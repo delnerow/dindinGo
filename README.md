@@ -1,0 +1,2 @@
+# dindinGo
+Padrões de objetos
