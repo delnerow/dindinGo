@@ -8,6 +8,8 @@ class Carteira():
         
     def atualizaCarteira(self, valor):
         self._saldo=self._saldo+valor
+    def getSaldo(self):
+        return self._saldo
 
 
 class Cofrinho(Carteira):
@@ -17,6 +19,7 @@ class Cofrinho(Carteira):
     def quebrar(self):
         retorno = self._saldo
         self._saldo=0
+        return retorno
 
 
 
