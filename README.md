@@ -1,17 +1,17 @@
 # dindinGo Project
 
-## Overview
-The dindinGo project is a financial management application that allows users to manage their transactions, savings (cofrinho), and current wallet (corrente). The application provides a user-friendly interface for creating and tracking expenses and income, as well as managing savings.
+## Introdução
+intro
 
-## Project Structure
+## Estrutura do Projeto
 ```
 dindinGo
 ├── src
-│   ├── interfacePemba.py  # Main interface for managing financial transactions
-│   ├── transacao.py        # Defines the transaction-related classes
-│   └── storage.py          # Handles saving and loading data
-├── requirements.txt        # Lists project dependencies
-└── README.md               # Project documentation
+│   ├── interfacePemba.py  
+│   ├── transacao.py        
+│   └── storage.py          
+├── requirements.txt        
+└── README.md               
 ```
 
 ## Installation
@@ -42,10 +42,7 @@ dindinGo
 - **Cofrinho**: Represents a savings jar where users can save money and retrieve it when needed.
 - **Despesa**: Represents an expense transaction, capturing details such as name, value, type, date, and frequency.
 - **Receita**: Represents an income transaction with similar properties to Despesa.
-- **Data Persistence**: The application remembers the state of transactions, cofrinho, and corrente between runs by saving data to a file.
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
 
 ## License
 This project is licensed under the MIT License.

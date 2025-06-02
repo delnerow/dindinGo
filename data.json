@@ -3,26 +3,39 @@
         {
             "nome": "Assalto ao Banco Central",
             "valor": 700,
-            "tipo": "servi\u00e7o",
+            "tipo": "servi\u00e7oo",
             "data": "2025-06-02T12:28:04.119823",
             "desc": "tropinha deu o g\u00e1s",
-            "repeticao": true
+            "carteira": "Roubos e furtos",
+            "modo": "-",
+            "repeticao": false
         },
         {
             "nome": "roubo do roubo",
-            "valor": 40,
+            "valor": 23999503,
             "tipo": "casa",
             "data": "2025-06-02T12:37:55.088409",
             "desc": "roubaram o furto",
-            "repeticao": true
+            "carteira": "Roubos e furtos",
+            "modo": "-",
+            "repeticao": false
+        },
+        {
+            "nome": "Fian\u00e7a",
+            "valor": 700000000,
+            "tipo": "casa",
+            "data": "2025-06-02T16:26:10.864088",
+            "desc": "bobby foi preso",
+            "carteira": "Roubos e furtos",
+            "modo": "-",
+            "repeticao": false
         }
-        
     ],
     "carteiras": [
         {
             "nome": "Roubos e furtos",
             "desc": "armazena o resultado da bandidagem",
-            "saldo": 709999504
+            "saldo": 41
         }
     ],
     "cofrinhos": [
