@@ -1,20 +1,35 @@
 {
     "transacoes": [
         {
-            "nome": "roubo",
-            "valor": 50,
-            "tipo": "lazer",
-            "data": "2025-06-02T11:05:25.116495",
-            "repeticao": "0"
+            "nome": "Assalto ao Banco Central",
+            "valor": 700,
+            "tipo": "servi\u00e7o",
+            "data": "2025-06-02T12:28:04.119823",
+            "desc": "tropinha deu o g\u00e1s",
+            "repeticao": true
         },
         {
-            "nome": "roubado",
-            "valor": -20,
-            "tipo": "lazer",
-            "data": "2025-06-02T11:05:57.352445",
-            "repeticao": "0"
+            "nome": "roubo do roubo",
+            "valor": 40,
+            "tipo": "casa",
+            "data": "2025-06-02T12:37:55.088409",
+            "desc": "roubaram o furto",
+            "repeticao": true
+        }
+        
+    ],
+    "carteiras": [
+        {
+            "nome": "Roubos e furtos",
+            "desc": "armazena o resultado da bandidagem",
+            "saldo": 709999504
         }
     ],
-    "corrente": 5,
-    "cofrinho": 25
+    "cofrinhos": [
+        {
+            "nome": "poupan\u00e7a slk",
+            "desc": "pro futuro do time",
+            "saldo": 510
+        }
+    ]
 }
