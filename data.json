@@ -1,0 +1,20 @@
+{
+    "transacoes": [
+        {
+            "nome": "roubo",
+            "valor": 50,
+            "tipo": "lazer",
+            "data": "2025-06-02T11:05:25.116495",
+            "repeticao": "0"
+        },
+        {
+            "nome": "roubado",
+            "valor": -20,
+            "tipo": "lazer",
+            "data": "2025-06-02T11:05:57.352445",
+            "repeticao": "0"
+        }
+    ],
+    "corrente": 5,
+    "cofrinho": 25
+}

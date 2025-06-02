@@ -31,6 +31,19 @@ class Transaction():
         self.tipo =tipo
         self.data = data
         self.repeticao = repeticao
+    # Formata para JSON
+    def to_dict(self):
+        return {
+                'nome': self.nome,
+                'valor': self.valor,
+                'tipo': self.tipo,
+                'data': self.data,
+                'repeticao': self.repeticao
+        }
+    # Cria a partir de um dicionário de Json. rever dps detalhes dese classmethod, mas eh bom pra factory...
+    @classmethod
+    def from_dict(cls, d):
+        return cls(d['nome'], d['valor'], d['tipo'], d['data'], d['repeticao'])
         
 class Receita(Transaction):
     def __init__(self,nome,valor, tipo, data, repeticao):
