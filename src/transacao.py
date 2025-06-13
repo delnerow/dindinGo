@@ -1,20 +1,11 @@
+from abc import ABC, abstractmethod
 
-
-class Carteira():
+class CarteiraABS(ABC):
     def __init__(self,nome,descricao,saldo):
         self._nome=nome
         self._descricao=descricao
         self._saldo=saldo
         
-    def atualizaCarteira(self, Transacao):
-        if isinstance(Transacao, Transaction):
-            if isinstance(Transacao, Despesa):
-                valor = -Transacao.valor
-            else: # Receita 
-                valor = Transacao.valor
-            self._saldo=self._saldo+valor
-        else: 
-             self._saldo=self._saldo+Transacao   
     def getSaldo(self):
         return self._saldo
     def getNome(self):
@@ -34,7 +25,7 @@ class Carteira():
         return cls(d['nome'], d['desc'], d['saldo'])
 
 
-class Cofrinho(Carteira):
+class Cofrinho(CarteiraABS):
     def __init__(self,nome,descricao,saldo):
         super().__init__(nome,descricao,saldo) 
             
@@ -42,11 +33,33 @@ class Cofrinho(Carteira):
         retorno = self._saldo
         self._saldo=0
         return retorno
+    def depositar(self, Transacao):
+        if isinstance(Transacao, Transaction):
+            if isinstance(Transacao, Despesa):
+                #não pode haver despesas em cofrinhos!!!
+                print("erro: não é possível adicionar despesas a um cofrinho")
+            else: # Receita 
+                valor = Transacao.valor
+            self._saldo=self._saldo+valor
+        else: 
+             self._saldo=self._saldo+Transacao   
+
+class Carteira(CarteiraABS):
+    def __init__(self,nome,descricao,saldo):
+        super().__init__(nome,descricao,saldo) 
+            
+    def atualizaCarteira(self, Transacao):
+        if isinstance(Transacao, Transaction):
+            if isinstance(Transacao, Despesa):
+                valor = -Transacao.valor
+            else: # Receita 
+                valor = Transacao.valor
+            self._saldo=self._saldo+valor
+        else: 
+             self._saldo=self._saldo+Transacao
 
 
-
-
-class Transaction():
+class Transaction(ABC):
     def __init__(self,nome,valor, tipo, data, desc,carteira,modo,fixo=False):
         self.nome = nome
         self.valor = valor 
@@ -54,14 +67,14 @@ class Transaction():
         self.data = data
         self.desc = desc
         self.fixo = fixo
-        self.modo=modo
+        self.modo = modo
         self.carteira = carteira  
         
     def set_carteira(self, carteira):
         if isinstance(carteira, Carteira):
             self.carteira = carteira
         else:
-            raise ValueError("Carteira deve ser uma instância da classe Carteira")
+            raise ValueError("Carteira deve ser uma instância da classe Carteira.")
     # Formata para JSON
     def to_dict(self):
         return {
