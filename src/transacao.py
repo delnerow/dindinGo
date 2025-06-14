@@ -33,6 +33,7 @@ class Cofrinho(CarteiraABS):
         retorno = self._saldo
         self._saldo=0
         return retorno
+    
     def depositar(self, Transacao):
         if isinstance(Transacao, Transaction):
             if isinstance(Transacao, Despesa):
@@ -102,3 +103,4 @@ class Receita(Transaction):
 class Despesa(Transaction):
     def __init__(self,nome,valor, tipo, data, desc, carteira,modo, repeticao):
         super().__init__(nome,valor,tipo,data, desc, carteira,"-", repeticao)
+
