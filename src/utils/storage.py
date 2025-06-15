@@ -1,7 +1,7 @@
 import json
 
 from transacao import Carteira, Cofrinho, Despesa, Receita
-
+from sistemaDePontos import sistemaDePontos
 DATA_FILE = 'data.json'
 def load_data():
     try:
@@ -10,6 +10,7 @@ def load_data():
             transacoes = []
             carteiras = []
             cofrinhos = []
+            pontos = []
             for t in data['transacoes']:
                 if t['tipo'] == 'receita':
                     transacoes.append(Receita.from_dict(t))
@@ -19,15 +20,18 @@ def load_data():
                 carteiras.append(Carteira.from_dict(t))
             for t in data['cofrinhos']:
                 cofrinhos.append(Cofrinho.from_dict(t))
-            return transacoes, carteiras, cofrinhos
+            for t in data['pontos']:
+                pontos.append(sistemaDePontos.from_dict(t))
+            return transacoes, carteiras, cofrinhos, pontos
     except FileNotFoundError:
-        return [], [], []
+        return [], [], [], []
 
-def save_data(transacoes, carteiras, cofrinhos):
+def save_data(transacoes, carteiras, cofrinhos, pontos):
     data = {
         'transacoes': [t.to_dict() for t in transacoes],
         'carteiras': [t.to_dict() for t in carteiras],
-        'cofrinhos': [t.to_dict() for t in cofrinhos]
+        'cofrinhos': [t.to_dict() for t in cofrinhos],
+        'pontos': [t.to_dict() for t in pontos]
     }
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=4)

@@ -26,7 +26,7 @@ while True:
     printCarteiras(carteiras)
     printCofrinhos(cofrinhos)
     
-    print("num transações:", len(gerenciador.get_transacoes())) #debug
+    print(f"💎 Pontuação atual: {gerenciador.get_pontos()} 💎") 
 
     acao = int(input(
         "Oq vc deseja fazer\n"

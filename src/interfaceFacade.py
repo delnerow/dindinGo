@@ -10,13 +10,16 @@ from transacao import  Despesa, Receita
 
 class GerenciamentoDeCarteiras:
     def __init__(self):
-        transacoes, carteiras, cofrinhos = load_data()
+        transacoes, carteiras, cofrinhos, pontos = load_data()
         self._transacoes = transacoes
         self._carteiras = carteiras
         self._cofrinhos = cofrinhos
         self._mes_atual = datetime.datetime.now().month
         self._ano_atual = datetime.datetime.now().year
         self._transacoes_mes = self.filtrar_transacoes_mes()
+        #vetor com um único sistema de pontos
+        #para acessar usar pontos[0] 
+        self._pontos = pontos 
 
     def adicionar_receita(self,nome,valor, tipo, data, desc,carteira,modo,fixo=False):
         """Adiciona uma receita à lista de transações."""
@@ -40,15 +43,20 @@ class GerenciamentoDeCarteiras:
 
         
     def adicionar_despesa(self,nome,valor, tipo, data, desc,carteira,modo,fixo=False):
-        """Adiciona uma despesa à lista de transações."""
+        """Adiciona uma despesa à lista de transações. e atribuir pontuação, 
+        retorna pontos perdidos, gasto e meta da categoria da despesa."""
         
         #verifica erro
         if self.erro_add_transacao(nome, valor, tipo, data, desc, carteira, modo, fixo):
             return
         
         # Cria a receita e adiciona à lista de transações
-        self._transacoes.append(Despesa(nome, valor, tipo, data, desc, carteira, modo, fixo))
+        despesa = Despesa(nome, valor, tipo, data, desc, carteira, modo, fixo)
+        self._transacoes.append(despesa)
+        #atribui pontuação
+        pontos_perdidos, gasto, meta = self._pontos[0].adicionar_despesa(despesa.valor, despesa.tipo)
         self.salvar_dados()
+        return pontos_perdidos, gasto, meta
         
 
     def erro_add_transacao(self,nome,valor, tipo, data, desc,carteira,modo,fixo=False):
@@ -104,6 +112,10 @@ class GerenciamentoDeCarteiras:
         """Retorna o ano atual."""
         return self._ano_atual
     
+    def get_pontos(self):
+        """Retorna a pontuação do sistema de pontos."""
+        return self._pontos[0].get_pontos()
+
     def filtrar_transacoes_mes(self):
         """Filtra as transações do mês atual."""
         self._transacoes_mes = filtra_transacoes_mes(self._transacoes, self._mes_atual, self._ano_atual)
@@ -136,4 +148,4 @@ class GerenciamentoDeCarteiras:
     
     def salvar_dados(self):
         """Salva os dados das transações, carteiras e cofrinhos."""
-        save_data(self._transacoes, self._carteiras, self._cofrinhos)
+        save_data(self._transacoes, self._carteiras, self._cofrinhos, self._pontos)
