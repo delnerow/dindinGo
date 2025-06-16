@@ -2,6 +2,7 @@ import json
 
 from transacao import CofrinhoFactory, Corrente, Cofrinho, CorrenteFactory, Despesa, DespesaFactory, Receita, ReceitaFactory
 
+
 DATA_FILE = 'data.json'
 def load_data():
     try:
@@ -15,6 +16,7 @@ def load_data():
             dFactory = DespesaFactory()
             corFactory = CorrenteFactory()
             cofFactory = CofrinhoFactory()
+            pontos = []
             for t in data['transacoes']:
                 if t['receita'] == 1:
                     transacoes.append(rFactory.from_dict(t))
@@ -24,16 +26,19 @@ def load_data():
                 carteiras.append(corFactory.from_dict(t))
             for t in data['cofrinhos']:
                 cofrinhos.append(cofFactory.from_dict(t))
-            return transacoes, carteiras, cofrinhos, curId
+            for t in data['pontos']:
+                pontos.append(sistemaDePontos.from_dict(t))
+            return transacoes, carteiras, cofrinhos, pontos, curId
     except FileNotFoundError:
-        return [], [], [] , 0
+        return [], [], [], [] , 0
 
-def save_data(curId, transacoes, carteiras, cofrinhos):
+def save_data(curId, transacoes, carteiras, cofrinhos, pontos):
     data = {
         'idGenerator': curId,  # Placeholder for ID generator
         'transacoes': [t.to_dict() for t in transacoes],
         'carteiras': [t.to_dict() for t in carteiras],
-        'cofrinhos': [t.to_dict() for t in cofrinhos]
+        'cofrinhos': [t.to_dict() for t in cofrinhos],
+        'pontos': [t.to_dict() for t in pontos]
     }
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=4)
