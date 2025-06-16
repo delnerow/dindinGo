@@ -82,10 +82,7 @@ class Corrente(Carteira):
             
     def atualizaCarteira(self, Transacao):
         if isinstance(Transacao, Transaction):
-            if isinstance(Transacao, Despesa):
-                valor = -Transacao.valor
-            else: # Receita 
-                valor = Transacao.valor
+            valor = Transacao.valor
             self._saldo=self._saldo+valor
             self.movimentacoes.append(Transacao.id)  # Adiciona a transação à lista
         else: 

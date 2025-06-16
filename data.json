@@ -1,5 +1,5 @@
 {
-    "idGenerator": 4,
+    "idGenerator": 8,
     "transacoes": [
         {
             "id": 2,
@@ -33,6 +33,50 @@
             "desc": "alguns pagaram",
             "carteira": "Lojinha",
             "repeticao": false
+        },
+        {
+            "id": 5,
+            "receita": false,
+            "nome": "aaa",
+            "valor": 1,
+            "categoria": "alimenta\u00e7\u00e3o",
+            "data": "2025-06-16T20:15:42.793010",
+            "desc": "aaaaaa",
+            "carteira": "Lojinha",
+            "repeticao": false
+        },
+        {
+            "id": 6,
+            "receita": false,
+            "nome": "Faxina",
+            "valor": 100,
+            "categoria": "servi\u00e7o",
+            "data": "2025-06-16T20:16:32.133937",
+            "desc": "shuashua",
+            "carteira": "Lojinha",
+            "repeticao": false
+        },
+        {
+            "id": 7,
+            "receita": false,
+            "nome": "aasd",
+            "valor": 100,
+            "categoria": "lazer",
+            "data": "2025-06-16T20:21:05.783943",
+            "desc": "awdsad",
+            "carteira": "Lojinha",
+            "repeticao": false
+        },
+        {
+            "id": 8,
+            "receita": false,
+            "nome": "Ladrao",
+            "valor": 400,
+            "categoria": "servi\u00e7o",
+            "data": "2025-06-16T20:23:13.489083",
+            "desc": "bike",
+            "carteira": "Lojinha",
+            "repeticao": false
         }
     ],
     "carteiras": [
@@ -45,10 +89,12 @@
         {
             "nome": "Lojinha",
             "desc": "Atletica",
-            "saldo": 390,
+            "saldo": 90,
             "movimentacoes": [
                 3,
-                4
+                4,
+                7,
+                8
             ]
         }
     ],
@@ -58,6 +104,21 @@
             "desc": "dinheiro da atletica para a grande CIA",
             "saldo": 700,
             "movimentacoes": []
+        }
+    ],
+    "pontos": [
+        {
+            "pontos": 0,
+            "meta_lazer": 100,
+            "meta_alimentacao": 1000,
+            "meta_casa": 1000,
+            "meta_mercado": 300,
+            "meta_servico": 100,
+            "gastos_lazer": -100,
+            "gastos_alimentacao": 2473,
+            "gastos_casa": 123,
+            "gastos_mercado": 21323,
+            "gastos_servico": 200
         }
     ]
 }

@@ -40,7 +40,7 @@ class GerenciamentoDeCarteiras:
 
         self._transacoes.append(trans)
         # Atualiza a carteira associada
-        self.atualizar_carteira(carteira)
+        self.atualizar_carteira(trans,carteira)
         # Salva os dados
         self.salvar_dados()
 
@@ -55,11 +55,12 @@ class GerenciamentoDeCarteiras:
         
         # Cria a receita e adiciona à lista de transações
         self.curId = self.curId +1
-        despesa = self.despesaFactory(self.curId, nome, valor, tipo, data, desc, carteira, fixo)
+        despesa = self.despesaFactory.create_transaction(self.curId, nome, valor, tipo, data, desc, carteira.getNome(), fixo)
         self._transacoes.append(despesa)
         #atribui pontuação
-        pontos_perdidos, gasto, meta = self._pontos[0].adicionar_despesa(despesa.valor, despesa.tipo)
+        pontos_perdidos, gasto, meta = self._pontos[0].adicionar_despesa(despesa.valor, despesa.categoria)
         self.salvar_dados()
+        self.atualizar_carteira(despesa,carteira)
         return pontos_perdidos, gasto, meta
         
 

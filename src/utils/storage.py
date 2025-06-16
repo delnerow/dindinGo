@@ -32,7 +32,7 @@ def load_data():
     except FileNotFoundError:
         return [], [], [], [] , 0
 
-def save_data(curId, transacoes, carteiras, cofrinhos, pontos):
+def save_data(transacoes, carteiras, cofrinhos, pontos, curId):
     data = {
         'idGenerator': curId,  # Placeholder for ID generator
         'transacoes': [t.to_dict() for t in transacoes],

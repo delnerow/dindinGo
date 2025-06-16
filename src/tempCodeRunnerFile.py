@@ -1,1 +1,2 @@
-cofrinho
+rFactory = CorrenteFactory()
+fFactory = CofrinhoFactory()

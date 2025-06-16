@@ -75,9 +75,9 @@ while True:
         tipo = tipoL[tipoIndex - 1] if 1 <= tipoIndex <= 5 else "lazer"
         data = datetime.datetime.now().isoformat()
         if modo == 2:
-            gerenciador.adicionar_receita(nome, valor, tipo, data, desc, carteira.getNome(), "+", repeticao)
+            gerenciador.adicionar_receita(nome, valor, tipo, data, desc, carteira, repeticao)
         elif modo == 1:
-            gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira.getNome(), "+", repeticao)
+            gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira,  repeticao)
         else:
             print("Modo inválido.")
             continue
