@@ -1,78 +1,63 @@
 {
+    "idGenerator": 4,
     "transacoes": [
         {
-            "nome": "Assalto ao Banco Central",
-            "valor": 700,
-            "tipo": "servi\u00e7oo",
-            "data": "2025-06-02T12:28:04.119823",
-            "desc": "tropinha deu o g\u00e1s",
-            "carteira": "Roubos e furtos",
-            "modo": "-",
+            "id": 2,
+            "receita": false,
+            "nome": "b",
+            "valor": 50,
+            "categoria": "lazer",
+            "data": "2025-06-16T11:47:30.544014",
+            "desc": "b",
+            "carteira": "a",
             "repeticao": false
         },
         {
-            "nome": "roubo do roubo",
-            "valor": 23999503,
-            "tipo": "casa",
-            "data": "2025-06-02T12:37:55.088409",
-            "desc": "roubaram o furto",
-            "carteira": "Roubos e furtos",
-            "modo": "-",
+            "id": 3,
+            "receita": false,
+            "nome": "falta de dc",
+            "valor": 50,
+            "categoria": "servi\u00e7o",
+            "data": "2025-06-16T12:00:50.268089",
+            "desc": "pessoal nn pagou",
+            "carteira": "Lojinha",
             "repeticao": false
         },
         {
-            "nome": "Fian\u00e7a",
-            "valor": 700000000,
-            "tipo": "casa",
-            "data": "2025-06-02T16:26:10.864088",
-            "desc": "bobby foi preso",
-            "carteira": "Roubos e furtos",
-            "modo": "-",
-            "repeticao": false
-        },
-        {
-            "nome": "test",
-            "valor": 3,
-            "tipo": "servi\u00e7o",
-            "data": "2025-06-14T10:33:20.094227",
-            "desc": "test",
-            "carteira": "Roubos e furtos",
-            "modo": "-",
-            "repeticao": false
-        },
-        {
-            "nome": "1sd",
-            "valor": 1,
-            "tipo": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-14T15:09:53.714808",
-            "desc": "sfgs",
-            "carteira": "Roubos e furtos",
-            "modo": "-",
-            "repeticao": false
-        },
-        {
-            "nome": "1",
-            "valor": 1123,
-            "tipo": "lazer",
-            "data": "2025-06-14T15:18:29.155088",
-            "desc": "1",
-            "carteira": "Roubos e furtos",
-            "modo": "-",
+            "id": 4,
+            "receita": true,
+            "nome": "dc",
+            "valor": 40,
+            "categoria": "servi\u00e7o",
+            "data": "2025-06-16T12:01:50.745160",
+            "desc": "alguns pagaram",
+            "carteira": "Lojinha",
             "repeticao": false
         }
     ],
     "carteiras": [
         {
-            "nome": "Roubos e furtos",
-            "desc": "armazena o resultado da bandidagem",
-            "saldo": 41
+            "nome": "a",
+            "desc": "a",
+            "saldo": 50,
+            "movimentacoes": []
+        },
+        {
+            "nome": "Lojinha",
+            "desc": "Atletica",
+            "saldo": 390,
+            "movimentacoes": [
+                3,
+                4
+            ]
         }
     ],
     "cofrinhos": [
         {
-            "nome": "poupan\u00e7a slk",
-            "desc": "pro futuro do time",
-            "saldo": 514
+            "nome": "CIA",
+            "desc": "dinheiro da atletica para a grande CIA",
+            "saldo": 700,
+            "movimentacoes": []
         }
     ]
 }

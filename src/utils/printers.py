@@ -20,7 +20,7 @@ def printTransacoes(transacoes):
         print("="*30)
         print(f"📝 Nome: {transacao.nome}")
         print(f"💰 Valor: {transacao.valor}")
-        print(f"🏷️ Tipo: {transacao.tipo}")
+        print(f"🏷️ Categoria: {transacao.categoria}")
         print(f"📅 Data: {transacao.data}")
         print(f"📝 Descrição: {transacao.desc}")
         print(f"🔁 Fixo? {'Sim' if transacao.fixo else 'Não'}")

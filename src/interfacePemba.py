@@ -7,11 +7,10 @@ from utils.filters import filtra_transacoes_mes
 from utils.storage import load_data, save_data
 from transActions import criar_transacao, editar_transacao
 
-transacoes, carteiras, cofrinhos = load_data()
+transacoes, carteiras, cofrinhos, curId = load_data()
 
 mes_atual = datetime.datetime.now().month
 ano_atual = datetime.datetime.now().year
-
 
 
 while True:
@@ -50,7 +49,8 @@ while True:
         continue
 
     if acao == 1:
-        criar_transacao(transacoes, carteiras)
+        curId= curId + 1
+        criar_transacao(transacoes, carteiras,curId)
         os.system('cls')
     elif acao == 2:
         os.system('cls')
@@ -87,7 +87,7 @@ while True:
             print("Valor inválido. Você não tem esse dinheiro")
             continue
         corrente.atualizaCarteira(-valor)
-        cofrinho.atualizaCarteira(valor)
+        cofrinho.depositar(valor)
     
     elif acao == 3:
         os.system('cls')
@@ -119,4 +119,4 @@ while True:
     elif acao == 8:
         editar_transacao(transacoes, carteiras)
         os.system('pause')
-    save_data(transacoes, carteiras, cofrinhos)
+    save_data(curId, transacoes, carteiras, cofrinhos)

@@ -1,9 +1,13 @@
 import os
 import datetime
 from utils.printers import printCarteiras, printTransacoes
-from transacao import  Despesa, Receita
+from transacao import  DespesaFactory, ReceitaFactory
 
-def criar_transacao(transacoes, carteiras):
+rFactory = ReceitaFactory()
+dFactory = DespesaFactory()
+
+
+def criar_transacao(transacoes, carteiras, curId):
     if len(carteiras) == 0:
         print("Nenhuma carteira criada ainda. Crie uma primeiro.")
         return
@@ -22,19 +26,21 @@ def criar_transacao(transacoes, carteiras):
     repeticao = input("É fixo? (s/n)").lower() == 's'
     nome = input("Qual o nome?")
     desc = input("Qual a descrição?")
-    tipoIndex = int(input("Qual a categoria\nLazer(1)\nAlimentação(2)\nCasa(3)\nMercado(4)\nServiço(5)?"))
-    tipoL = ["lazer", "alimentação", "casa", "mercado", "serviço"]
-    tipo = tipoL[tipoIndex - 1] if 1 <= tipoIndex <= 5 else "lazer"
+    categoriaIndex = int(input("Qual a categoria\nLazer(1)\nAlimentação(2)\nCasa(3)\nMercado(4)\nServiço(5)?"))
+    categoriaL = ["lazer", "alimentação", "casa", "mercado", "serviço"]
+    categoria = categoriaL[categoriaIndex - 1] if 1 <= categoriaIndex <= 5 else "lazer"
     data = datetime.datetime.now().isoformat()
+    trans = None
+
     if modo == 2:
-        trans = Receita(nome, valor, tipo, data, desc, carteira.getNome(),"+", repeticao)
+        trans = rFactory.create_transaction(curId, nome, valor, categoria, data, desc, carteira.getNome(), repeticao)
     elif modo == 1:
-        trans = Despesa(nome, valor, tipo, data, desc, carteira.getNome(),"-", repeticao)
+        trans = dFactory.create_transaction(curId, nome, valor, categoria, data, desc, carteira.getNome(), repeticao)
     else:
         print("Modo inválido.")
         return
     transacoes.append(trans)
-    carteira.atualizaCarteira(trans.valor)
+    carteira.atualizaCarteira(trans)
     print("Transação criada!")
     
     
@@ -55,24 +61,19 @@ def editar_transacao(transacoes, carteiras):
     novo_nome = input(f"Nome [{trans.nome}]: ") or trans.nome
     novo_valor = input(f"Valor [{trans.valor}]: ")
     novo_valor = int(novo_valor) if novo_valor else trans.valor
-    novo_tipo = input(f"Tipo [{trans.tipo}]: ") or trans.tipo
+    novo_categoria = input(f"categoria [{trans.categoria}]: ") or trans.categoria
     nova_data = input(f"Data (YYYY-MM-DD) [{trans.data}]: ") or trans.data
     nova_desc = input(f"Descrição [{trans.desc}]: ") or trans.desc
-    novo_modo = input(f"Despesa(-) ou Ganho(+)?)") or trans.modo
     novo_fixo = input(f"Fixo? (s/n) [{'s' if trans.fixo else 'n'}]: ")
     novo_fixo = trans.fixo if novo_fixo == '' else (novo_fixo.lower() == 's')
     trans.nome = novo_nome
     trans.valor = novo_valor
-    trans.tipo = novo_tipo
+    trans.categoria = novo_categoria
     trans.data = nova_data
     trans.desc = nova_desc
     trans.fixo = novo_fixo
-    trans.modo=novo_modo
     if len(carteiras) > 0:
         carteira = carteiras[0]
-        if novo_modo == '-':
-            diff = (novo_valor - valor_antigo) * -1
-        else:
-            diff = novo_valor - valor_antigo
+        diff = novo_valor - valor_antigo
         carteira.atualizaCarteira(diff)
     print("Transação atualizada!")
