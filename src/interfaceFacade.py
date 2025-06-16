@@ -1,16 +1,15 @@
 import datetime
 import os
 
-from carteiraActions import criarCarteira, criarCofrinho
 from utils.printers import printCarteiras, printCofrinhos, printTransacoes
 from utils.filters import filtra_transacoes_mes
 from utils.storage import load_data, save_data
-from transActions import criar_transacao, editar_transacao
-from transacao import  Despesa, Receita
+from transacao import  CofrinhoFactory, CorrenteFactory, Despesa, DespesaFactory, Receita, ReceitaFactory
 
 class GerenciamentoDeCarteiras:
     def __init__(self):
-        transacoes, carteiras, cofrinhos, pontos = load_data()
+        transacoes, carteiras, cofrinhos, pontos, curId = load_data()
+        self.curId = curId
         self._transacoes = transacoes
         self._carteiras = carteiras
         self._cofrinhos = cofrinhos
@@ -20,38 +19,43 @@ class GerenciamentoDeCarteiras:
         #vetor com um único sistema de pontos
         #para acessar usar pontos[0] 
         self._pontos = pontos 
+        self.receitaFactory = ReceitaFactory()
+        self.despesaFactory = DespesaFactory()
+        self.correnteFactory = CorrenteFactory()
+        self.cofrinhoFactory = CofrinhoFactory()
 
-    def adicionar_receita(self,nome,valor, tipo, data, desc,carteira,modo,fixo=False):
+    def adicionar_receita(self,nome,valor, tipo, data, desc,carteira,fixo=False):
         """Adiciona uma receita à lista de transações."""
 
         #verifica erro
-        if self.erro_add_transacao(nome, valor, tipo, data, desc, carteira, modo, fixo):
+        if self.erro_add_transacao(nome, valor, tipo, data, desc, carteira, fixo):
             return
         
         # Cria a receita e adiciona à lista de transações
         print("tamanho transacoes:", len(self._transacoes)) #debug
-
-        trans = Receita(nome, valor, tipo, data, desc, carteira, modo, fixo)
+        self.curId = self.curId +1
+        trans = self.receitaFactory.create_transaction(self.curId,nome, valor, tipo, data, desc, carteira, fixo)
         
         print("tamanho transacoes apos criar receita:", len(self._transacoes)) #debug
 
         self._transacoes.append(trans)
         # Atualiza a carteira associada
-        self.atualizar_carteira(valor, carteira)
+        self.atualizar_carteira(carteira)
         # Salva os dados
         self.salvar_dados()
 
         
-    def adicionar_despesa(self,nome,valor, tipo, data, desc,carteira,modo,fixo=False):
+    def adicionar_despesa(self, nome,valor, tipo, data, desc,carteira,fixo=False):
         """Adiciona uma despesa à lista de transações. e atribuir pontuação, 
         retorna pontos perdidos, gasto e meta da categoria da despesa."""
         
         #verifica erro
-        if self.erro_add_transacao(nome, valor, tipo, data, desc, carteira, modo, fixo):
+        if self.erro_add_transacao(nome, valor, tipo, data, desc, carteira, fixo):
             return
         
         # Cria a receita e adiciona à lista de transações
-        despesa = Despesa(nome, valor, tipo, data, desc, carteira, modo, fixo)
+        self.curId = self.curId +1
+        despesa = self.despesaFactory(self.curId, nome, valor, tipo, data, desc, carteira, fixo)
         self._transacoes.append(despesa)
         #atribui pontuação
         pontos_perdidos, gasto, meta = self._pontos[0].adicionar_despesa(despesa.valor, despesa.tipo)
@@ -120,19 +124,20 @@ class GerenciamentoDeCarteiras:
         """Filtra as transações do mês atual."""
         self._transacoes_mes = filtra_transacoes_mes(self._transacoes, self._mes_atual, self._ano_atual)
 
-    def atualizar_carteira(self, valor, carteira):
-        """Atualiza o saldo da carteira com base no valor da transação."""
+    def atualizar_carteira(self, transacao, carteira):
+        """Atualiza o saldo da carteira com base na transação."""
         if carteira in self._carteiras:
-            carteira.atualizaCarteira(valor)
+            carteira.atualizaCarteira(transacao)
         else:
             print("Carteira não encontrada.")
         self.salvar_dados()
     
-    def depositar_cofrinho(self, valor, cofre, carteira):
+    def depositar_cofrinho(self, trans, cofre, carteira):
         """Deposita um valor no cofre."""
         if cofre in self._cofrinhos:
-            cofre.depositar(valor)
-            carteira.atualizaCarteira(-valor)
+            cofre.depositar(trans)
+            if carteira in self._carteiras:
+                carteira.atualizaCarteira(-trans.valor)
         else:
             print("Cofrinho não encontrado.")
         self.salvar_dados()
@@ -148,4 +153,4 @@ class GerenciamentoDeCarteiras:
     
     def salvar_dados(self):
         """Salva os dados das transações, carteiras e cofrinhos."""
-        save_data(self._transacoes, self._carteiras, self._cofrinhos, self._pontos)
+        save_data(self._transacoes, self._carteiras, self._cofrinhos, self._pontos, self.curId)

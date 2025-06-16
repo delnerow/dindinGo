@@ -2,24 +2,22 @@ import datetime
 import os
 
 from carteiraActions import criarCarteira, criarCofrinho
+from interfaceFacade import GerenciamentoDeCarteiras
 from utils.printers import printCarteiras, printCofrinhos, printTransacoes
 from utils.filters import filtra_transacoes_mes
 from utils.storage import load_data, save_data
 from transActions import criar_transacao, editar_transacao
 
-transacoes, carteiras, cofrinhos, curId = load_data()
 
-mes_atual = datetime.datetime.now().month
-ano_atual = datetime.datetime.now().year
-
+gerenciador = GerenciamentoDeCarteiras()
 
 while True:
     os.system('cls')
-    print(f"Transações feitas em {mes_atual:02d}/{ano_atual}:")
-    transacoes_mes = filtra_transacoes_mes(transacoes, mes_atual, ano_atual)
+    print(f"Transações feitas em {gerenciador.get_mes_atual():02d}/{gerenciador.get_ano_atual()}:")
+    transacoes_mes = filtra_transacoes_mes(gerenciador.get_transacoes(), gerenciador.get_mes_atual(), gerenciador.get_ano_atual())
     printTransacoes(transacoes_mes)
-    printCarteiras(carteiras)
-    printCofrinhos(cofrinhos)
+    printCarteiras(gerenciador.get_carteiras())
+    printCofrinhos(gerenciador.get_cofrinhos())
         
     acao = int(input(
         "Oq vc deseja fazer\n"
@@ -34,54 +32,47 @@ while True:
     ))
 
     if acao == 6:
-        if mes_atual == 1:
-            mes_atual = 12
-            ano_atual -= 1
-        else:
-            mes_atual -= 1
-        continue
+        gerenciador.mes_anterior()
     elif acao == 7:
-        if mes_atual == 12:
-            mes_atual = 1
-            ano_atual += 1
-        else:
-            mes_atual += 1
-        continue
-
+        gerenciador.proximo_mes()
     if acao == 1:
-        curId= curId + 1
-        criar_transacao(transacoes, carteiras,curId)
+        modo = int(input("Despesa(1) ou Ganho(2)?"))
+        nome, valor, categoria, data, desc, carteira, repeticao = criar_transacao(gerenciador.get_carteiras())
+        if modo == 1:
+            gerenciador.adicionar_despesa(nome, valor, categoria, data, desc, carteira, repeticao)  
+        elif modo == 2:
+            gerenciador.adicionar_receita(nome, valor, categoria, data, desc, carteira, repeticao)
         os.system('cls')
     elif acao == 2:
         os.system('cls')
-        if len(cofrinhos) == 0:
+        if len(gerenciador.get_cofrinhos()) == 0:
             print("Nenhum cofrinho criado ainda. Crie um primeiro.")
             continue
-        if len(carteiras) == 0:
+        if len(gerenciador.get_cofrinhos()) == 0:
             print("Nenhuma carteira criada ainda. Crie uma primeiro.")
             continue
-        if len(cofrinhos) == 1:
-            cofrinho = cofrinhos[0]
+        if len(gerenciador.get_cofrinhos()) == 1:
+            cofrinho = gerenciador.get_cofrinhos()[0]
         else:
-            printCofrinhos(cofrinhos)
+            printCofrinhos(gerenciador.get_cofrinhos())
             cofre_index = int(input("Escolha o cofre para adicionar: "))
-            if cofre_index < 0 or cofre_index >= len(cofrinhos):
+            if cofre_index < 0 or cofre_index >= len(gerenciador.get_cofrinhos()):
                 print("Cofrinho inválido. Usando o cofre padrão.")
-                cofrinho = cofrinhos[0]
+                cofrinho = gerenciador.get_cofrinhos()[0]
             else:
-                cofrinho = cofrinhos[cofre_index]
+                cofrinho = gerenciador.get_cofrinhos()[cofre_index]
         os.system('cls')
-        if len(carteiras) == 1:
-            corrente = carteiras[0]
+        if len(gerenciador.get_carteiras()) == 1:
+            corrente = gerenciador.get_carteiras()[0]
         else:
             print("Carteiras disponíveis:")
-            printCarteiras(carteiras)
+            printCarteiras(gerenciador.get_carteiras())
             carteira= int(input("Qual a carteira da transação?\nDigite o número da carteira: "))
-            if carteira < 0 or carteira >= len(carteiras):
+            if carteira < 0 or carteira >= len(gerenciador.get_carteiras()):
                 print("Carteira inválida. Usando a carteira corrente como padrão.")
-                corrente = carteiras[0]
+                corrente = gerenciador.get_carteiras()[0]
             else:
-                corrente = carteiras[carteira]
+                corrente = gerenciador.get_carteiras()[carteira]
         valor = int(input("Qual o valor a adicionar ao cofrinho?"))
         if valor >= corrente.getSaldo():
             print("Valor inválido. Você não tem esse dinheiro")
@@ -91,32 +82,32 @@ while True:
     
     elif acao == 3:
         os.system('cls')
-        if len(cofrinhos) == 0:
+        if len(gerenciador.get_cofrinhos()) == 0:
             print("Nenhum cofrinho criado ainda. Crie um primeiro.")
             continue
-        if len(cofrinhos) == 1:
-            cofrinho = cofrinhos[0]
+        if len(gerenciador.get_cofrinhos()) == 1:
+            cofrinho = gerenciador.get_cofrinhos()[0]
         else:
             print("Cofrinhos disponíveis:")
-            printCofrinhos(cofrinhos)
+            printCofrinhos(gerenciador.get_cofrinhos())
             cofre_index = int(input("Escolha o cofre para quebrar: "))
-            if cofre_index < 0 or cofre_index >= len(cofrinhos):
+            if cofre_index < 0 or cofre_index >= len(gerenciador.get_cofrinhos()):
                 print("Cofrinho inválido. Usando o cofre padrão.")
-                cofrinho = cofrinhos[0]
+                cofrinho = gerenciador.get_cofrinhos()[0]
             else:
-                cofrinho = cofrinhos[cofre_index]
+                cofrinho = gerenciador.get_cofrinhos()[cofre_index]
         valor = cofrinho.quebrar()
         corrente.atualizaCarteira(valor)
         print("Cofrinho quebrado! Valor adicionado à carteira corrente: ", valor)
     elif acao == 4:
         os.system('cls')
-        criarCarteira(carteiras)
+        criarCarteira(gerenciador.get_carteiras())
         os.system('cls')
     elif acao == 5:
         os.system('cls')
-        criarCofrinho(cofrinhos)
+        criarCofrinho(gerenciador.get_cofrinhos())
         os.system('cls')
     elif acao == 8:
-        editar_transacao(transacoes, carteiras)
+        editar_transacao(gerenciador.get_transacoes(), gerenciador.get_carteiras())
         os.system('pause')
-    save_data(curId, transacoes, carteiras, cofrinhos)
+    gerenciador.salvar_dados()

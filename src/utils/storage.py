@@ -1,7 +1,7 @@
 import json
 
 from transacao import CofrinhoFactory, Corrente, Cofrinho, CorrenteFactory, Despesa, DespesaFactory, Receita, ReceitaFactory
-
+from sistemaDePontos import sistemaDePontos
 
 DATA_FILE = 'data.json'
 def load_data():

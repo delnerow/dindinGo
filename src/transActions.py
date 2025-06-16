@@ -7,7 +7,7 @@ rFactory = ReceitaFactory()
 dFactory = DespesaFactory()
 
 
-def criar_transacao(transacoes, carteiras, curId):
+def criar_transacao(carteiras):
     if len(carteiras) == 0:
         print("Nenhuma carteira criada ainda. Crie uma primeiro.")
         return
@@ -22,7 +22,7 @@ def criar_transacao(transacoes, carteiras, curId):
         else:
             carteira = carteiras[carteira_idx]
     valor = int(input("Qual o valor, em reais?"))
-    modo = int(input("Despesa(1) ou Ganho(2)?"))
+
     repeticao = input("É fixo? (s/n)").lower() == 's'
     nome = input("Qual o nome?")
     desc = input("Qual a descrição?")
@@ -30,18 +30,7 @@ def criar_transacao(transacoes, carteiras, curId):
     categoriaL = ["lazer", "alimentação", "casa", "mercado", "serviço"]
     categoria = categoriaL[categoriaIndex - 1] if 1 <= categoriaIndex <= 5 else "lazer"
     data = datetime.datetime.now().isoformat()
-    trans = None
-
-    if modo == 2:
-        trans = rFactory.create_transaction(curId, nome, valor, categoria, data, desc, carteira.getNome(), repeticao)
-    elif modo == 1:
-        trans = dFactory.create_transaction(curId, nome, valor, categoria, data, desc, carteira.getNome(), repeticao)
-    else:
-        print("Modo inválido.")
-        return
-    transacoes.append(trans)
-    carteira.atualizaCarteira(trans)
-    print("Transação criada!")
+    return(nome, valor, categoria, data, desc, carteira,repeticao)
     
     
     
