@@ -30,7 +30,7 @@ def load_data():
                 pontos.append(sistemaDePontos.from_dict(t))
             return transacoes, carteiras, cofrinhos, pontos, curId
     except FileNotFoundError:
-        return [], [], [], [] , 0
+        return [], [], [], [0] , 0
 
 def save_data(transacoes, carteiras, cofrinhos, pontos, curId):
     data = {

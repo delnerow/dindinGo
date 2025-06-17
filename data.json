@@ -1,5 +1,5 @@
 {
-    "idGenerator": 8,
+    "idGenerator": 9,
     "transacoes": [
         {
             "id": 2,
@@ -77,6 +77,17 @@
             "desc": "bike",
             "carteira": "Lojinha",
             "repeticao": false
+        },
+        {
+            "id": 9,
+            "receita": false,
+            "nome": "asd",
+            "valor": 123123.0,
+            "categoria": "alimenta\u00e7\u00e3o",
+            "data": "2025-06-16T22:57:06.555043",
+            "desc": "awdasd",
+            "carteira": "Lojinha",
+            "repeticao": false
         }
     ],
     "carteiras": [
@@ -89,13 +100,20 @@
         {
             "nome": "Lojinha",
             "desc": "Atletica",
-            "saldo": 90,
+            "saldo": -123033.0,
             "movimentacoes": [
                 3,
                 4,
                 7,
-                8
+                8,
+                9
             ]
+        },
+        {
+            "nome": "jane",
+            "desc": "doe",
+            "saldo": "12",
+            "movimentacoes": []
         }
     ],
     "cofrinhos": [
@@ -115,7 +133,7 @@
             "meta_mercado": 300,
             "meta_servico": 100,
             "gastos_lazer": -100,
-            "gastos_alimentacao": 2473,
+            "gastos_alimentacao": -120650.0,
             "gastos_casa": 123,
             "gastos_mercado": 21323,
             "gastos_servico": 200
