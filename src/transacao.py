@@ -102,7 +102,7 @@ class TransactionFactory(ABC):
 # Concrete Factories
 class ReceitaFactory(TransactionFactory):
     def create_transaction(self, id,nome, valor,categoria, data, desc, carteira, repeticao=False):
-        return Receita(id, nome, valor,categoria, data, desc, carteira, repeticao)
+        return Receita(id, nome, valor,categoria, data, desc, carteira.getNome(), repeticao)
 
     def from_dict(self, d):
         return Receita(
@@ -118,7 +118,7 @@ class ReceitaFactory(TransactionFactory):
 
 class DespesaFactory(TransactionFactory):
     def create_transaction(self, id,nome, valor,categoria, data, desc, carteira, repeticao=False):
-        return Despesa(id,nome, valor,categoria, data, desc, carteira, repeticao)
+        return Despesa(id,nome, valor,categoria, data, desc, carteira.getNome(), repeticao)
 
     def from_dict(self, d):
         return Despesa(
@@ -141,17 +141,12 @@ class Transaction(ABC):
         self.desc = desc
         self.fixo = fixo
         self.id = id
-        self.carteira = carteira  
+        self.carteira = carteira
         
     @property
     def valor(self):
         return self._valor if isinstance(self,Receita) else -self._valor
     
-    def set_carteira(self, carteira):
-        if isinstance(carteira, Corrente):
-            self.carteira = carteira
-        else:
-            raise ValueError("Carteira deve ser uma instância da classe Carteira.")
     # Formata para JSON
     def to_dict(self):
         return {

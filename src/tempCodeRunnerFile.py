@@ -1,2 +1,1 @@
-rFactory = CorrenteFactory()
-fFactory = CofrinhoFactory()
+carteira

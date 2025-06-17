@@ -76,13 +76,13 @@ while True:
             result, msg =gerenciador.adicionar_receita(nome, valor, tipo, data, desc, carteira, repeticao)
             
         elif modo == 1:
-            result, msg = gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira,  repeticao)
+            pontos_perdidos, gasto, meta, result, msg = gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira,  repeticao)
         else:
             print("Modo inválido.")
             continue
         if result: print("Transação criada!")
         else: print(msg)
-        time.sleep(4)
+        time.sleep(2)
 
 
     elif acao == 2:
@@ -121,7 +121,7 @@ while True:
             continue
         gerenciador.depositar_cofrinho(valor, cofrinho, corrente)
         print("Valor adicionado ao cofrinho com sucesso!:)")
-        time.sleep(4)
+        time.sleep(2)
 
     elif acao == 3:
         os.system('cls')
@@ -144,7 +144,7 @@ while True:
         corrente = carteiras[0] 
         gerenciador.quebrar_cofrinho(cofrinho, corrente)
         print("Cofrinho quebrado! Valor adicionado à carteira corrente: ", valor)
-        time.sleep(4)
+        time.sleep(2)
 
     elif acao == 4:
         os.system('cls')
@@ -153,7 +153,7 @@ while True:
         saldo = input("Qual o saldo inicial?")
         result, msg =gerenciador.adicionar_carteira(nome, desc, saldo)
         print(msg)
-        time.sleep(4)
+        time.sleep(2)
     elif acao == 5:
         os.system('cls')
         nome = input("Qual o nome do novo cofrinho?")
@@ -161,7 +161,7 @@ while True:
         saldo = input("Qual o saldo inicial?")
         result, msg =gerenciador.adicionar_cofrinho(nome, desc, saldo)
         print(msg)
-        time.sleep(4)
+        time.sleep(2)
 
 
 

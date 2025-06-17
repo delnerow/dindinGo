@@ -30,15 +30,15 @@ def load_data():
                 pontos.append(sistemaDePontos.from_dict(t))
             return transacoes, carteiras, cofrinhos, pontos, curId
     except FileNotFoundError:
-        return [], [], [], [0] , 0
+        return [], [], [], [] , 0
 
 def save_data(transacoes, carteiras, cofrinhos, pontos, curId):
     data = {
         'idGenerator': curId,  # Placeholder for ID generator
         'transacoes': [t.to_dict() for t in transacoes],
-        'carteiras': [t.to_dict() for t in carteiras],
-        'cofrinhos': [t.to_dict() for t in cofrinhos],
-        'pontos': [t.to_dict() for t in pontos]
+        'carteiras': [c.to_dict() for c in carteiras],
+        'cofrinhos': [c.to_dict() for c in cofrinhos],
+        'pontos': [p.to_dict() for p in pontos]
     }
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=4)

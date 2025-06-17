@@ -1,129 +1,42 @@
 {
-    "idGenerator": 9,
+    "idGenerator": 3,
     "transacoes": [
+        {
+            "id": 1,
+            "receita": true,
+            "nome": "Arrecada\u00e7\u00e3o",
+            "valor": 200.0,
+            "categoria": "alimenta\u00e7\u00e3o",
+            "data": "2025-06-16T23:37:38.555178",
+            "desc": "Vakinha amita para nemot t27",
+            "carteira": "Trevilato Pemba",
+            "repeticao": false
+        },
         {
             "id": 2,
             "receita": false,
-            "nome": "b",
-            "valor": 50,
-            "categoria": "lazer",
-            "data": "2025-06-16T11:47:30.544014",
-            "desc": "b",
-            "carteira": "a",
-            "repeticao": false
-        },
-        {
-            "id": 3,
-            "receita": false,
-            "nome": "falta de dc",
-            "valor": 50,
-            "categoria": "servi\u00e7o",
-            "data": "2025-06-16T12:00:50.268089",
-            "desc": "pessoal nn pagou",
-            "carteira": "Lojinha",
-            "repeticao": false
-        },
-        {
-            "id": 4,
-            "receita": true,
-            "nome": "dc",
-            "valor": 40,
-            "categoria": "servi\u00e7o",
-            "data": "2025-06-16T12:01:50.745160",
-            "desc": "alguns pagaram",
-            "carteira": "Lojinha",
-            "repeticao": false
-        },
-        {
-            "id": 5,
-            "receita": false,
-            "nome": "aaa",
-            "valor": 1,
+            "nome": "Curso IMPA",
+            "valor": 100.0,
             "categoria": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-16T20:15:42.793010",
-            "desc": "aaaaaa",
-            "carteira": "Lojinha",
-            "repeticao": false
-        },
-        {
-            "id": 6,
-            "receita": false,
-            "nome": "Faxina",
-            "valor": 100,
-            "categoria": "servi\u00e7o",
-            "data": "2025-06-16T20:16:32.133937",
-            "desc": "shuashua",
-            "carteira": "Lojinha",
-            "repeticao": false
-        },
-        {
-            "id": 7,
-            "receita": false,
-            "nome": "aasd",
-            "valor": 100,
-            "categoria": "lazer",
-            "data": "2025-06-16T20:21:05.783943",
-            "desc": "awdsad",
-            "carteira": "Lojinha",
-            "repeticao": false
-        },
-        {
-            "id": 8,
-            "receita": false,
-            "nome": "Ladrao",
-            "valor": 400,
-            "categoria": "servi\u00e7o",
-            "data": "2025-06-16T20:23:13.489083",
-            "desc": "bike",
-            "carteira": "Lojinha",
-            "repeticao": false
-        },
-        {
-            "id": 9,
-            "receita": false,
-            "nome": "asd",
-            "valor": 123123.0,
-            "categoria": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-16T22:57:06.555043",
-            "desc": "awdasd",
-            "carteira": "Lojinha",
+            "data": "2025-06-16T23:48:29.044164",
+            "desc": "Reciclagem de prismas",
+            "carteira": "Trevilato Pemba",
             "repeticao": false
         }
     ],
     "carteiras": [
         {
-            "nome": "a",
-            "desc": "a",
-            "saldo": 50,
-            "movimentacoes": []
-        },
-        {
-            "nome": "Lojinha",
-            "desc": "Atletica",
-            "saldo": -123033.0,
+            "nome": "Trevilato Pemba",
+            "desc": "ONG para financiar estudos do leonardo",
+            "saldo": 100.0,
             "movimentacoes": [
-                3,
-                4,
-                7,
-                8,
-                9
+                1,
+                2,
+                3
             ]
-        },
-        {
-            "nome": "jane",
-            "desc": "doe",
-            "saldo": "12",
-            "movimentacoes": []
         }
     ],
-    "cofrinhos": [
-        {
-            "nome": "CIA",
-            "desc": "dinheiro da atletica para a grande CIA",
-            "saldo": 700,
-            "movimentacoes": []
-        }
-    ],
+    "cofrinhos": [],
     "pontos": [
         {
             "pontos": 0,
@@ -133,7 +46,7 @@
             "meta_mercado": 300,
             "meta_servico": 100,
             "gastos_lazer": -100,
-            "gastos_alimentacao": -120650.0,
+            "gastos_alimentacao": -120950.0,
             "gastos_casa": 123,
             "gastos_mercado": 21323,
             "gastos_servico": 200

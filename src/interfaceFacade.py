@@ -46,7 +46,7 @@ class GerenciamentoDeCarteiras:
         try:
             self.validar_transacao(nome, valor, tipo, desc, carteira, fixo)
             self._curId = self._curId +1
-            despesa = self.despesaFactory.create_transaction(self._curId, nome, float(valor), tipo, data, desc, carteira.getNome(), fixo)
+            despesa = self.despesaFactory.create_transaction(self._curId, nome, float(valor), tipo, data, desc, carteira, fixo)
             self._transacoes.append(despesa)
             pontos_perdidos, gasto, meta = self._pontos[0].adicionar_despesa(despesa.valor, despesa.categoria)
             self.salvar_dados()
@@ -61,9 +61,10 @@ class GerenciamentoDeCarteiras:
         # Cria a carteira e adiciona à lista de carteiras
         try:
             self.validar_carteira(nome, desc, saldo)
-            carteira = self.correnteFactory.create(nome, desc, saldo)
+            carteira = self.correnteFactory.create(nome, desc, float(saldo))
             self._carteiras.append(carteira)
             self.salvar_dados()
+            return True, "Carteira adicionada com sucesso"
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
         
@@ -72,9 +73,10 @@ class GerenciamentoDeCarteiras:
         # Cria o cofre e adiciona à lista de cofrinhos
         try:
             self.validar_carteira(nome, desc, saldo)
-            cofre = self.cofrinhoFactory.create(nome, desc, saldo)
+            cofre = self.cofrinhoFactory.create(nome, desc, float(saldo))
             self._cofrinhos.append(cofre)
             self.salvar_dados()
+            return True, "Cofrinho adicionado com sucesso"
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
     
@@ -184,6 +186,8 @@ class GerenciamentoDeCarteiras:
     
     def get_pontos(self):
         """Retorna a pontuação do sistema de pontos."""
+        if not self._pontos:
+            return 0
         return self._pontos[0].get_pontos()
 
     def filtrar_transacoes_mes(self):
