@@ -13,11 +13,11 @@ class Transaction(ABC):
     def __init__(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, fixo: bool = False):
         self.id = id
         self.nome = nome
-        self._valor = abs(valor)  # Armazena sempre um valor positivo
+        self._valor = abs(valor)
         self.categoria = categoria
         self.data = data
         self.desc = desc
-        self.carteira = carteira # Nome/ID da carteira associada
+        self.carteira = carteira
         self.fixo = fixo
 
     @property
@@ -32,7 +32,7 @@ class Transaction(ABC):
         Define a qual objeto Carteira esta transação pertence.
         """
         if isinstance(carteira, Carteira):
-            self.carteira = carteira.getNome()
+            self.carteira = carteira.get_nome()
         else:
             raise TypeError("O argumento 'carteira' deve ser uma instância de Carteira.")
 
@@ -71,21 +71,18 @@ class Carteira(ABC):
         self._nome = nome
         self._descricao = descricao
         self._saldo = saldo
-        self.movimentacoes = movimentacoes  # Lista para armazenar IDs de transações
+        self.movimentacoes = movimentacoes
 
-    def getSaldo(self) -> float:
+    def get_saldo(self) -> float:
         return self._saldo
 
-    def getNome(self) -> str:
+    def get_nome(self) -> str:
         return self._nome
 
-    def getDescricao(self) -> str:
+    def get_descricao(self) -> str:
         return self._descricao
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Converte o objeto Carteira para um dicionário (serialização).
-        """
         return {
             'nome': self._nome,
             'desc': self._descricao,
@@ -94,37 +91,29 @@ class Carteira(ABC):
         }
     
     def ajustar_saldo(self, valor_ajuste: float):
-        """
-        Ajusta diretamente o saldo da carteira.
-        Usado para correções ou edições de transações.
-        """
         self._saldo += valor_ajuste
 
     @abstractmethod
-    def atualizaCarteira(self, transacao: Transaction):
+    def atualiza_carteira(self, transacao: Transaction):
         """
         Método abstrato para atualizar a carteira com uma transação completa.
-        As subclasses (Corrente, Cofrinho) devem implementar sua própria lógica.
         """
         pass
 
 class Cofrinho(Carteira):
     """
     Representa uma conta poupança simples (Cofrinho).
-    Não pode ter despesas diretas, apenas depósitos (Receitas).
     """
     def __init__(self, nome: str, descricao: str, saldo: float, movimentacoes: List[int] = []):
         super().__init__(nome, descricao, saldo, movimentacoes)
 
     def quebrar(self) -> float:
-        """Zera o saldo do cofrinho e retorna o valor que havia nele."""
         retorno = self._saldo
         self._saldo = 0
-        self.movimentacoes.clear() # Limpa o histórico ao quebrar
+        self.movimentacoes.clear()
         return retorno
 
     def depositar(self, transacao: Transaction):
-        """Adiciona uma transação a este cofrinho."""
         if not isinstance(transacao, Transaction):
             raise TypeError("Apenas objetos do tipo Transaction podem ser depositados.")
         
@@ -132,16 +121,13 @@ class Cofrinho(Carteira):
             print(f"ERRO: Não é possível adicionar uma Despesa ('{transacao.nome}') a um Cofrinho.")
             return
 
-        # O valor da transação já é positivo para Receita
         self._saldo += transacao.valor
         self.movimentacoes.append(transacao.id)
 
-    def atualizaCarteira(self, transacao: Transaction):
+    def atualiza_carteira(self, transacao: Transaction):
         """
         Implementa o método abstrato herdado de Carteira.
-        Para um Cofrinho, a lógica é a mesma de um depósito.
         """
-        # Reutiliza a lógica já existente no método depositar
         self.depositar(transacao)
 
 class Corrente(Carteira):
@@ -151,12 +137,11 @@ class Corrente(Carteira):
     def __init__(self, nome: str, descricao: str, saldo: float, movimentacoes: List[int] = []):
         super().__init__(nome, descricao, saldo, movimentacoes)
 
-    def atualizaCarteira(self, transacao: Transaction):
-        """Adiciona uma transação (receita ou despesa) à conta corrente."""
+    def atualiza_carteira(self, transacao: Transaction):
+        """Adiciona o valor de uma transação (receita ou despesa) ao saldo."""
         if not isinstance(transacao, Transaction):
             raise TypeError("Apenas objetos do tipo Transaction podem ser adicionados à carteira.")
 
-        # O método .valor já retorna o valor com o sinal correto (+/-)
         self._saldo += transacao.valor
         self.movimentacoes.append(transacao.id)
 

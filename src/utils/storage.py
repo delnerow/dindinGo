@@ -1,10 +1,14 @@
 import json
 from typing import List, Optional
+
+# Importe suas classes do modelo e fábricas
 from transacao import Transaction, Carteira, Cofrinho, ReceitaFactory, DespesaFactory, CorrenteFactory, CofrinhoFactory
 from sistemaDePontos import sistemaDePontos
 
 class StorageManager:
-
+    """
+    Implementação do padrão Singleton para gerenciar a persistência de dados.
+    """
     _instance: Optional['StorageManager'] = None
     DATA_FILE = 'data.json'
 
@@ -22,9 +26,8 @@ class StorageManager:
         self.transacoes: List[Transaction] = []
         self.carteiras: List[Carteira] = []
         self.cofrinhos: List[Cofrinho] = []
-        # Inicializa o sistema de pontos com um valor padrão
         self.pontos_manager: sistemaDePontos = sistemaDePontos(pontos=0)
-        self.curId: int = 0
+        self.cur_id: int = 0
         
         self._load_data()
 
@@ -33,7 +36,7 @@ class StorageManager:
         try:
             with open(self.DATA_FILE, 'r') as file:
                 data = json.load(file)
-                self.curId = data.get('idGenerator', 0)
+                self.cur_id = data.get('idGenerator', 0)
                 
                 for t_data in data.get('transacoes', []):
                     factory = ReceitaFactory if t_data.get('receita') else DespesaFactory
@@ -45,7 +48,6 @@ class StorageManager:
                 for c_data in data.get('cofrinhos', []):
                     self.cofrinhos.append(CofrinhoFactory.from_dict(c_data))
                 
-                # --- LÓGICA PARA CARREGAR O SISTEMA DE PONTOS ---
                 pontos_data = data.get('pontos')
                 if pontos_data:
                     self.pontos_manager = sistemaDePontos.from_dict(pontos_data[0])
@@ -57,20 +59,14 @@ class StorageManager:
     def save_data(self):
         """Salva o estado atual da memória para o arquivo JSON."""
         data = {
-            'idGenerator': self.curId,
+            'idGenerator': self.cur_id,
             'transacoes': [t.to_dict() for t in self.transacoes],
             'carteiras': [c.to_dict() for c in self.carteiras],
             'cofrinhos': [c.to_dict() for c in self.cofrinhos],
-            # --- LÓGICA PARA SALVAR O SISTEMA DE PONTOS ---
             'pontos': [self.pontos_manager.to_dict()] 
         }
         with open(self.DATA_FILE, 'w') as file:
             json.dump(data, file, indent=4)
-
-    # --- MÉTODOS DE ACESSO (GETTERS) ---
-
-    def get_pontos_manager(self) -> sistemaDePontos:
-        return self.pontos_manager
 
     def get_cofrinhos(self) -> List[Cofrinho]:
         return self.cofrinhos
@@ -81,9 +77,13 @@ class StorageManager:
     def get_all_transactions(self) -> List[Transaction]:
         return self.transacoes
     
+    def get_pontos_manager(self) -> sistemaDePontos:
+        return self.pontos_manager
+
     def get_next_id(self) -> int:
-        self.curId += 1
-        return self.curId
+        """Gera e retorna um novo ID único."""
+        self.cur_id += 1
+        return self.cur_id
 
     def add_transaction(self, transaction: Transaction):
         self.transacoes.append(transaction)

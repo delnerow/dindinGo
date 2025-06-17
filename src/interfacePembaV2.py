@@ -1,12 +1,12 @@
 import datetime
 import os
 import time
-from utils.printers import printCarteiras, printCofrinhos, printTransacoes
+from utils.printers import print_carteiras, print_cofrinhos, print_transacoes
 from utils.filters import filtra_transacoes_mes
 from interfaceFacade import GerenciamentoDeCarteiras
 
 # ==============================================================================
-# FUNÇÕES AUXILIARES PARA ROBUSTEZ E CÓDIGO LIMPO
+# FUNÇÕES AUXILIARES
 # ==============================================================================
 
 def get_numeric_input(prompt: str, value_type: type = float) -> float:
@@ -17,7 +17,6 @@ def get_numeric_input(prompt: str, value_type: type = float) -> float:
     while True:
         try:
             input_str = input(prompt)
-            # Permite que o usuário digite com vírgula ou ponto
             value = value_type(input_str.replace(',', '.'))
             return value
         except ValueError:
@@ -25,8 +24,7 @@ def get_numeric_input(prompt: str, value_type: type = float) -> float:
 
 def selecionar_item(lista_itens: list, nome_item: str, impressora_func):
     """
-    Função genérica para o usuário selecionar um item de uma lista (carteira, cofrinho, etc.).
-    Retorna o item selecionado ou None se a lista estiver vazia.
+    Função genérica para o usuário selecionar um item de uma lista.
     """
     if not lista_itens:
         print(f"Nenhum(a) {nome_item} disponível. Crie um(a) primeiro.")
@@ -81,20 +79,18 @@ gerenciador = GerenciamentoDeCarteiras()
 while True:
     os.system('cls' if os.name == 'nt' else 'clear')
 
-    # --- Carrega e exibe o estado atual ---
     print(f"Transações feitas em {gerenciador.get_mes_atual():02d}/{gerenciador.get_ano_atual()}:")
     transacoes = gerenciador.get_transacoes()
     transacoes_mes = filtra_transacoes_mes(transacoes, gerenciador.get_mes_atual(), gerenciador.get_ano_atual())
     carteiras = gerenciador.get_carteiras()
     cofrinhos = gerenciador.get_cofrinhos()
 
-    printTransacoes(transacoes_mes)
-    printCarteiras(carteiras)
-    printCofrinhos(cofrinhos)
+    print_transacoes(transacoes_mes)
+    print_carteiras(carteiras)
+    print_cofrinhos(cofrinhos)
 
     print(f"\n💎 Pontuação atual: {gerenciador.get_pontos()} 💎")
 
-    # --- Menu de Ações ---
     menu = (
         "\nO que você deseja fazer?\n"
         "[1] Nova transação\n"
@@ -110,9 +106,8 @@ while True:
     )
     acao = get_numeric_input(menu, value_type=int)
 
-    # --- Processamento das Ações ---
     if acao == 1: # Nova transação
-        carteira = selecionar_item(carteiras, "carteira", printCarteiras)
+        carteira = selecionar_item(carteiras, "carteira", print_carteiras)
         if carteira is None:
             continue
 
@@ -135,26 +130,26 @@ while True:
         time.sleep(3)
 
     elif acao == 2: # Depositar no cofrinho
-        cofrinho = selecionar_item(cofrinhos, "cofrinho", printCofrinhos)
+        cofrinho = selecionar_item(cofrinhos, "cofrinho", print_cofrinhos)
         if cofrinho is None:
             continue
         
-        corrente = selecionar_item(carteiras, "carteira de origem", printCarteiras)
+        corrente = selecionar_item(carteiras, "carteira de origem", print_carteiras)
         if corrente is None:
             continue
-
-        valor = get_numeric_input(f"Saldo disponível na carteira '{corrente.getNome()}': R$ {corrente.getSaldo():.2f}\nQual o valor a depositar? ")
+        
+        prompt_valor = f"Saldo disponível na carteira '{corrente.get_nome()}': R$ {corrente.get_saldo():.2f}\nQual o valor a depositar? "
+        valor = get_numeric_input(prompt_valor)
         
         result, msg = gerenciador.depositar_cofrinho(valor, cofrinho, corrente)
         print(msg)
         time.sleep(3)
 
     elif acao == 3: # Quebrar cofrinho
-        cofrinho = selecionar_item(cofrinhos, "cofrinho", printCofrinhos)
+        cofrinho = selecionar_item(cofrinhos, "cofrinho", print_cofrinhos)
         if cofrinho is None:
             continue
         
-        # Por padrão, o valor vai para a primeira carteira corrente
         corrente = carteiras[0] if carteiras else None
         if corrente is None:
             print("Você precisa de uma carteira para receber o valor do cofrinho.")
@@ -163,9 +158,9 @@ while True:
         
         valor_quebrado, msg = gerenciador.quebrar_cofrinho(cofrinho, corrente)
         if valor_quebrado is not None:
-             print(f"Cofrinho quebrado! Valor de R$ {valor_quebrado:.2f} foi adicionado à carteira '{corrente.getNome()}'.")
+             print(f"Cofrinho quebrado! Valor de R$ {valor_quebrado:.2f} foi adicionado à carteira '{corrente.get_nome()}'.")
         else:
-            print(msg) # Imprime a mensagem de erro vinda do gerenciador
+            print(msg)
         time.sleep(4)
 
     elif acao == 4: # Criar Nova Carteira
@@ -184,38 +179,30 @@ while True:
         print(msg)
         time.sleep(3)
 
-    elif acao == 6: # Mês anterior
+    elif acao == 6:
         gerenciador.mes_anterior()
 
-    elif acao == 7: # Próximo mês
+    elif acao == 7:
         gerenciador.proximo_mes()
 
     elif acao == 8: # Editar transação
-        transacao_para_editar = selecionar_item(transacoes_mes, "transação", printTransacoes)
+        transacao_para_editar = selecionar_item(transacoes_mes, "transação", print_transacoes)
         if transacao_para_editar is None:
             continue
 
         print("\nEditando transação. Deixe em branco para manter o valor atual.")
 
-        # Coleta os novos dados do usuário
         novo_nome = input(f"Nome [{transacao_para_editar.nome}]: ") or transacao_para_editar.nome
         novo_valor = input(f"Valor [{transacao_para_editar._valor}]: ") or str(transacao_para_editar._valor)
-        # ... coletar outros campos ...
 
-        novos_dados = {
-            'nome': novo_nome,
-            'valor': novo_valor,
-            # ... outros campos ...
-        }
+        novos_dados = {'nome': novo_nome, 'valor': novo_valor}
 
-        # Chama o Facade para fazer a edição
         sucesso, msg = gerenciador.editar_transacao(transacao_para_editar, novos_dados)
         print(msg)
         time.sleep(3)
         
     elif acao == 9: # Sair
         print("Salvando dados... Até a próxima!")
-        # O gerenciador já deve salvar os dados a cada operação importante
         break
         
     else:
