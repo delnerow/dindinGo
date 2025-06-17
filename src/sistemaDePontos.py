@@ -1,3 +1,4 @@
+import datetime
 
 class sistemaDePontos:
     def __init__(self, pontos, meta_lazer=100, meta_alimentacao=1000, meta_casa=100, meta_mercado=1000, meta_serviço=100,
@@ -58,6 +59,7 @@ class sistemaDePontos:
             'gastos_mercado': self._gastos_mercado,
             'gastos_servico': self._gastos_servico
         }
+    
     def adicionar_despesa(self, valor, tipo):
         """Adiciona uma despesa ao sistema de pontos e atualiza os gastos."""
         tipos = {
@@ -79,8 +81,70 @@ class sistemaDePontos:
             self.__remover_pontos(pontos_perdidos)
             
         return pontos_perdidos, gasto, meta
-
+    
+    def quebrar_cofrinho(self, data_atual, data_alvo):
+        """Quebra o cofrinho e verifica se a data atual é menor que a data alvo.
+           Se for, perde pontos proporcional à diferença de dias.
+           Retorna os pontos perdidos."""
         
+        #datas como datetime.date
+        if data_atual < data_alvo:
+            #perder pontos proporcional a diferença de período
+            dias_diferenca = (data_alvo - data_atual).days
+            pontos_perdidos = dias_diferenca // 30  # Exemplo: 1 ponto a cada 30 dias
+            self.__remover_pontos(pontos_perdidos)
+            return pontos_perdidos
+        else:
+            #não perde pontos se a data atual é maior ou igual à data alvo
+            return 0
+        
+    def depositar_cofrinho(self, valor, data_atual, data_alvo):
+        """Deposita o valor do cofrinho e atribui pontuação positiva
+           proporcional ao valor e ao tempo.
+           Retorna os pontos ganhos."""
+        
+        if valor <= 0:
+            raise ValueError("Valor do depósito deve ser maior que zero.")
+        
+        #atribui pontos pelo valor e pelo tempo
+        pontos_ganhos = valor // 100 + (data_alvo - data_atual).days // 30
+        #adiciona os pontos ganhos
+        self.__adicionar_pontos(pontos_ganhos)
+        return pontos_ganhos
+
+    def editar_metas(self, meta_lazer=None, meta_alimentacao=None, meta_casa=None, 
+                        meta_mercado=None, meta_servico=None):
+        """Edita as metas de cada categoria."""
+        #verifia se todas as metas são válidas
+        metas = [meta_lazer, meta_alimentacao, meta_casa, meta_mercado, meta_servico]
+        if any(meta is not None and meta <= 0 for meta in metas):
+            raise ValueError("Todas as metas devem ser maiores que zero.")
+        
+        #atualiza as metas        
+        if meta_lazer is not None:
+            self._meta_lazer = meta_lazer
+        if meta_alimentacao is not None:
+            self._meta_alimentacao = meta_alimentacao
+        if meta_casa is not None:
+            self._meta_casa = meta_casa
+        if meta_mercado is not None:
+            self._meta_mercado = meta_mercado
+        if meta_servico is not None:
+            self._meta_servico = meta_servico
+        #requer que sejam salvos no arquivo externo
+    
+    def __resetar_gastos(self):
+        """Reseta os gastos de todas as categorias."""
+        self._gastos_lazer = 0
+        self._gastos_alimentacao = 0
+        self._gastos_casa = 0
+        self._gastos_mercado = 0
+        self._gastos_servico = 0
+
+    def mudar_mes(self):
+        """Reseta os pontos e gastos ao mudar de mês."""
+        self.__resetar_gastos()
+        #requer que sejam salvos no arquivo externo
 
     @classmethod
     def from_dict(cls, d):
@@ -103,4 +167,4 @@ class sistemaDePontos:
             'gastos_casa': self._gastos_casa,
             'gastos_mercado': self._gastos_mercado,
             'gastos_servico': self._gastos_servico
-        }   
+        }  
