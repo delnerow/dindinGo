@@ -23,33 +23,79 @@ class GerenciamentoDeCarteiras:
 
         self.categorias = ["lazer", "alimentação", "casa", "mercado", "serviço"]
 
-    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False):
+    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep: int = 1):
         try:
-            self.validar_transacao(nome, str(valor), tipo, desc, carteira, fixo)
+            self.validar_transacao(nome, str(valor), tipo, carteira)
             
+            # Get current date as datetime object
+            data_atual = datetime.datetime.fromisoformat(data)
             novo_id = self.storage.get_next_id()
-            trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo)
             
-            self.storage.add_transaction(trans)
-            carteira.atualiza_carteira(trans)
-            
+            # Create transactions for each repetition
+            if(rep>1):
+                for i in range(rep):
+                    # Calculate date for this repetition
+                    data_trans = data_atual.replace(month=((data_atual.month - 1 + i) % 12) + 1)
+                    if (data_atual.month + i) > 12:
+                        data_trans = data_trans.replace(year=data_atual.year + ((data_atual.month + i - 1) // 12))
+                    
+                    trans = self.receita_factory.create_transaction(
+                        novo_id, 
+                        f"{nome} ({i+1}/{rep})" if rep > 1 else nome,
+                        valor, 
+                        tipo, 
+                        data_trans.isoformat(), 
+                        desc, 
+                        carteira.get_nome(), 
+                        fixo,
+                        rep
+                    )
+                    
+                    self.storage.add_transaction(trans)
+                    novo_id = self.storage.get_next_id()
+            else:
+                trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
+                self.storage.add_transaction(trans)
+                carteira.atualiza_carteira(trans)
             self.storage.save_data()
-            return True, "Receita adicionada com sucesso."
+            return True, f"{'Receita adicionada' if rep == 1 else f'Receitas adicionadas para {rep} meses'} com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
 
-    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False):
+    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep : int = 1):
         try:
-            self.validar_transacao(nome, str(valor), tipo, desc, carteira, fixo)
-            
+            self.validar_transacao(nome, str(valor), tipo, carteira)
+            # Get current date as datetime object
+            data_atual = datetime.datetime.fromisoformat(data)
             novo_id = self.storage.get_next_id()
-            despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo)
-            
-            self.storage.add_transaction(despesa)
-            carteira.atualiza_carteira(despesa)
-            
-            pontos_manager = self.storage.get_pontos_manager()
-            pontos_manager.adicionar_despesa(despesa.valor, despesa.categoria)
+            # Create transactions for each repetition
+            if(rep>1):
+                for i in range(rep):
+                    # Calculate date for this repetition
+                    data_trans = data_atual.replace(month=((data_atual.month - 1 + i) % 12) + 1)
+                    if (data_atual.month + i) > 12:
+                        data_trans = data_trans.replace(year=data_atual.year + ((data_atual.month + i - 1) // 12))
+                    
+                    
+                    trans = self.despesa_factory.create_transaction(
+                        novo_id, 
+                        f"{nome} ({i+1}/{rep})" if rep > 1 else nome,
+                        valor, 
+                        tipo, 
+                        data_trans.isoformat(), 
+                        desc, 
+                        carteira.get_nome(), 
+                        fixo,
+                        rep
+                    )
+                    
+                    self.storage.add_transaction(trans)
+                    novo_id = self.storage.get_next_id()
+            else:
+                despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
+                self.storage.add_transaction(despesa)
+                pontos_manager = self.storage.get_pontos_manager()
+                carteira.atualiza_carteira(despesa, pontos_manager)
 
             self.storage.save_data()
             return True, "Despesa adicionada com sucesso."
@@ -57,14 +103,14 @@ class GerenciamentoDeCarteiras:
             return False, f"\nErros de validação:\n{str(e)}"
         
         
+    def realizar_transacao(self, transacao: Transaction):
+        #para transacoes que nao foram pagas quando criadas, como as que se repetem
+        carteira = next(c for c in self.storage.get_carteiras() if c.get_nome() == transacao.carteira)
+        carteira.atualiza_carteira(transacao)   
         
         
         
-        
-        
-        
-        
-    # nao posso mudar categoria se é deposito! depositso devem ser mostrados na lista??????
+    #  depositso devem ser mostrados na lista??????
     
     
     
@@ -74,7 +120,7 @@ class GerenciamentoDeCarteiras:
     
     def editar_transacao(self, transacao_original: Transaction, novos_dados: dict):
         try:
-            if transacao_original.categoria is not "transferencia":
+            if transacao_original.categoria != "transferencia":
                 carteira_existe = any( c.get_nome() == transacao_original.carteira for c in self.storage.get_carteiras())
                 if not carteira_existe:
                     return False, "Erro: Não é possível editar transação de uma carteira deletada."
@@ -191,7 +237,7 @@ class GerenciamentoDeCarteiras:
         except Exception as e:
             return False, f"Erro ao deletar transação: {str(e)}"
 
-    def validar_transacao(self, nome, valor, tipo, desc, carteira, fixo):
+    def validar_transacao(self, nome, valor, tipo, carteira):
         errors = ValidationErrors()
         if not nome or not nome.strip(): errors.add(EmptyFieldError("nome"))
         

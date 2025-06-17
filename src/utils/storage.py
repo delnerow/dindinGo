@@ -3,7 +3,7 @@ from typing import List, Optional
 
 # Importe suas classes do modelo e fábricas
 from transacao import Transaction, Carteira, Cofrinho, ReceitaFactory, DespesaFactory, CorrenteFactory, CofrinhoFactory
-from sistemaDePontos import sistemaDePontos
+from sistemaDePontos import SistemaDePontos
 
 class StorageManager:
     """
@@ -26,7 +26,7 @@ class StorageManager:
         self.transacoes: List[Transaction] = []
         self.carteiras: List[Carteira] = []
         self.cofrinhos: List[Cofrinho] = []
-        self.pontos_manager: sistemaDePontos = sistemaDePontos(pontos=0)
+        self.pontos_manager: SistemaDePontos = SistemaDePontos(pontos=0)
         self.cur_id: int = 0
         
         self._load_data()
@@ -50,7 +50,7 @@ class StorageManager:
                 
                 pontos_data = data.get('pontos')
                 if pontos_data:
-                    self.pontos_manager = sistemaDePontos.from_dict(pontos_data[0])
+                    self.pontos_manager = SistemaDePontos.from_dict(pontos_data[0])
             
             #update dos cofrinhos na inicialização do sistema
             for cofre in self.cofrinhos:
@@ -83,7 +83,7 @@ class StorageManager:
     def get_all_transactions(self) -> List[Transaction]:
         return self.transacoes
     
-    def get_pontos_manager(self) -> sistemaDePontos:
+    def get_pontos_manager(self) -> SistemaDePontos:
         return self.pontos_manager
 
     def get_next_id(self) -> int:

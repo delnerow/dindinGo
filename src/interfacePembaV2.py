@@ -81,6 +81,7 @@ while True:
 
     print(f"Transações feitas em {gerenciador.get_mes_atual():02d}/{gerenciador.get_ano_atual()}:")
     transacoes = gerenciador.get_transacoes()
+    
     transacoes_mes = filtra_transacoes_mes(transacoes, gerenciador.get_mes_atual(), gerenciador.get_ano_atual())
     carteiras = gerenciador.get_carteiras()
     cofrinhos = gerenciador.get_cofrinhos()
@@ -116,15 +117,20 @@ while True:
         valor = get_numeric_input("Qual o valor, em reais? ")
         modo = get_numeric_input("Despesa(1) ou Ganho(2)? ", int)
         repeticao = input("É uma transação recorrente? (s/n) ").lower() == 's'
+        if repeticao:
+            print("Quantas vezes essa transação se repete? (digite um número inteiro)")
+            rep = get_numeric_input("Número de repetições: ", int)
+        else:
+            rep = 1
         nome = input("Qual o nome da transação? ")
         desc = input("Qual a descrição? ")
         tipo = selecionar_categoria(gerenciador)
         data = datetime.datetime.now().isoformat()
 
         if modo == 2:
-            result, msg = gerenciador.adicionar_receita(nome, valor, tipo, data, desc, carteira, repeticao)
+            result, msg = gerenciador.adicionar_receita(nome, valor, tipo, data, desc, carteira, repeticao, rep)
         elif modo == 1:
-            result, msg = gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira, repeticao)
+            result, msg = gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira, repeticao, rep)
         else:
             result, msg = False, "Modo inválido."
 

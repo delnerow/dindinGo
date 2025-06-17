@@ -1,5 +1,5 @@
 {
-    "idGenerator": 27,
+    "idGenerator": 36,
     "transacoes": [
         {
             "id": 2,
@@ -10,7 +10,8 @@
             "data": "2025-06-16T23:48:29.044164",
             "desc": "Reciclagem de prismas",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 4,
@@ -21,7 +22,8 @@
             "data": "2025-06-16T23:50:50.039031",
             "desc": "fab",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 5,
@@ -32,7 +34,8 @@
             "data": "2025-06-17T00:10:46.575344",
             "desc": "socorro",
             "carteira": "Trevilato Pemba",
-            "repeticao": true
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 6,
@@ -43,7 +46,8 @@
             "data": "2025-06-17T00:11:40.276421",
             "desc": "Cofre quebrado",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 7,
@@ -54,7 +58,8 @@
             "data": "2025-06-17T00:45:17.433625",
             "desc": "",
             "carteira": "Adilson",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 8,
@@ -65,7 +70,8 @@
             "data": "2025-06-17T00:45:17.433625",
             "desc": "",
             "carteira": "porcao ged",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 9,
@@ -76,7 +82,8 @@
             "data": "2025-06-17T00:47:48.814561",
             "desc": "Cofre quebrado",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 10,
@@ -87,7 +94,8 @@
             "data": "2025-06-17T01:30:23.191520",
             "desc": "pobre",
             "carteira": "Adilson",
-            "repeticao": true
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 11,
@@ -98,7 +106,8 @@
             "data": "2025-06-17T08:05:45.076268",
             "desc": "presente para a Barbie vegetariana",
             "carteira": "Adilson",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 12,
@@ -109,7 +118,8 @@
             "data": "2025-06-17T08:44:19.975963",
             "desc": "",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 13,
@@ -120,7 +130,8 @@
             "data": "2025-06-17T08:44:19.975963",
             "desc": "",
             "carteira": "porcao ged",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 14,
@@ -131,7 +142,8 @@
             "data": "2025-06-17T08:45:07.775014",
             "desc": "",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 15,
@@ -142,7 +154,8 @@
             "data": "2025-06-17T08:45:07.775014",
             "desc": "",
             "carteira": "CIA",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 16,
@@ -153,7 +166,8 @@
             "data": "2025-06-17T09:22:07.815699",
             "desc": "",
             "carteira": "Adilson",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 17,
@@ -164,7 +178,8 @@
             "data": "2025-06-17T09:22:07.815699",
             "desc": "",
             "carteira": "CIA",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 18,
@@ -175,7 +190,8 @@
             "data": "2025-06-17T09:46:03.880253",
             "desc": "",
             "carteira": "Adilson",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 19,
@@ -186,7 +202,8 @@
             "data": "2025-06-17T09:46:03.880253",
             "desc": "",
             "carteira": "CIA",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 20,
@@ -197,7 +214,8 @@
             "data": "2025-06-17T09:47:24.389080",
             "desc": "",
             "carteira": "Adilson",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 21,
@@ -208,7 +226,8 @@
             "data": "2025-06-17T09:47:24.389080",
             "desc": "",
             "carteira": "CIA",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 22,
@@ -219,7 +238,8 @@
             "data": "2025-06-17T10:31:44.737466",
             "desc": "Cofre quebrado",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 23,
@@ -230,7 +250,8 @@
             "data": "2025-06-17T15:18:42.155633",
             "desc": "",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 24,
@@ -241,7 +262,8 @@
             "data": "2025-06-17T15:18:42.157604",
             "desc": "",
             "carteira": "Casa da Moeda",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 25,
@@ -252,7 +274,8 @@
             "data": "2025-06-17T15:58:13.457951",
             "desc": "",
             "carteira": "Ponei cavalo",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 26,
@@ -263,7 +286,8 @@
             "data": "2025-06-17T15:58:52.005133",
             "desc": "",
             "carteira": "Ponei cavalo",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
         },
         {
             "id": 27,
@@ -274,14 +298,135 @@
             "data": "2025-06-17T15:58:52.005133",
             "desc": "",
             "carteira": "Casa da Moeda",
-            "repeticao": false
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 28,
+            "receita": false,
+            "nome": "A\u00e7ai Gold",
+            "valor": 100.0,
+            "categoria": "alimenta\u00e7\u00e3o",
+            "data": "2025-06-17T18:50:14.538919",
+            "desc": "dourado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 29,
+            "receita": false,
+            "nome": "Farda de Aspirador (1/3)",
+            "valor": 150.0,
+            "categoria": "mercado",
+            "data": "2025-06-17T18:51:07.381567",
+            "desc": "P\u00f3",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 29,
+            "receita": false,
+            "nome": "Farda de Aspirador (2/3)",
+            "valor": 150.0,
+            "categoria": "mercado",
+            "data": "2025-07-17T18:51:07.381567",
+            "desc": "P\u00f3",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": false
+        },
+        {
+            "id": 29,
+            "receita": false,
+            "nome": "Farda de Aspirador (3/3)",
+            "valor": 150.0,
+            "categoria": "mercado",
+            "data": "2025-08-17T18:51:07.381567",
+            "desc": "P\u00f3",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": false
+        },
+        {
+            "id": 30,
+            "receita": false,
+            "nome": "Metaquest",
+            "valor": 30000.0,
+            "categoria": "lazer",
+            "data": "2025-06-17T19:47:33.583629",
+            "desc": "AFIAGBD",
+            "carteira": "Adilson",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 31,
+            "receita": true,
+            "nome": "Aposentadoria do Cunha (1/5)",
+            "valor": 50000.0,
+            "categoria": "lazer",
+            "data": "2025-06-17T19:52:21.008029",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": true,
+            "feita": 5
+        },
+        {
+            "id": 32,
+            "receita": true,
+            "nome": "Aposentadoria do Cunha (2/5)",
+            "valor": 50000.0,
+            "categoria": "lazer",
+            "data": "2025-07-17T19:52:21.008029",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": true,
+            "feita": 5
+        },
+        {
+            "id": 33,
+            "receita": true,
+            "nome": "Aposentadoria do Cunha (3/5)",
+            "valor": 50000.0,
+            "categoria": "lazer",
+            "data": "2025-08-17T19:52:21.008029",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": true,
+            "feita": 5
+        },
+        {
+            "id": 34,
+            "receita": true,
+            "nome": "Aposentadoria do Cunha (4/5)",
+            "valor": 50000.0,
+            "categoria": "lazer",
+            "data": "2025-09-17T19:52:21.008029",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": true,
+            "feita": 5
+        },
+        {
+            "id": 35,
+            "receita": true,
+            "nome": "Aposentadoria do Cunha (5/5)",
+            "valor": 50000.0,
+            "categoria": "lazer",
+            "data": "2025-10-17T19:52:21.008029",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": true,
+            "feita": 5
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 1903.0,
+            "saldo": 1803.0,
             "movimentacoes": [
                 1,
                 2,
@@ -293,20 +438,22 @@
                 12,
                 14,
                 22,
-                23
+                23,
+                28
             ]
         },
         {
             "nome": "Adilson",
             "desc": "A MAIS GORDA",
-            "saldo": 9997783.0,
+            "saldo": 9967783.0,
             "movimentacoes": [
                 7,
                 10,
                 11,
                 16,
                 18,
-                20
+                20,
+                30
             ]
         }
     ],
@@ -366,8 +513,8 @@
             "meta_casa": 1000,
             "meta_mercado": 300,
             "meta_servico": 100,
-            "gastos_lazer": 0,
-            "gastos_alimentacao": 0,
+            "gastos_lazer": -30000.0,
+            "gastos_alimentacao": -100.0,
             "gastos_casa": 0,
             "gastos_mercado": 0,
             "gastos_servico": 0
