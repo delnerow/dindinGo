@@ -1,5 +1,5 @@
 {
-    "idGenerator": 21,
+    "idGenerator": 22,
     "transacoes": [
         {
             "id": 1,
@@ -220,13 +220,24 @@
             "desc": "",
             "carteira": "CIA",
             "repeticao": false
+        },
+        {
+            "id": 22,
+            "receita": true,
+            "nome": "Valor do cofre 'dezmbro'",
+            "valor": 100.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T10:31:44.737466",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": false
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 2302.0,
+            "saldo": 2402.0,
             "movimentacoes": [
                 1,
                 2,
@@ -236,7 +247,8 @@
                 6,
                 9,
                 12,
-                14
+                14,
+                22
             ]
         },
         {
@@ -282,8 +294,17 @@
         {
             "nome": "dezmbro",
             "desc": "nao abre",
-            "saldo": 100.0,
+            "saldo": 0,
             "timer_mes": 5,
+            "ultimo_mes_update": 6,
+            "ultimo_ano_update": 2025,
+            "movimentacoes": []
+        },
+        {
+            "nome": "Casa da Moeda",
+            "desc": "imprimir notas de 500",
+            "saldo": 0.0,
+            "timer_mes": 3,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
             "movimentacoes": []
@@ -291,7 +312,7 @@
     ],
     "pontos": [
         {
-            "pontos": 0,
+            "pontos": 85,
             "meta_lazer": 100,
             "meta_alimentacao": 1000,
             "meta_casa": 1000,

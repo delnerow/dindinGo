@@ -84,11 +84,11 @@ class sistemaDePontos:
     
     def quebrar_cofrinho(self, timer):
         """Quebra o cofrinho e verifica se a data atual é menor que a data alvo.
-           Se for, perde pontos proporcional à diferença de dias.
+           Se for, perde pontos proporcional à diferença de meses.
            Retorna os pontos perdidos."""
         
         #datas como datetime.date
-        if timer >= 0:
+        if timer > 0:
             #perder pontos proporcional a diferença de período
             #difença dos meses usando datetime.month
             pontos_perdidos = timer *3  # 3 pontos a cada mês antes do alvo

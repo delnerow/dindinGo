@@ -88,10 +88,13 @@ class GerenciamentoDeCarteiras:
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
 
-    def adicionar_cofrinho(self, nome: str, desc: str, saldo: float = 0):
+    def adicionar_cofrinho(self, nome: str, desc: str, timer_mes: int, saldo: float = 0):
         try:
+            hoje = datetime.datetime.now()
+            mes_atual = hoje.month
+            ano_atual = hoje.year
             self.validar_carteira(nome, desc, str(saldo))
-            cofre = self.cofrinho_factory.create(nome, desc, saldo)
+            cofre = self.cofrinho_factory.create(nome, desc, saldo, timer_mes, mes_atual, ano_atual)
             self.storage.add_cofrinho(cofre)
             return True, "Cofrinho criado com sucesso."
         except ValidationErrors as e:
