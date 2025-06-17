@@ -51,6 +51,12 @@ class StorageManager:
                 pontos_data = data.get('pontos')
                 if pontos_data:
                     self.pontos_manager = sistemaDePontos.from_dict(pontos_data[0])
+            
+            #update dos cofrinhos na inicialização do sistema
+            for cofre in self.cofrinhos:
+                cofre.inicializar()
+            
+            self.save_data()  # Salva os dados carregados para garantir consistência
 
         except (FileNotFoundError, json.JSONDecodeError):
             print("Arquivo de dados não encontrado ou corrompido. Iniciando com estado limpo.")

@@ -1,5 +1,5 @@
 {
-    "idGenerator": 10,
+    "idGenerator": 21,
     "transacoes": [
         {
             "id": 1,
@@ -99,13 +99,134 @@
             "desc": "pobre",
             "carteira": "Adilson",
             "repeticao": true
+        },
+        {
+            "id": 11,
+            "receita": false,
+            "nome": "Grama sint\u00e9tica",
+            "valor": 100.0,
+            "categoria": "alimenta\u00e7\u00e3o",
+            "data": "2025-06-17T08:05:45.076268",
+            "desc": "presente para a Barbie vegetariana",
+            "carteira": "Adilson",
+            "repeticao": false
+        },
+        {
+            "id": 12,
+            "receita": false,
+            "nome": "Dep\u00f3sito para porcao ged",
+            "valor": 100.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T08:44:19.975963",
+            "desc": "",
+            "carteira": "Trevilato Pemba",
+            "repeticao": false
+        },
+        {
+            "id": 13,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Trevilato Pemba",
+            "valor": 100.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T08:44:19.975963",
+            "desc": "",
+            "carteira": "porcao ged",
+            "repeticao": false
+        },
+        {
+            "id": 14,
+            "receita": false,
+            "nome": "Dep\u00f3sito para CIA",
+            "valor": 100.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T08:45:07.775014",
+            "desc": "",
+            "carteira": "Trevilato Pemba",
+            "repeticao": false
+        },
+        {
+            "id": 15,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Trevilato Pemba",
+            "valor": 100.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T08:45:07.775014",
+            "desc": "",
+            "carteira": "CIA",
+            "repeticao": false
+        },
+        {
+            "id": 16,
+            "receita": false,
+            "nome": "Dep\u00f3sito para CIA",
+            "valor": 1000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T09:22:07.815699",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": false
+        },
+        {
+            "id": 17,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Adilson",
+            "valor": 1000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T09:22:07.815699",
+            "desc": "",
+            "carteira": "CIA",
+            "repeticao": false
+        },
+        {
+            "id": 18,
+            "receita": false,
+            "nome": "Dep\u00f3sito para CIA",
+            "valor": 99.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T09:46:03.880253",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": false
+        },
+        {
+            "id": 19,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Adilson",
+            "valor": 99.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T09:46:03.880253",
+            "desc": "",
+            "carteira": "CIA",
+            "repeticao": false
+        },
+        {
+            "id": 20,
+            "receita": false,
+            "nome": "Dep\u00f3sito para CIA",
+            "valor": 17.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T09:47:24.389080",
+            "desc": "",
+            "carteira": "Adilson",
+            "repeticao": false
+        },
+        {
+            "id": 21,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Adilson",
+            "valor": 17.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T09:47:24.389080",
+            "desc": "",
+            "carteira": "CIA",
+            "repeticao": false
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 2502.0,
+            "saldo": 2302.0,
             "movimentacoes": [
                 1,
                 2,
@@ -113,16 +234,22 @@
                 4,
                 5,
                 6,
-                9
+                9,
+                12,
+                14
             ]
         },
         {
             "nome": "Adilson",
             "desc": "A MAIS GORDA",
-            "saldo": 9998999.0,
+            "saldo": 9997783.0,
             "movimentacoes": [
                 7,
-                10
+                10,
+                11,
+                16,
+                18,
+                20
             ]
         }
     ],
@@ -130,19 +257,35 @@
         {
             "nome": "CIA",
             "desc": "bora encher a cara",
-            "saldo": 0,
-            "movimentacoes": []
+            "saldo": 1216.0,
+            "timer_mes": 0,
+            "ultimo_mes_update": 6,
+            "ultimo_ano_update": 2025,
+            "movimentacoes": [
+                15,
+                17,
+                19,
+                21
+            ]
         },
         {
             "nome": "porcao ged",
             "desc": "no bulking loco",
-            "saldo": 0,
-            "movimentacoes": []
+            "saldo": 100.0,
+            "timer_mes": 5,
+            "ultimo_mes_update": 6,
+            "ultimo_ano_update": 2025,
+            "movimentacoes": [
+                13
+            ]
         },
         {
             "nome": "dezmbro",
             "desc": "nao abre",
             "saldo": 100.0,
+            "timer_mes": 5,
+            "ultimo_mes_update": 6,
+            "ultimo_ano_update": 2025,
             "movimentacoes": []
         }
     ],
@@ -154,11 +297,11 @@
             "meta_casa": 1000,
             "meta_mercado": 300,
             "meta_servico": 100,
-            "gastos_lazer": -201.0,
-            "gastos_alimentacao": -120950.0,
-            "gastos_casa": 123,
-            "gastos_mercado": 21323,
-            "gastos_servico": 200
+            "gastos_lazer": 0,
+            "gastos_alimentacao": 0,
+            "gastos_casa": 0,
+            "gastos_mercado": 0,
+            "gastos_servico": 0
         }
     ]
 }

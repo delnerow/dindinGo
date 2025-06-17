@@ -82,21 +82,20 @@ class sistemaDePontos:
             
         return pontos_perdidos, gasto, meta
     
-    def quebrar_cofrinho(self, mes_atual, mes_alvo):
+    def quebrar_cofrinho(self, timer):
         """Quebra o cofrinho e verifica se a data atual é menor que a data alvo.
            Se for, perde pontos proporcional à diferença de dias.
            Retorna os pontos perdidos."""
         
         #datas como datetime.date
-        if mes_atual < mes_alvo:
+        if timer >= 0:
             #perder pontos proporcional a diferença de período
             #difença dos meses usando datetime.month
-            mes_diff = int(mes_alvo - mes_atual)
-            pontos_perdidos = mes_diff *3  # 3 pontos a cada mês antes do alvo
+            pontos_perdidos = timer *3  # 3 pontos a cada mês antes do alvo
             self.__remover_pontos(pontos_perdidos)
             return pontos_perdidos
         else:
-            #não perde pontos se a data atual é maior ou igual à data alvo
+            #não perde pontos se o período do cofre já tiver passado
             return 0
         
     def depositar_cofrinho(self, valor):

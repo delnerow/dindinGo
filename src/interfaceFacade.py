@@ -120,6 +120,7 @@ class GerenciamentoDeCarteiras:
         return True, f"Valor de R$ {valor:.2f} depositado com sucesso."
 
     def quebrar_cofrinho(self, cofrinho: Cofrinho, carteira_destino: Carteira):
+        timer = cofrinho.get_timer()
         valor_quebrado = cofrinho.quebrar()
         
         if valor_quebrado > 0:
@@ -127,6 +128,8 @@ class GerenciamentoDeCarteiras:
             trans = self.receita_factory.create_transaction(id_trans, f"Valor do cofre '{cofrinho.get_nome()}'", valor_quebrado, "transferencia", datetime.datetime.now().isoformat(), "Cofre quebrado", carteira_destino.get_nome())
             self.storage.add_transaction(trans)
             carteira_destino.atualiza_carteira(trans)
+            # verifica penalidade de pontos
+            self.storage.get_pontos_manager().quebrar_cofrinho(timer)
         
         self.storage.save_data()
         return valor_quebrado, "Cofrinho quebrado com sucesso!"
@@ -161,6 +164,8 @@ class GerenciamentoDeCarteiras:
     def get_cofrinhos(self): return self.storage.get_cofrinhos()
     def get_transacoes(self): return self.storage.get_all_transactions()
     def get_pontos(self): return self.storage.get_pontos_manager().get_pontos()
+    def get_metas(self): return self.storage.get_pontos_manager().get_metas()
+    def get_gastos(self): return self.storage.get_pontos_manager().get_gastos()
     def get_categorias_disponiveis(self): return self.categorias
     def get_mes_atual(self): return self._mes_atual
     def get_ano_atual(self): return self._ano_atual

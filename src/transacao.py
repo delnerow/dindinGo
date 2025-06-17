@@ -1,6 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
+import datetime
 
 # ==================================
 # 1. Classes do Modelo Principal
@@ -104,8 +105,13 @@ class Cofrinho(Carteira):
     """
     Representa uma conta poupança simples (Cofrinho).
     """
-    def __init__(self, nome: str, descricao: str, saldo: float, movimentacoes: List[int] = []):
+    def __init__(self, nome: str, descricao: str, saldo: float,
+                timer_mes: int, ultimo_mes_update: int, ultimo_ano_update: int,
+                movimentacoes: List[int] = []):
         super().__init__(nome, descricao, saldo, movimentacoes)
+        self._timer_mes = timer_mes
+        self._ultimo_mes_update = ultimo_mes_update
+        self._ultimo_ano_update = ultimo_ano_update
 
     def quebrar(self) -> float:
         retorno = self._saldo
@@ -130,6 +136,50 @@ class Cofrinho(Carteira):
         """
         self.depositar(transacao)
 
+    def get_timer(self):
+        """
+        Retorna o timer do cofre, quando pode ser quebrado sem
+        penalidade alguma.
+        """
+        return self._timer_mes
+    
+    def inicializar(self):
+        #verificar se deve atualizar o timer_mes
+        hoje = datetime.datetime.now()
+        mes_atual = hoje.month
+        ano_atual = hoje.year
+        if self._ultimo_mes_update == mes_atual and self._ultimo_ano_update == ano_atual:
+            # timer está atualizado
+            pass
+        else:
+            if ano_atual == self._ultimo_ano_update:
+                # mesmo ano, apenas atualizar o mês
+                self._timer_mes -= mes_atual - self._ultimo_mes_update
+                self._ultimo_mes_update = mes_atual
+            else:
+                # ano diferente, corrigir o ano
+                while self._ultimo_ano_update != ano_atual:
+                    self._ultimo_ano_update += 1
+                    self._timer_mes -= 12
+                # corrigir o mês
+                self._timer_mes -= mes_atual - self._ultimo_mes_update
+                self._ultimo_mes_update = mes_atual
+        # garantir que o self._timer_mes não fique negativo
+        self._timer_mes = 0 if self._timer_mes < 0 else self._timer_mes
+
+
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'nome': self._nome,
+            'desc': self._descricao,
+            'saldo': self._saldo,
+            "timer_mes": self._timer_mes,
+            "ultimo_mes_update": self._ultimo_mes_update,
+            "ultimo_ano_update": self._ultimo_ano_update,
+            'movimentacoes': self.movimentacoes
+        }
+    
 class Corrente(Carteira):
     """
     Representa uma conta corrente que permite receitas e despesas.
@@ -202,11 +252,12 @@ class CorrenteFactory(CarteiraFactory):
         )
 
 class CofrinhoFactory(CarteiraFactory):
-    def create(self, nome: str, descricao: str, saldo: float, movimentacoes: List[int] = []) -> Cofrinho:
-        return Cofrinho(nome, descricao, saldo, movimentacoes)
+    def create(self, nome: str, descricao: str, saldo: float,timer_mes, ultimo_mes_update, ultimo_ano_update,
+                movimentacoes: List[int] = []) -> Cofrinho:
+        return Cofrinho(nome, descricao, saldo, timer_mes, ultimo_mes_update, ultimo_ano_update,movimentacoes)
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Cofrinho:
         return Cofrinho(
-            d['nome'], d['desc'], d['saldo'], d.get('movimentacoes', [])
+            d['nome'], d['desc'], d['saldo'], d['timer_mes'], d['ultimo_mes_update'], d['ultimo_ano_update'], d.get('movimentacoes', [])
         )
