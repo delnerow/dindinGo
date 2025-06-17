@@ -92,6 +92,21 @@ class Carteira(ABC):
             'saldo': self._saldo,
             'movimentacoes': self.movimentacoes
         }
+    
+    def ajustar_saldo(self, valor_ajuste: float):
+        """
+        Ajusta diretamente o saldo da carteira.
+        Usado para correções ou edições de transações.
+        """
+        self._saldo += valor_ajuste
+
+    @abstractmethod
+    def atualizaCarteira(self, transacao: Transaction):
+        """
+        Método abstrato para atualizar a carteira com uma transação completa.
+        As subclasses (Corrente, Cofrinho) devem implementar sua própria lógica.
+        """
+        pass
 
 class Cofrinho(Carteira):
     """
@@ -120,6 +135,14 @@ class Cofrinho(Carteira):
         # O valor da transação já é positivo para Receita
         self._saldo += transacao.valor
         self.movimentacoes.append(transacao.id)
+
+    def atualizaCarteira(self, transacao: Transaction):
+        """
+        Implementa o método abstrato herdado de Carteira.
+        Para um Cofrinho, a lógica é a mesma de um depósito.
+        """
+        # Reutiliza a lógica já existente no método depositar
+        self.depositar(transacao)
 
 class Corrente(Carteira):
     """

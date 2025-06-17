@@ -1,12 +1,6 @@
 import datetime
-
-# Importa as classes de exceção personalizadas
 from expectionHandlers import ValidationErrors, EmptyFieldError, InvalidTypeError, InvalidValueError
-
-# Importa o StorageManager Singleton (assumindo que ele está em storage.py)
 from utils.storage import StorageManager
-
-# Importa as fábricas e classes de modelo
 from transacao import CofrinhoFactory, CorrenteFactory, DespesaFactory, ReceitaFactory, Carteira, Cofrinho, Transaction
 
 class GerenciamentoDeCarteiras:
@@ -67,6 +61,46 @@ class GerenciamentoDeCarteiras:
             return True, "Despesa adicionada com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
+
+    # Em interfaceFacade.py, dentro da classe GerenciamentoDeCarteiras
+
+    def editar_transacao(self, transacao_original: Transaction, novos_dados: dict):
+        """
+        Edita uma transação existente, ajusta o saldo da carteira e salva.
+        'novos_dados' é um dicionário com os campos a serem alterados.
+        """
+        try:
+            # Encontra a carteira associada à transação original
+            carteira_associada = next(c for c in self.storage.get_carteiras() if c.getNome() == transacao_original.carteira)
+            
+            valor_antigo_com_sinal = transacao_original.valor # Guarda o valor com sinal (+/-)
+            
+            # Valida os novos dados (simplificado para focar na lógica principal)
+            novo_valor_bruto = float(novos_dados.get('valor', transacao_original._valor))
+            
+            # --- Lógica de atualização ---
+            
+            # 1. Atualiza os atributos do objeto transação
+            transacao_original.nome = novos_dados.get('nome', transacao_original.nome)
+            transacao_original.categoria = novos_dados.get('categoria', transacao_original.categoria)
+            transacao_original._valor = novo_valor_bruto # Atualiza o valor bruto (sempre positivo)
+            
+            # 2. Calcula a diferença para o ajuste no saldo
+            # O novo .valor já terá o sinal correto
+            diferenca_de_saldo = transacao_original.valor - valor_antigo_com_sinal
+            
+            # 3. Usa o novo método para ajustar o saldo da carteira
+            carteira_associada.ajustar_saldo(diferenca_de_saldo)
+    
+            # 4. Salva o estado modificado (tanto da transação quanto da carteira)
+            self.storage.save_data()
+            
+            return True, "Transação atualizada com sucesso!"
+    
+        except StopIteration:
+            return False, "Erro: Carteira associada à transação não foi encontrada."
+        except ValueError:
+            return False, "Erro de validação: O valor inserido não é um número válido."
 
     def adicionar_carteira(self, nome: str, desc: str, saldo: float = 0):
         try:

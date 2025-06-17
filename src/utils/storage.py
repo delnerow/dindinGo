@@ -1,12 +1,10 @@
 import json
 from typing import List, Optional
-
-# Importe suas classes
 from transacao import Transaction, Carteira, Cofrinho, ReceitaFactory, DespesaFactory, CorrenteFactory, CofrinhoFactory
-from sistemaDePontos import sistemaDePontos # Certifique-se de que este import está correto
+from sistemaDePontos import sistemaDePontos
 
 class StorageManager:
-    # ... (o __new__ e o início do __init__ continuam iguais) ...
+
     _instance: Optional['StorageManager'] = None
     DATA_FILE = 'data.json'
 
@@ -37,7 +35,6 @@ class StorageManager:
                 data = json.load(file)
                 self.curId = data.get('idGenerator', 0)
                 
-                # ... (lógica para carregar transacoes, carteiras, cofrinhos continua igual) ...
                 for t_data in data.get('transacoes', []):
                     factory = ReceitaFactory if t_data.get('receita') else DespesaFactory
                     self.transacoes.append(factory.from_dict(t_data))
@@ -51,7 +48,6 @@ class StorageManager:
                 # --- LÓGICA PARA CARREGAR O SISTEMA DE PONTOS ---
                 pontos_data = data.get('pontos')
                 if pontos_data:
-                    # Assumindo que o sistema de pontos tem um método from_dict
                     self.pontos_manager = sistemaDePontos.from_dict(pontos_data[0])
 
         except (FileNotFoundError, json.JSONDecodeError):
@@ -73,11 +69,9 @@ class StorageManager:
 
     # --- MÉTODOS DE ACESSO (GETTERS) ---
 
-    def get_pontos_manager(self) -> sistemaDePontos: # <<< O MÉTODO QUE FALTAVA
-        """Retorna o objeto gerenciador de pontos."""
+    def get_pontos_manager(self) -> sistemaDePontos:
         return self.pontos_manager
 
-    # ... (os outros getters e adders continuam aqui) ...
     def get_cofrinhos(self) -> List[Cofrinho]:
         return self.cofrinhos
 

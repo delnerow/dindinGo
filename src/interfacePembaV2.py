@@ -55,7 +55,6 @@ def selecionar_categoria(gerenciador: GerenciamentoDeCarteiras) -> str:
     """
     Mostra as categorias disponíveis e permite ao usuário selecionar uma.
     """
-    # Supondo que o Facade tenha um método para obter as categorias
     categorias = gerenciador.get_categorias_disponiveis()
     print("Selecione uma categoria:")
     for i, cat in enumerate(categorias):
@@ -105,7 +104,8 @@ while True:
         "[5] Criar Novo Cofrinho\n"
         "[6] Mês anterior\n"
         "[7] Próximo mês\n"
-        "[8] Sair\n"
+        "[8] Editar transação\n"
+        "[9] Sair\n"
         ">>> "
     )
     acao = get_numeric_input(menu, value_type=int)
@@ -189,8 +189,31 @@ while True:
 
     elif acao == 7: # Próximo mês
         gerenciador.proximo_mes()
+
+    elif acao == 8: # Editar transação
+        transacao_para_editar = selecionar_item(transacoes_mes, "transação", printTransacoes)
+        if transacao_para_editar is None:
+            continue
+
+        print("\nEditando transação. Deixe em branco para manter o valor atual.")
+
+        # Coleta os novos dados do usuário
+        novo_nome = input(f"Nome [{transacao_para_editar.nome}]: ") or transacao_para_editar.nome
+        novo_valor = input(f"Valor [{transacao_para_editar._valor}]: ") or str(transacao_para_editar._valor)
+        # ... coletar outros campos ...
+
+        novos_dados = {
+            'nome': novo_nome,
+            'valor': novo_valor,
+            # ... outros campos ...
+        }
+
+        # Chama o Facade para fazer a edição
+        sucesso, msg = gerenciador.editar_transacao(transacao_para_editar, novos_dados)
+        print(msg)
+        time.sleep(3)
         
-    elif acao == 8: # Sair
+    elif acao == 9: # Sair
         print("Salvando dados... Até a próxima!")
         # O gerenciador já deve salvar os dados a cada operação importante
         break
