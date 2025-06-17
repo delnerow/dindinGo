@@ -1,6 +1,7 @@
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Sidebar from "../components/ui/sidebar";
 
 const meses = [
   { label: "Maio de 2025", value: "2025-05" },
@@ -24,10 +25,16 @@ export default function Transacoes() {
 
   const total = transacoesFiltradas.reduce((acc, t) => acc + t.valor, 0);
 
-  return (
-    <div className="p-6">
+return (
+  <div className="flex h-screen overflow-hidden bg-gray-100">
+    {/* Sidebar */}
+    <div className="w-64 bg-white border-r shadow-lg">
+      <Sidebar />
+    </div>
+
+    {/* Conteúdo principal */}
+    <div className="flex-1 p-6 overflow-y-auto">
       <div className="flex items-center space-x-2 mb-4">
-        <ChevronLeft className="cursor-pointer" onClick={() => navigate(-1)} />
         <select
           className="text-xl font-bold bg-transparent"
           value={mesSelecionado}
@@ -65,5 +72,6 @@ export default function Transacoes() {
         ))}
       </ul>
     </div>
-  );
+  </div>
+);
 }

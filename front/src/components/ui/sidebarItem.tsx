@@ -11,8 +11,8 @@ export default function SidebarItem({ icon, label }: { icon: React.ReactNode; la
       case "Transações":
         navigate("/transacoes");
         break;
-      case "Cartões de Crédito":
-        navigate("/cartoes");
+      case "Contas":
+        navigate("/contas");
         break;
       
       default:
