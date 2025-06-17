@@ -82,23 +82,24 @@ class sistemaDePontos:
             
         return pontos_perdidos, gasto, meta
     
-    def quebrar_cofrinho(self, data_atual, data_alvo):
+    def quebrar_cofrinho(self, mes_atual, mes_alvo):
         """Quebra o cofrinho e verifica se a data atual é menor que a data alvo.
            Se for, perde pontos proporcional à diferença de dias.
            Retorna os pontos perdidos."""
         
         #datas como datetime.date
-        if data_atual < data_alvo:
+        if mes_atual < mes_alvo:
             #perder pontos proporcional a diferença de período
-            dias_diferenca = (data_alvo - data_atual).days
-            pontos_perdidos = dias_diferenca // 30  # Exemplo: 1 ponto a cada 30 dias
+            #difença dos meses usando datetime.month
+            mes_diff = int(mes_alvo - mes_atual)
+            pontos_perdidos = mes_diff *3  # 3 pontos a cada mês antes do alvo
             self.__remover_pontos(pontos_perdidos)
             return pontos_perdidos
         else:
             #não perde pontos se a data atual é maior ou igual à data alvo
             return 0
         
-    def depositar_cofrinho(self, valor, data_atual, data_alvo):
+    def depositar_cofrinho(self, valor):
         """Deposita o valor do cofrinho e atribui pontuação positiva
            proporcional ao valor e ao tempo.
            Retorna os pontos ganhos."""
@@ -106,8 +107,8 @@ class sistemaDePontos:
         if valor <= 0:
             raise ValueError("Valor do depósito deve ser maior que zero.")
         
-        #atribui pontos pelo valor e pelo tempo
-        pontos_ganhos = valor // 100 + (data_alvo - data_atual).days // 30
+        #atribui pontos pelo valor
+        pontos_ganhos = valor // 100
         #adiciona os pontos ganhos
         self.__adicionar_pontos(pontos_ganhos)
         return pontos_ganhos
