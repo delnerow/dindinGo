@@ -2,7 +2,7 @@ import datetime
 
 from expectionHandlers import ValidationErrors, EmptyFieldError, InvalidTypeError, InvalidValueError
 from utils.storage import StorageManager
-from transacao import CofrinhoFactory, CorrenteFactory, DespesaFactory, ReceitaFactory, Carteira, Cofrinho, Transaction
+from transacao import CofrinhoFactory, CorrenteFactory, DespesaFactory, Receita, ReceitaFactory, Carteira, Cofrinho, Transaction
 
 class GerenciamentoDeCarteiras:
     """
@@ -136,6 +136,39 @@ class GerenciamentoDeCarteiras:
         
         self.storage.save_data()
         return valor_quebrado, "Cofrinho quebrado com sucesso!"
+
+    def deletar_transacao(self, transacao: Transaction) -> tuple[bool, str]:
+        """
+        Deleta uma transação e atualiza o saldo da carteira associada.
+    
+        """
+        try:
+            # Encontra a carteira associada
+            carteira_associada = next(
+                c for c in self.storage.get_carteiras() 
+                if c.get_nome() == transacao.carteira
+            )
+            
+            # Remove o valor da transação do saldo da carteira
+            carteira_associada.ajustar_saldo(-transacao.valor)
+            
+            # Remove a transação do storage
+            self.storage.remove_transaction(transacao.id)
+            
+            # Se for uma despesa, atualiza o sistema de pontos
+            if not isinstance(transacao, Receita):
+                pontos_manager = self.storage.get_pontos_manager()
+                pontos_manager.remover_despesa(transacao.valor, transacao.categoria)
+            
+            # Salva as alterações
+            self.storage.save_data()
+            
+            return True, "Transação deletada com sucesso!"
+            
+        except StopIteration:
+            return False, "Erro: Carteira associada à transação não foi encontrada."
+        except Exception as e:
+            return False, f"Erro ao deletar transação: {str(e)}"
 
     def validar_transacao(self, nome, valor, tipo, desc, carteira, fixo):
         errors = ValidationErrors()

@@ -101,3 +101,21 @@ class StorageManager:
     def add_cofrinho(self, cofrinho: Cofrinho):
         self.cofrinhos.append(cofrinho)
         self.save_data()
+        
+    def remove_transaction(self, transaction_id: int) -> bool:
+        """
+        Remove uma transação pelo ID.
+        
+        Args:
+            transaction_id: ID of the transaction to remove
+            
+        Returns:
+            bool: True if transaction was removed, False if not found
+        """
+        original_length = len(self.transacoes)
+        self.transacoes = [t for t in self.transacoes if t.id != transaction_id]
+        
+        if len(self.transacoes) < original_length:
+            self.save_data()
+            return True
+        return False

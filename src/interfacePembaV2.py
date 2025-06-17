@@ -101,7 +101,8 @@ while True:
         "[6] Mês anterior\n"
         "[7] Próximo mês\n"
         "[8] Editar transação\n"
-        "[9] Sair\n"
+        "[9] Deletar transação\n"
+        "[0] Sair\n"
         ">>> "
     )
     acao = get_numeric_input(menu, value_type=int)
@@ -202,7 +203,22 @@ while True:
         print(msg)
         time.sleep(3)
         
-    elif acao == 9: # Sair
+    elif acao == 9: # Deletar transação
+        transacao_para_deletar = selecionar_item(transacoes_mes, "transação", print_transacoes)
+        if transacao_para_deletar is None:
+            continue
+
+        confirmacao = input(f"\nTem certeza que deseja deletar a transação '{transacao_para_deletar.nome}'? (s/n) ")
+        if confirmacao.lower() != 's':
+            print("Operação cancelada.")
+            time.sleep(2)
+            continue
+
+        sucesso, msg = gerenciador.deletar_transacao(transacao_para_deletar)
+        print(msg)
+        time.sleep(3)
+        
+    elif acao == 0:  # Sair (changed from 9 to 0)
         print("Salvando dados... Até a próxima!")
         break
         
