@@ -1,226 +1,178 @@
 import datetime
 
-from expectionHandlers import CarteiraNotFoundError, EmptyFieldError, InvalidTypeError, InvalidValueError, TransactionError, ValidationErrors
-from utils.filters import filtra_transacoes_mes
-from utils.storage import load_data, save_data
-from transacao import  CofrinhoFactory, CorrenteFactory, DespesaFactory,  ReceitaFactory
+# Importa as classes de exceção personalizadas
+from expectionHandlers import ValidationErrors, EmptyFieldError, InvalidTypeError, InvalidValueError
+
+# Importa o StorageManager Singleton (assumindo que ele está em storage.py)
+from utils.storage import StorageManager
+
+# Importa as fábricas e classes de modelo
+from transacao import CofrinhoFactory, CorrenteFactory, DespesaFactory, ReceitaFactory, Carteira, Cofrinho, Transaction
 
 class GerenciamentoDeCarteiras:
+    """
+    Implementação do padrão Facade.
+    Oferece uma interface simples para o sistema, orquestrando
+    operações entre a interface do usuário, a lógica de negócios e a camada de persistência.
+    """
     def __init__(self):
-        transacoes, carteiras, cofrinhos, pontos, curId = load_data()
-        self._curId = curId
-        self._transacoes = transacoes
-        self._carteiras = carteiras
-        self._cofrinhos = cofrinhos
+        # O Facade agora USA o Singleton de armazenamento em vez de gerenciar o estado.
+        self.storage = StorageManager()
+        
+        # O estado de visualização (mês/ano) permanece no Facade.
         self._mes_atual = datetime.datetime.now().month
         self._ano_atual = datetime.datetime.now().year
-        self._transacoes_mes = self.filtrar_transacoes_mes()
-        #vetor com um único sistema de pontos
-        #para acessar usar pontos[0] 
-        self._pontos = pontos 
+        
+        # As fábricas são mantidas aqui, pois o Facade as utiliza para criar objetos.
         self.receitaFactory = ReceitaFactory()
         self.despesaFactory = DespesaFactory()
         self.correnteFactory = CorrenteFactory()
         self.cofrinhoFactory = CofrinhoFactory()
+
+        # A lista de categorias é definida aqui e fornecida para a UI.
         self.categorias = ["lazer", "alimentação", "casa", "mercado", "serviço"]
 
-    def adicionar_receita(self, nome, valor, tipo, data, desc,carteira,fixo=False):
-        """Adiciona uma receita à lista de transações."""
+    # --- Métodos de Negócio (Orquestração) ---
 
+    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False):
         try:
-            self.validar_transacao(nome, valor, tipo, desc, carteira, fixo)
-    
-            self._curId = self._curId +1
-            trans = self.receitaFactory.create_transaction(self._curId,nome, float(valor), tipo, data, desc, carteira, fixo)
-            self._transacoes.append(trans)
-            self.atualizar_carteira(trans,carteira)
-            self.salvar_dados()
-            return True, "Receita adicionada com sucesso"
+            self.validar_transacao(nome, str(valor), tipo, desc, carteira, fixo)
+            
+            novo_id = self.storage.get_next_id()
+            trans = self.receitaFactory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.getNome(), fixo)
+            
+            self.storage.add_transaction(trans)
+            carteira.atualizaCarteira(trans)
+            
+            self.storage.save_data() # Garante que a mudança no saldo da carteira seja salva
+            return True, "Receita adicionada com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
-      
-    def adicionar_despesa(self, nome, valor, tipo, data, desc,carteira,fixo=False):
-        """Adiciona uma despesa à lista de transações. e atribuir pontuação, 
-        retorna pontos perdidos, gasto e meta da categoria da despesa."""
-        
+
+    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False):
         try:
-            self.validar_transacao(nome, valor, tipo, desc, carteira, fixo)
-            self._curId = self._curId +1
-            despesa = self.despesaFactory.create_transaction(self._curId, nome, float(valor), tipo, data, desc, carteira, fixo)
-            self._transacoes.append(despesa)
-            pontos_perdidos, gasto, meta = self._pontos[0].adicionar_despesa(despesa.valor, despesa.categoria)
-            self.salvar_dados()
-            self.atualizar_carteira(despesa,carteira)
-            return pontos_perdidos, gasto, meta, True, "Receita adicionada com sucesso"
-        
+            self.validar_transacao(nome, str(valor), tipo, desc, carteira, fixo)
+            
+            novo_id = self.storage.get_next_id()
+            despesa = self.despesaFactory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.getNome(), fixo)
+            
+            self.storage.add_transaction(despesa)
+            carteira.atualizaCarteira(despesa)
+            
+            # Interage com o sistema de pontos, que também é acessado via storage
+            pontos_manager = self.storage.get_pontos_manager()
+            pontos_manager.adicionar_despesa(despesa.valor, despesa.categoria)
+
+            self.storage.save_data()
+            return True, "Despesa adicionada com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
-        
-    def adicionar_carteira(self, nome, desc, saldo=0):
-        """Adiciona uma nova carteira à lista de carteiras."""
-        # Cria a carteira e adiciona à lista de carteiras
+
+    def adicionar_carteira(self, nome: str, desc: str, saldo: float = 0):
         try:
-            self.validar_carteira(nome, desc, saldo)
-            carteira = self.correnteFactory.create(nome, desc, float(saldo))
-            self._carteiras.append(carteira)
-            self.salvar_dados()
-            return True, "Carteira adicionada com sucesso"
+            self.validar_carteira(nome, desc, str(saldo))
+            carteira = self.correnteFactory.create(nome, desc, saldo)
+            self.storage.add_carteira(carteira)
+            return True, "Carteira criada com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
-        
-    def adicionar_cofrinho(self, nome, desc, saldo=0):
-        """Adiciona um novo cofrinho à lista de cofrinhos."""
-        # Cria o cofre e adiciona à lista de cofrinhos
+
+    def adicionar_cofrinho(self, nome: str, desc: str, saldo: float = 0):
         try:
-            self.validar_carteira(nome, desc, saldo)
-            cofre = self.cofrinhoFactory.create(nome, desc, float(saldo))
-            self._cofrinhos.append(cofre)
-            self.salvar_dados()
-            return True, "Cofrinho adicionado com sucesso"
+            self.validar_carteira(nome, desc, str(saldo))
+            cofre = self.cofrinhoFactory.create(nome, desc, saldo)
+            self.storage.add_cofrinho(cofre)
+            return True, "Cofrinho criado com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
-    
+
+    def depositar_cofrinho(self, valor: float, cofrinho: Cofrinho, carteira_origem: Carteira):
+        if valor <= 0:
+            return False, "O valor do depósito deve ser positivo."
+        if valor > carteira_origem.getSaldo():
+            return False, "Saldo insuficiente na carteira de origem."
+
+        # Cria duas transações para rastreamento: uma despesa na carteira e uma receita no cofre
+        id_saida = self.storage.get_next_id()
+        trans_saida = self.despesaFactory.create_transaction(id_saida, f"Depósito para {cofrinho.getNome()}", valor, "transferencia", datetime.datetime.now().isoformat(), "", carteira_origem.getNome())
+        
+        id_entrada = self.storage.get_next_id()
+        trans_entrada = self.receitaFactory.create_transaction(id_entrada, f"Depósito de {carteira_origem.getNome()}", valor, "transferencia", datetime.datetime.now().isoformat(), "", cofrinho.getNome())
+
+        # Adiciona as transações ao histórico geral
+        self.storage.add_transaction(trans_saida)
+        self.storage.add_transaction(trans_entrada)
+        
+        # Atualiza os saldos
+        carteira_origem.atualizaCarteira(trans_saida)
+        cofrinho.depositar(trans_entrada)
+
+        self.storage.save_data()
+        return True, f"Valor de R$ {valor:.2f} depositado com sucesso."
+
+    def quebrar_cofrinho(self, cofrinho: Cofrinho, carteira_destino: Carteira):
+        valor_quebrado = cofrinho.quebrar()
+        
+        if valor_quebrado > 0:
+            # Cria uma transação para registrar a entrada do valor na carteira
+            id_trans = self.storage.get_next_id()
+            trans = self.receitaFactory.create_transaction(id_trans, f"Valor do cofre '{cofrinho.getNome()}'", valor_quebrado, "transferencia", datetime.datetime.now().isoformat(), "Cofre quebrado", carteira_destino.getNome())
+            self.storage.add_transaction(trans)
+            carteira_destino.atualizaCarteira(trans)
+        
+        self.storage.save_data()
+        return valor_quebrado, "Cofrinho quebrado com sucesso!"
+
+    # --- Métodos de Validação ---
+
     def validar_transacao(self, nome, valor, tipo, desc, carteira, fixo):
-        """Valida todos os campos da transação e retorna lista de erros"""
         errors = ValidationErrors()
-        # Validar nome
-        if not nome or nome.strip() == "":
-            errors.add(EmptyFieldError("nome"))
-            
-        # Validar valor
-        if not valor or valor.strip() == "":
-            errors.add(EmptyFieldError("valor"))
+        if not nome or not nome.strip(): errors.add(EmptyFieldError("nome"))
+        
         try:
-            valor = float(valor)
-            if valor <= 0:
-                errors.add(InvalidValueError("valor", "deve ser maior que zero"))
-        except ValueError:
-            errors.add(InvalidTypeError("valor", "número"))
+            val = float(valor)
+            if val <= 0: errors.add(InvalidValueError("valor", "deve ser maior que zero"))
+        except ValueError: errors.add(InvalidTypeError("valor", "número"))
+
+        if tipo not in self.categorias: errors.add(InvalidValueError("tipo", f"inválida"))
+        if not carteira or not isinstance(carteira, Carteira): errors.add(InvalidTypeError("carteira", "inválida"))
         
-        # Validar tipo
-        if not tipo or tipo.strip() == "":
-            errors.add(EmptyFieldError("tipo"))
-        elif tipo not in self.categorias:
-            errors.add(InvalidValueError("tipo", f"deve ser uma das categorias: {', '.join(self.categorias)}"))
-            
-        # Validar descrição
-        if not desc or desc.strip() == "":
-            errors.add(EmptyFieldError("descrição"))
-            
-        # Validar carteira
-        if not carteira:
-            errors.add(EmptyFieldError("carteira"))
-        elif carteira not in self._carteiras:
-            errors.add(InvalidValueError("carteira", "não encontrada"))
-        # Validar fixo
-        if not isinstance(fixo, bool):
-            errors.add(InvalidTypeError("fixo", "booleano"))
-        if errors.has_errors():
-            raise errors
-        return errors
-        
+        if errors.has_errors(): raise errors
+
     def validar_carteira(self, nome, desc, saldo):
         errors = ValidationErrors()
-        # Validar nome
-        if not nome or nome.strip() == "":
-            errors.add(EmptyFieldError("nome"))
-            
-        # Validar saldo
-        if not saldo or saldo.strip() == "":
-            errors.add(EmptyFieldError("valor"))
+        if not nome or not nome.strip(): errors.add(EmptyFieldError("nome"))
+        if not desc or not desc.strip(): errors.add(EmptyFieldError("descrição"))
+        
         try:
-            saldo = float(saldo)
-            if saldo < 0:
-                errors.add(InvalidValueError("saldo", "deve ser positivo ou zero"))
-        except ValueError:
-            errors.add(InvalidTypeError("saldo", "número"))
-         
-        # Validar descrição
-        if not desc or desc.strip() == "":
-            errors.add(EmptyFieldError("descrição"))
-        if errors.has_errors():
-            raise errors
-        return errors
-            
+            s = float(saldo)
+            if s < 0: errors.add(InvalidValueError("saldo", "não pode ser negativo"))
+        except ValueError: errors.add(InvalidTypeError("saldo", "número"))
+
+        if errors.has_errors(): raise errors
+
+    # --- Getters (Fornecem dados para a UI) ---
+
+    def get_carteiras(self): return self.storage.get_carteiras()
+    def get_cofrinhos(self): return self.storage.get_cofrinhos()
+    def get_transacoes(self): return self.storage.get_all_transactions()
+    def get_pontos(self): return self.storage.get_pontos_manager().get_pontos()
+    def get_categorias_disponiveis(self): return self.categorias
+    def get_mes_atual(self): return self._mes_atual
+    def get_ano_atual(self): return self._ano_atual
+
+    # --- Métodos de Controle de Visualização ---
+
     def proximo_mes(self):
-        """Avança para o próximo mês."""
         if self._mes_atual == 12:
             self._mes_atual = 1
             self._ano_atual += 1
         else:
             self._mes_atual += 1
-        self.filtra_transacoes_mes()
 
     def mes_anterior(self):
-        """Volta para o mês anterior."""
         if self._mes_atual == 1:
             self._mes_atual = 12
             self._ano_atual -= 1
         else:
             self._mes_atual -= 1
-        self.filtra_transacoes_mes()
-
-    def get_carteiras(self):
-        """Retorna a lista de carteiras."""
-        return self._carteiras
-    
-    def get_cofrinhos(self):
-        """Retorna a lista de cofrinhos."""
-        return self._cofrinhos
-    
-    def get_transacoes(self):
-        """Retorna todas as transações."""
-        return self._transacoes
-
-    def get_transacoes_mes(self):
-        """Retorna as transações do mês atual."""
-        return self._transacoes_mes
-    
-    def get_mes_atual(self):
-        """Retorna o mês atual."""
-        return self._mes_atual
-    
-    def get_ano_atual(self):
-        """Retorna o ano atual."""
-        return self._ano_atual
-    
-    def get_pontos(self):
-        """Retorna a pontuação do sistema de pontos."""
-        if not self._pontos:
-            return 0
-        return self._pontos[0].get_pontos()
-
-    def filtrar_transacoes_mes(self):
-        """Filtra as transações do mês atual."""
-        self._transacoes_mes = filtra_transacoes_mes(self._transacoes, self._mes_atual, self._ano_atual)
-
-    def atualizar_carteira(self, transacao, carteira):
-        """Atualiza o saldo da carteira com base na transação."""
-        if carteira in self._carteiras:
-            carteira.atualizaCarteira(transacao)
-        else:
-            print("Carteira não encontrada.")
-        self.salvar_dados()
-    
-    def depositar_cofrinho(self, trans, cofre, carteira):
-        """Deposita um valor no cofre."""
-        if cofre in self._cofrinhos:
-            cofre.depositar(trans)
-            if carteira in self._carteiras:
-                carteira.atualizaCarteira(-trans.valor)
-        else:
-            print("Cofrinho não encontrado.")
-        self.salvar_dados()
-
-    def quebrar_cofrinho(self, cofre, carteira):
-        """Quebra o cofre e atualiza a carteira."""
-        if cofre in self._cofrinhos:
-            valor = cofre.quebrar()
-            carteira.atualizaCarteira(valor)
-        else:
-            print("Cofrinho não encontrado.")
-        self.salvar_dados()
-    
-    def salvar_dados(self):
-        """Salva os dados das transações, carteiras e cofrinhos."""
-        save_data(self._transacoes, self._carteiras, self._cofrinhos, self._pontos, self._curId)

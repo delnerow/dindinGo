@@ -1,5 +1,5 @@
 {
-    "idGenerator": 3,
+    "idGenerator": 6,
     "transacoes": [
         {
             "id": 1,
@@ -22,21 +22,70 @@
             "desc": "Reciclagem de prismas",
             "carteira": "Trevilato Pemba",
             "repeticao": false
+        },
+        {
+            "id": 4,
+            "receita": true,
+            "nome": "soldo",
+            "valor": 1502.0,
+            "categoria": "servi\u00e7o",
+            "data": "2025-06-16T23:50:50.039031",
+            "desc": "fab",
+            "carteira": "Trevilato Pemba",
+            "repeticao": false
+        },
+        {
+            "id": 5,
+            "receita": false,
+            "nome": "sei la vei",
+            "valor": 100.0,
+            "categoria": "lazer",
+            "data": "2025-06-17T00:10:46.575344",
+            "desc": "socorro",
+            "carteira": "Trevilato Pemba",
+            "repeticao": true
+        },
+        {
+            "id": 6,
+            "receita": true,
+            "nome": "Valor do cofre 'CIA'",
+            "valor": 100.0,
+            "categoria": "transferencia",
+            "data": "2025-06-17T00:11:40.276421",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": false
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 100.0,
+            "saldo": 1602.0,
             "movimentacoes": [
                 1,
                 2,
-                3
+                3,
+                4,
+                5,
+                6
             ]
+        },
+        {
+            "nome": "Adilson",
+            "desc": "A MAIS GORDA",
+            "saldo": 10000000.0,
+            "movimentacoes": []
         }
     ],
-    "cofrinhos": [],
+    "cofrinhos": [
+        {
+            "nome": "CIA",
+            "desc": "bora encher a cara",
+            "saldo": 0,
+            "movimentacoes": []
+        }
+    ],
     "pontos": [
         {
             "pontos": 0,
@@ -45,7 +94,7 @@
             "meta_casa": 1000,
             "meta_mercado": 300,
             "meta_servico": 100,
-            "gastos_lazer": -100,
+            "gastos_lazer": -200.0,
             "gastos_alimentacao": -120950.0,
             "gastos_casa": 123,
             "gastos_mercado": 21323,
