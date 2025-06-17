@@ -119,3 +119,12 @@ class StorageManager:
             self.save_data()
             return True
         return False
+    def remove_carteira(self, carteira: Carteira) -> bool:
+        """
+        Remove uma carteira do storage.
+        """
+        try:
+            self.carteiras = [c for c in self.carteiras if c.get_nome() != carteira.get_nome()]
+            return True
+        except Exception:
+            return False

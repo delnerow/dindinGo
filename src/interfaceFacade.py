@@ -55,9 +55,30 @@ class GerenciamentoDeCarteiras:
             return True, "Despesa adicionada com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
-
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    # nao posso mudar categoria se é deposito! depositso devem ser mostrados na lista??????
+    
+    
+    
+    
+    
+    
+    
     def editar_transacao(self, transacao_original: Transaction, novos_dados: dict):
         try:
+            if transacao_original.categoria is not "transferencia":
+                carteira_existe = any( c.get_nome() == transacao_original.carteira for c in self.storage.get_carteiras())
+                if not carteira_existe:
+                    return False, "Erro: Não é possível editar transação de uma carteira deletada."
+                    
             carteira_associada = next(c for c in self.storage.get_carteiras() if c.get_nome() == transacao_original.carteira)
             
             valor_antigo_com_sinal = transacao_original.valor
@@ -195,6 +216,32 @@ class GerenciamentoDeCarteiras:
         except ValueError: errors.add(InvalidTypeError("saldo", "número"))
 
         if errors.has_errors(): raise errors
+
+    def deletar_carteira(self, carteira: Carteira) -> tuple[bool, str]:
+        """
+        Deleta uma carteira corrente se ela tiver saldo zero.
+        Não deleta as transações associadas, apenas impede novas transações.
+
+        """
+        try:
+            # Verifica se é uma carteira corrente
+            if isinstance(carteira, Cofrinho):
+                return False, "Não é possível deletar cofrinhos por este método."
+                
+            # Verifica se tem saldo zero
+            if carteira.get_saldo() != 0:
+                return False, f"Não é possível deletar carteira com saldo (atual: R${carteira.get_saldo():.2f})"
+                
+            # Remove a carteira do storage
+            self.storage.remove_carteira(carteira)
+        
+            # Salva as alterações
+            self.storage.save_data()
+            
+            return True, "Carteira deletada com sucesso!"
+            
+        except Exception as e:
+            return False, f"Erro ao deletar carteira: {str(e)}"
 
     def get_carteiras(self): return self.storage.get_carteiras()
     def get_cofrinhos(self): return self.storage.get_cofrinhos()

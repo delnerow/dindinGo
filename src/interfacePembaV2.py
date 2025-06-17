@@ -102,6 +102,7 @@ while True:
         "[7] Próximo mês\n"
         "[8] Editar transação\n"
         "[9] Deletar transação\n"
+        "[10] Deletar carteira\n"
         "[0] Sair\n"
         ">>> "
     )
@@ -215,6 +216,27 @@ while True:
             continue
 
         sucesso, msg = gerenciador.deletar_transacao(transacao_para_deletar)
+        print(msg)
+        time.sleep(3)
+        
+    elif acao == 10:  # Deletar carteira
+        carteira = selecionar_item(carteiras, "carteira", print_carteiras)
+        if carteira is None:
+            continue
+
+        print(f"\nSaldo atual da carteira: R${carteira.get_saldo():.2f}")
+        if carteira.get_saldo() != 0:
+            print("Atenção: Só é possível deletar carteiras com saldo zero!")
+            time.sleep(3)
+            continue
+
+        confirmacao = input(f"\nTem certeza que deseja deletar a carteira '{carteira.get_nome()}'? (s/n) ")
+        if confirmacao.lower() != 's':
+            print("Operação cancelada.")
+            time.sleep(2)
+            continue
+
+        sucesso, msg = gerenciador.deletar_carteira(carteira)
         print(msg)
         time.sleep(3)
         
