@@ -135,7 +135,7 @@ const Pontos: React.FC = () => {
               <Card className="p-4 flex items-center justify-between border-l-4 border-red-500">
                 <div>
                   <p className="text-sm text-gray-600">Perda por gastos impulsivos</p>
-                  <p className="text-xl font-semibold text-red-600">-{pontos.gastos}</p>
+                  <p className="text-xl font-semibold text-red-600">{pontos.gastos}</p>
                 </div>
                 <Flame className="w-8 h-8 text-red-500" />
               </Card>
