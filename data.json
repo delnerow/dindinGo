@@ -915,10 +915,10 @@
             "meta_casa": 1000,
             "meta_mercado": 300,
             "meta_servico": 100,
-            "gastos_lazer": 970000.0,
+            "gastos_lazer": -970.0,
             "gastos_alimentacao": -100.0,
             "gastos_casa": -2289.0,
-            "gastos_mercado": -400803.0,
+            "gastos_mercado": -4003.0,
             "gastos_servico": 0
         }
     ]
