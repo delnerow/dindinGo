@@ -909,7 +909,7 @@
     ],
     "pontos": [
         {
-            "pontos": 50,
+            "pontos": 780,
             "meta_lazer": 100,
             "meta_alimentacao": 1000,
             "meta_casa": 1000,
@@ -917,8 +917,8 @@
             "meta_servico": 100,
             "gastos_lazer": -970.0,
             "gastos_alimentacao": -100.0,
-            "gastos_casa": -2289.0,
-            "gastos_mercado": -4003.0,
+            "gastos_casa": -200.0,
+            "gastos_mercado": -450.0,
             "gastos_servico": 0
         }
     ]
