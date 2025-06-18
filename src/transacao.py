@@ -94,6 +94,7 @@ class Carteira(ABC):
         }
     
     def ajustar_saldo(self, valor_ajuste: float):
+        
         self._saldo += valor_ajuste
 
     @abstractmethod
@@ -196,9 +197,12 @@ class Corrente(Carteira):
         if not isinstance(transacao, Transaction):
             raise TypeError("Apenas objetos do tipo Transaction podem ser adicionados à carteira.")
         transacao.done = True 
+        
         self._saldo += transacao.valor
         self.movimentacoes.append(transacao.id)
+        print("Add!")
         pontos_manager.adicionar_despesa(transacao.valor, transacao.categoria)
+        
 
 # ==================================
 # 2. Classes de Fábrica (Factories)
@@ -226,7 +230,7 @@ class ReceitaFactory(TransactionFactory):
         )
 
 class DespesaFactory(TransactionFactory):
-    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, fixo: bool = False, rep: int = 1, done: bool = False) -> Despesa:
+    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep: int = 1, done: bool = False) -> Despesa:
         return Despesa(id, nome, valor, categoria, data, desc, carteira, rep, done)
 
     @classmethod

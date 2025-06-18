@@ -61,17 +61,20 @@ class SistemaDePontos:
         }
     
     def adicionar_despesa(self, valor, tipo):
+        print("ADDD")
         """Adiciona uma despesa ao sistema de pontos e atualiza os gastos."""
         tipos = {
             'lazer': ('_gastos_lazer', '_meta_lazer'),
-            'alimentação': ('_gastos_alimentacao', '_meta_alimentacao'),
+            'alimentacao': ('_gastos_alimentacao', '_meta_alimentacao'),
             'casa': ('_gastos_casa', '_meta_casa'),
             'mercado': ('_gastos_mercado', '_meta_mercado'),
-            'serviço': ('_gastos_servico', '_meta_servico')
+            'servico': ('_gastos_servico', '_meta_servico')
         }
+        tipo = tipo.lower().replace('ç', 'c').replace('ã', 'a')
+        
         if tipo not in tipos:
             raise ValueError("Tipo de despesa inválido.")
-
+        
         gasto_attr, meta_attr = tipos[tipo]
         setattr(self, gasto_attr, getattr(self, gasto_attr) + valor)
         meta = getattr(self, meta_attr)

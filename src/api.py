@@ -5,24 +5,17 @@ from flask_cors import CORS
 from interfaceFacade import GerenciamentoDeCarteiras
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://localhost:3000"])
 gerenciador = GerenciamentoDeCarteiras()
 
 @app.route("/api/carteiras", methods=["GET"])
 def listar_carteiras():
-    """
-    Rota GET que retorna todas as carteiras.
-    """
     carteiras = gerenciador.get_carteiras()
     carteiras_dict = [c.to_dict() for c in carteiras]
     return jsonify(carteiras_dict)  
 
 @app.route("/api/carteiras", methods=["POST"])
 def criar_carteira():
-    """
-    Rota POST que cria uma nova carteira.
-    Espera JSON com: nome, desc, saldo.
-    """
     data = request.get_json()
     nome = data.get("nome")
     desc = data.get("desc")
@@ -45,10 +38,62 @@ def criar_carteira():
             "message": message
         }), 400
 
+@app.route("/api/cofrinhos", methods=["GET"])
+def listar_cofrinhos():
+    cofrinhos = gerenciador.get_cofrinhos() 
+    cofrinhos_dict = [c.to_dict() for c in cofrinhos]
+    return jsonify(cofrinhos_dict)
 
-# Create a single instance of GerenciamentoDeCarteiras
+
+@app.route("/api/cofrinhos", methods=["POST"])
+def criar_cofrinho():
+    data = request.get_json()
+    nome = data.get("nome")
+    desc = data.get("desc")
+    timer_mes = int(data.get("timer_mes", 0))
+    meta = float(data.get("meta", 0.0))
+    saldo = float(data.get("saldo", 0.0))
+
+    success, message = gerenciador.adicionar_cofrinho(nome, desc, timer_mes, meta, saldo)
+
+    if success:
+        return jsonify({
+            "success": True,
+            "cofrinho": {
+                "nome": nome,
+                "descricao": desc,
+                "timer_mes": timer_mes,
+                "meta": meta,
+                "saldo": saldo
+            }
+        }), 200
+    else:
+        return jsonify({ "success": False, "message": message }), 400
+
+@app.route("/api/cofrinhos/<string:cofrinho_nome>/depositar", methods=["POST"])
+def fazer_deposito(cofrinho_nome):
+    data = request.get_json()
+    valor = float(data.get("valor", 0.0))
+    carteira_nome = data.get("carteiras")
+
+    cofrinho = gerenciador.get_cofrinho_by_nome(cofrinho_nome)
+    if not cofrinho:
+        return jsonify({"success": False, "message": "Cofrinho não encontrado."}), 404
+
+    carteira_origem = gerenciador.get_carteira_by_nome(carteira_nome)
+    if not carteira_origem:
+        return jsonify({"success": False, "message": "Carteira de origem não encontrada."}), 404
+
+    success, message = gerenciador.depositar_cofrinho(valor, cofrinho, carteira_origem)
+
+    if success:
+        return jsonify({"success": True, "message": message}), 200
+    else:
+        return jsonify({"success": False, "message": message}), 400
 
 @app.route('/api/transactions', methods=['GET'])
+
+
 def get_transactions():
     try:
         # Get transactions from storage through gerenciador
@@ -182,5 +227,6 @@ def create_transaction():
     except Exception as e:
         print("Error in request handling:", str(e))
         return {'error': str(e)}, 500
+    
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
