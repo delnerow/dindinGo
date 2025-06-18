@@ -184,7 +184,8 @@ while True:
         desc = input("Qual a descrição do novo cofrinho? ")
         saldo = get_numeric_input("Qual o saldo inicial? ")
         timer = get_numeric_input("Em quantos meses você quer quebrar o cofre? ", int)
-        result, msg = gerenciador.adicionar_cofrinho(nome, desc, timer, saldo)
+        meta = get_numeric_input("Qual o valor da meta?", float)
+        result, msg = gerenciador.adicionar_cofrinho(nome, desc, timer, meta, saldo)
         print(msg)
         time.sleep(3)
 

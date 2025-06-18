@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/ui/sidebar";
 import { Card, CardContent } from "../components/ui/card";
-import AddButton from "../components/ui/addButton";
+import AddButton from "../components/ui/adicionarCarteira";
 import CarteiraModal from "../components/ui/carteiraModal";
 
 type Carteira = {
@@ -23,10 +23,12 @@ export default function Carteiras() {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       <Sidebar />
-
+      
       <div className="flex-1 ml-64 p-6 space-y-6 overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Minhas Carteiras</h2>
-
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">Minhas Carteiras</h2>
+          <AddButton onClick={() => setShowModal(true)} />
+        </div>
         {carteiras.map((carteira, index) => (
           <Card key={index} className="w-full">
             <CardContent className="p-6 space-y-2">
@@ -38,8 +40,6 @@ export default function Carteiras() {
             </CardContent>
           </Card>
         ))}
-
-        <AddButton onClick={() => setShowModal(true)} />
 
         {showModal && (
           <CarteiraModal

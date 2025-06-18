@@ -12,6 +12,8 @@
             "carteira": "Trevilato Pemba",
             "repeticao": false,
             "feita": null
+            "repeticao": false,
+            "feita": null
         },
         {
             "id": 4,
@@ -34,6 +36,8 @@
             "data": "2025-06-17",
             "desc": "socorro",
             "carteira": "Trevilato Pemba",
+            "repeticao": true,
+            "feita": null
             "repeticao": true,
             "feita": null
         },
@@ -349,6 +353,17 @@
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
             "meta_valor": null,
+            "meta_valor": 100,
+            "movimentacoes": []
+        },
+        {
+            "nome": "123123",
+            "desc": "123123",
+            "saldo": 123123.0,
+            "timer_mes": 12,
+            "ultimo_mes_update": 6,
+            "ultimo_ano_update": 2025,
+            "meta_valor": 100000.0,
             "movimentacoes": []
         }
     ],

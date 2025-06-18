@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function CarteiraModal({
+export default function CofrinhoModal({
   onClose,
   onCreated,
 }: {
@@ -9,14 +9,15 @@ export default function CarteiraModal({
 }) {
   const [nome, setNome] = useState("");
   const [desc, setDesc] = useState("");
-  const [saldo, setSaldo] = useState("0.00");
+  const [timer_mes, setMes] = useState("1");
+  const [saldo, setSaldo] = useState("0.00")
   const [erro, setErro] = useState("");
 
   const handleSubmit = async () => {
     const res = await fetch("http://localhost:5000/api/carteiras", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, desc, saldo: parseFloat(saldo) }),
+      body: JSON.stringify({ nome, desc, timer_mes: parseInt(timer_mes), saldo: parseFloat(saldo) }),
     });
 
     const data = await res.json();
@@ -30,7 +31,7 @@ export default function CarteiraModal({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-96">
-        <h3 className="text-xl font-semibold mb-4">Nova Carteira</h3>
+        <h3 className="text-xl font-semibold mb-4">Novo Cofrinho</h3>
         <label className="block mb-1 text-sm font-medium text-gray-700">Nome:</label>
         <input
           type="text"
@@ -45,6 +46,14 @@ export default function CarteiraModal({
           placeholder="Descrição"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
+          className="w-full mb-3 p-2 border rounded"
+        />
+        <label className="block mb-1 text-sm font-medium text-gray-700">Tempo de duração do cofrinho (meses):</label>
+        <input
+          type="number"
+          placeholder="Tempo (meses)"
+          value={timer_mes}
+          onChange={(e) => setMes(e.target.value)}
           className="w-full mb-3 p-2 border rounded"
         />
         <label className="block mb-1 text-sm font-medium text-gray-700">Saldo inicial:</label>
