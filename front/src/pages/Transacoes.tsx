@@ -89,23 +89,28 @@ export default function Transacoes() {
 
   const handleEditTransaction = async (transaction: Transaction | NewTransaction) => {
   try {
-    // Type guard to check if this is an existing transaction
     if ('id' in transaction) {
+      console.log('Updating transaction:', transaction); // Debug log
       const response = await fetch(`http://localhost:5000/api/transactions/${transaction.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(transaction),
+        body: JSON.stringify({
+          ...transaction,
+          feita: Boolean(transaction.feita) // Ensure boolean value
+        }),
       });
 
-      if (!response.ok) throw new Error('Failed to update transaction');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update transaction');
+      }
 
-      setTransactions(transactions.map(t => 
-        t.id === transaction.id ? transaction : t
-      ));
+      // Refresh transactions to get updated data
+      await fetchTransactions();
+      setEditingTransaction(null);
     }
-    setEditingTransaction(null);
   } catch (err) {
     console.error('Update error:', err);
     alert('Failed to update transaction');
@@ -241,27 +246,48 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
 
           return (
             <div key={transaction.id} className="bg-white rounded-lg shadow p-4">
-              <div className="flex justify-between items-start mb-2">
-                <div className="flex items-start space-x-3">
-                  <div className="flex flex-col items-center space-y-2">
-                    <Wallet
-                      className={`w-5 h-5 ${
-                        transaction.receita ? 'text-green-500' : 'text-red-500'
-                      }`}
-                    />
-                    <CategoryIcon className="w-5 h-5 text-gray-500" />
-                  </div>
-                  <div>
-                    <div className="font-medium">{transaction.nome}</div>
-                    <div className="text-sm text-gray-500">
-                      {transaction.categoria}
-                    </div>
-                    {/* Add description here */}
-            {transaction.desc && (
+  <div className="flex justify-between items-start mb-2">
+    <div className="flex items-start space-x-3">
+      <div className="flex flex-col items-center space-y-2">
+        <Wallet
+          className={`w-5 h-5 ${
+            transaction.receita ? 'text-green-500' : 'text-red-500'
+          }`}
+        />
+        <CategoryIcon className="w-5 h-5 text-gray-500" />
+      </div>
+      <div>
+        <div className="font-medium">{transaction.nome}</div>
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-gray-500">
+            {transaction.categoria}
+          </span>
+          <span className="text-sm text-gray-400">•</span>
+          <span className="text-sm font-medium text-blue-600">
+            {transaction.carteira}
+          </span>
+        </div>
+        {transaction.desc && (
               <div className="text-sm text-gray-400 mt-1 italic">
                 {transaction.desc}
               </div>
             )}
+            {transaction.repeticao > 0 && (
+          <div className="flex items-center mt-1 space-x-2">
+            <span className="text-xs text-gray-500">
+              Recorrente ({transaction.repeticao}x)
+            </span>
+            <span className={`text-xs px-2 py-0.5 rounded-full ${
+              transaction.feita 
+                ? 'bg-green-100 text-green-800'
+                : 'bg-yellow-100 text-yellow-800'
+            }`}>
+              {transaction.feita ? 'Feito' : 'Pendente'}
+            </span>
+          </div>
+        )}
+ 
+
                   </div>
                 </div>
                 <div className="text-right">

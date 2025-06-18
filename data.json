@@ -1,5 +1,5 @@
 {
-    "idGenerator": 33,
+    "idGenerator": 34,
     "transacoes": [
         {
             "id": 2,
@@ -29,13 +29,13 @@
             "id": 5,
             "receita": false,
             "nome": "sei la vei",
-            "valor": 50,
+            "valor": 50.0,
             "categoria": "lazer",
             "data": "2025-06-17",
             "desc": "socorro",
             "carteira": "Trevilato Pemba",
             "repeticao": true,
-            "feita": null
+            "feita": true
         },
         {
             "id": 6,
@@ -323,7 +323,7 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": false
+            "feita": true
         },
         {
             "id": 30,
@@ -335,7 +335,7 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": false
+            "feita": true
         },
         {
             "id": 31,
@@ -347,7 +347,7 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": false
+            "feita": true
         },
         {
             "id": 32,
@@ -359,14 +359,26 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": false
+            "feita": true
+        },
+        {
+            "id": 34,
+            "receita": false,
+            "nome": "piruleta?",
+            "valor": 1233.0,
+            "categoria": "mercado",
+            "data": "2025-06-18",
+            "desc": "",
+            "carteira": "Roubos e furtos",
+            "repeticao": 0,
+            "feita": true
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 999570.0,
+            "saldo": 1005418.0,
             "movimentacoes": [
                 1,
                 2,
@@ -383,7 +395,19 @@
                 23,
                 24,
                 26,
-                27
+                27,
+                4,
+                5,
+                5,
+                4,
+                4,
+                4,
+                30,
+                31,
+                32,
+                31,
+                31,
+                31
             ]
         },
         {
@@ -398,6 +422,14 @@
                 18,
                 20,
                 25
+            ]
+        },
+        {
+            "nome": "Roubos e furtos",
+            "desc": "Bom dia!",
+            "saldo": -1203.0,
+            "movimentacoes": [
+                34
             ]
         }
     ],
@@ -472,7 +504,7 @@
             "gastos_lazer": 970000.0,
             "gastos_alimentacao": -100.0,
             "gastos_casa": -2733.0,
-            "gastos_mercado": -399500.0,
+            "gastos_mercado": -400743.0,
             "gastos_servico": 0
         }
     ]

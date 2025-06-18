@@ -19,6 +19,7 @@ interface EditTransactionModalProps {
 export function EditTransactionModal({ transaction, isOpen, onClose, onSave, carteiras }: EditTransactionModalProps) {
   const [isFixo, setIsFixo] = useState(transaction ? transaction.repeticao > 0 : false);
   const [repeticoes, setRepeticoes] = useState(transaction?.repeticao || 1);
+  const [isFeita, setIsFeita] = useState(transaction?.feita || false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,9 +32,9 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
       data: formData.get('data') as string,
       desc: formData.get('desc') as string || '',
       carteira: formData.get('carteira') as string,
-      repeticao: isFixo ? repeticoes : 0,  // If not fixed, repeticao is 0
+      repeticao: isFixo ? repeticoes : 0,
       receita: formData.get('tipo') === 'receita',
-      feita: false
+      feita: isFixo ? isFeita : false // Only allow feita if transaction is fixed
     };
 
     if (transaction) {
@@ -157,7 +158,7 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             </div>
 
             {isFixo && (
-              <div>
+              <><div>
                 <label className="block text-sm font-medium text-gray-700">
                   Número de Repetições
                 </label>
@@ -166,9 +167,19 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
                   min="1"
                   value={repeticoes}
                   onChange={(e) => setRepeticoes(Number(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                />
-              </div>
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+              </div><div className="flex items-center mt-4">
+                  <input
+                    type="checkbox"
+                    id="isFeita"
+                    checked={isFeita}
+                    onChange={(e) => setIsFeita(e.target.checked)}
+                    className="rounded border-gray-300 text-green-600" />
+                  <label htmlFor="isFeita" className="ml-2 text-sm font-medium text-gray-700">
+                    Transação já realizada?
+                  </label>
+                </div></>
+
             )}
           </div>
 

@@ -22,7 +22,7 @@ class GerenciamentoDeCarteiras:
 
         self.categorias = ["lazer", "alimentação", "casa", "mercado", "serviço"]
 
-    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep: int = 1):
+    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, rep: int = 1):
         try:
             self.validar_transacao(nome, str(valor), tipo, carteira)
             
@@ -46,7 +46,6 @@ class GerenciamentoDeCarteiras:
                         data_trans.isoformat(), 
                         desc, 
                         carteira.get_nome(), 
-                        fixo,
                         rep
                     )
                     
@@ -54,7 +53,7 @@ class GerenciamentoDeCarteiras:
                     novo_id = self.storage.get_next_id()
             else:
                 
-                trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
+                trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), rep )
                 self.storage.add_transaction(trans)
                 pontos_manager = self.storage.get_pontos_manager()
                 carteira.atualiza_carteira(trans,pontos_manager)
@@ -64,7 +63,7 @@ class GerenciamentoDeCarteiras:
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
 
-    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep : int = 1):
+    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira,  rep : int = 1):
         try:
             self.validar_transacao(nome, str(valor), tipo, carteira)
             # Get current date as datetime object
@@ -86,15 +85,14 @@ class GerenciamentoDeCarteiras:
                         tipo, 
                         data_trans.isoformat(), 
                         desc, 
-                        carteira.get_nome(), 
-                        fixo,
+                        carteira.get_nome(),
                         rep
                     )
                     
                     self.storage.add_transaction(trans)
                     novo_id = self.storage.get_next_id()
             else:
-                despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
+                despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(),  rep )
                 self.storage.add_transaction(despesa)
                 pontos_manager = self.storage.get_pontos_manager()
                 carteira.atualiza_carteira(despesa, pontos_manager)
@@ -137,6 +135,14 @@ class GerenciamentoDeCarteiras:
             transacao_original._valor = novo_valor_bruto
             
             diferenca_de_saldo = transacao_original.valor - valor_antigo_com_sinal
+            newDone = novos_dados.get('feita')
+            if(not transacao_original.done and newDone):
+                print("ficou pronta")
+                carteira_associada.atualiza_carteira(transacao_original, self.storage.get_pontos_manager())
+            if(transacao_original.done and not newDone):
+                print("desficou")
+                transacao_original.done = newDone
+                carteira_associada.ajustar_saldo(-diferenca_de_saldo)
             
             carteira_associada.ajustar_saldo(diferenca_de_saldo)
             self.storage.save_data()
