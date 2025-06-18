@@ -6,9 +6,9 @@ from transacao import CofrinhoFactory, CorrenteFactory, DespesaFactory, Receita,
 
 class GerenciamentoDeCarteiras:
     """
-    Implementação do padrão Facade.
+    Implementação do padrão Facade (a famosa Fachada).
     Oferece uma interface simples para o sistema, orquestrando
-    operações entre a interface do usuário, a lógica de negócios e a camada de persistência.
+    operações entre a interface do usuário, a lógica de negócios e a camada de persistência ( o famoso JSON).
     """
     def __init__(self):
         self.storage = StorageManager()
@@ -100,22 +100,11 @@ class GerenciamentoDeCarteiras:
             return True, "Despesa adicionada com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
-        
-        
+            
     def realizar_transacao(self, transacao: Transaction):
         #para transacoes que nao foram pagas quando criadas, como as que se repetem
         carteira = next(c for c in self.storage.get_carteiras() if c.get_nome() == transacao.carteira)
         carteira.atualiza_carteira(transacao)   
-        
-        
-        
-    #  depositso devem ser mostrados na lista??????
-    
-    
-    
-    
-    
-    
     
     def editar_transacao(self, transacao_original: Transaction, novos_dados: dict):
         try:
