@@ -201,7 +201,9 @@ class Corrente(Carteira):
         self._saldo += transacao.valor
         self.movimentacoes.append(transacao.id)
         print("Add!")
-        pontos_manager.adicionar_despesa(transacao.valor, transacao.categoria)
+        if pontos_manager is not None:
+            pontos_manager.adicionar_despesa(transacao.valor, transacao.categoria)
+
         
 
 # ==================================
