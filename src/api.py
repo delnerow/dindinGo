@@ -130,10 +130,10 @@ def create_transaction():
         except (ValueError, TypeError) as e:
             print("Error converting valor:", str(e))
             return {'error': 'Valor inválido: deve ser um número'}, 400
-
         # Get the carteira object
         try:
             carteiras = gerenciador.get_carteiras()
+                
             carteira = next(
                 (c for c in carteiras if c.get_nome() == data['carteira']),
                 None
@@ -157,7 +157,7 @@ def create_transaction():
                     data=data['data'],
                     desc=data['desc'],
                     carteira=carteira,
-                    fixo=data['repeticao']
+                    rep=data['repeticao']
                 )
             else:
                 success, message = gerenciador.adicionar_despesa(
@@ -167,7 +167,7 @@ def create_transaction():
                     data=data['data'],
                     desc=data['desc'],
                     carteira=carteira,
-                    fixo=data['repeticao']
+                    rep=data['repeticao']
                 )
 
             if not success:

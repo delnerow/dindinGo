@@ -1,3 +1,5 @@
+// Add after your existing imports
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Plus, Wallet, Pencil, Trash2 } from 'lucide-react';
 import Sidebar from "../components/ui/sidebar";
@@ -5,6 +7,22 @@ import { Transaction, NewTransaction } from '../types/Transaction';
 import { EditTransactionModal } from '../components/EditTransactionModal';
 import { getCategoryIcon } from '../utils/categoryIcons';
 
+// Add these helper functions after your existing constants
+const getNextMonth = (currentMonth: string): string => {
+  const [year, month] = currentMonth.split('-').map(Number);
+  if (month === 12) {
+    return `${year + 1}-01`;
+  }
+  return `${year}-${String(month + 1).padStart(2, '0')}`;
+};
+
+const getPreviousMonth = (currentMonth: string): string => {
+  const [year, month] = currentMonth.split('-').map(Number);
+  if (month === 1) {
+    return `${year - 1}-12`;
+  }
+  return `${year}-${String(month - 1).padStart(2, '0')}`;
+};
 
 interface Carteira {
   nome: string;
@@ -21,6 +39,12 @@ const meses = [
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString('pt-BR');
+};
+
+const formatMonthYear = (monthYear: string): string => {
+  const [year, month] = monthYear.split('-');
+  const date = new Date(Number(year), Number(month) - 1);
+  return date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
 };
 
 export default function Transacoes() {
@@ -168,17 +192,27 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
-          <select
-            className="text-xl font-bold bg-transparent"
-            value={mesSelecionado}
-            onChange={(e) => setMesSelecionado(e.target.value)}
-          >
-            {meses.map((m) => (
-              <option key={m.value} value={m.value}>
-                {m.label}
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center space-x-4">
+  <button
+    onClick={() => setMesSelecionado(getPreviousMonth(mesSelecionado))}
+    className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+    title="Mês anterior"
+  >
+    <ChevronLeft className="w-5 h-5" />
+  </button>
+  
+  <span className="text-xl font-bold">
+    {formatMonthYear(mesSelecionado)}
+  </span>
+  
+  <button
+    onClick={() => setMesSelecionado(getNextMonth(mesSelecionado))}
+    className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+    title="Próximo mês"
+  >
+    <ChevronRight className="w-5 h-5" />
+  </button>
+</div>
         </div>
 
         <button

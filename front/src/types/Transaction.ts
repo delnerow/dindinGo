@@ -1,14 +1,14 @@
 export interface Transaction {
     id: number;
-    receita: boolean;  // Changed from tipo_transacao
     nome: string;
     valor: number;
     categoria: string;
     data: string;
     desc: string;
     carteira: string;
-    repeticao: boolean;  // Changed from number to boolean
-    feita?: boolean;     // Added optional feita field
+    repeticao: number;  // number of repetitions (0 if not repeated)
+    receita: boolean;
+    feita: boolean;
 }
 
 export type NewTransaction = Omit<Transaction, 'id'>;

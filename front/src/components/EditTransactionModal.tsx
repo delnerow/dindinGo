@@ -17,8 +17,8 @@ interface EditTransactionModalProps {
 }
 
 export function EditTransactionModal({ transaction, isOpen, onClose, onSave, carteiras }: EditTransactionModalProps) {
-  const [isFixo, setIsFixo] = useState(transaction?.repeticao || false);
-  const [repeticoes, setRepeticoes] = useState(1);
+  const [isFixo, setIsFixo] = useState(transaction ? transaction.repeticao > 0 : false);
+  const [repeticoes, setRepeticoes] = useState(transaction?.repeticao || 1);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,9 +31,9 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
       data: formData.get('data') as string,
       desc: formData.get('desc') as string || '',
       carteira: formData.get('carteira') as string,
-      repeticao: isFixo,  // Changed to use boolean
-      receita: formData.get('tipo') === 'receita',  // Changed to match data model
-      feita: false  // Default value for new transactions
+      repeticao: isFixo ? repeticoes : 0,  // If not fixed, repeticao is 0
+      receita: formData.get('tipo') === 'receita',
+      feita: false
     };
 
     if (transaction) {
