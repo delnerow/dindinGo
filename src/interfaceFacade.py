@@ -14,7 +14,7 @@ class GerenciamentoDeCarteiras:
         self.storage = StorageManager()
         self._mes_atual = datetime.datetime.now().month
         self._ano_atual = datetime.datetime.now().year
-        
+
         self.receita_factory = ReceitaFactory()
         self.despesa_factory = DespesaFactory()
         self.corrente_factory = CorrenteFactory()
@@ -22,7 +22,7 @@ class GerenciamentoDeCarteiras:
 
         self.categorias = ["lazer", "alimentação", "casa", "mercado", "serviço"]
 
-    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, rep: int = 1):
+    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep: int = 1):
         try:
             self.validar_transacao(nome, str(valor), tipo, carteira)
             
@@ -46,24 +46,22 @@ class GerenciamentoDeCarteiras:
                         data_trans.isoformat(), 
                         desc, 
                         carteira.get_nome(), 
+                        fixo,
                         rep
                     )
                     
                     self.storage.add_transaction(trans)
                     novo_id = self.storage.get_next_id()
             else:
-                
-                trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), rep )
+                trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
                 self.storage.add_transaction(trans)
-                pontos_manager = self.storage.get_pontos_manager()
-                carteira.atualiza_carteira(trans,pontos_manager)
-                print("normal!!")
+                carteira.atualiza_carteira(trans)
             self.storage.save_data()
             return True, f"{'Receita adicionada' if rep == 1 else f'Receitas adicionadas para {rep} meses'} com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
 
-    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira,  rep : int = 1):
+    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep : int = 1):
         try:
             self.validar_transacao(nome, str(valor), tipo, carteira)
             # Get current date as datetime object
@@ -85,14 +83,15 @@ class GerenciamentoDeCarteiras:
                         tipo, 
                         data_trans.isoformat(), 
                         desc, 
-                        carteira.get_nome(),
+                        carteira.get_nome(), 
+                        fixo,
                         rep
                     )
                     
                     self.storage.add_transaction(trans)
                     novo_id = self.storage.get_next_id()
             else:
-                despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(),  rep )
+                despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
                 self.storage.add_transaction(despesa)
                 pontos_manager = self.storage.get_pontos_manager()
                 carteira.atualiza_carteira(despesa, pontos_manager)
@@ -124,61 +123,23 @@ class GerenciamentoDeCarteiras:
                 carteira_existe = any( c.get_nome() == transacao_original.carteira for c in self.storage.get_carteiras())
                 if not carteira_existe:
                     return False, "Erro: Não é possível editar transação de uma carteira deletada."
-            
-            # Verificar se a nova carteira existe (se for alterada)
-            nova_carteira_nome = novos_dados.get('carteira', transacao_original.carteira)
-            if nova_carteira_nome != transacao_original.carteira:
-                nova_carteira_existe = any(c.get_nome() == nova_carteira_nome for c in self.storage.get_carteiras())
-                if not nova_carteira_existe:
-                    return False, f"Erro: Carteira '{nova_carteira_nome}' não encontrada."
                     
             carteira_associada = next(c for c in self.storage.get_carteiras() if c.get_nome() == transacao_original.carteira)
             
             valor_antigo_com_sinal = transacao_original.valor
             novo_valor_bruto = float(novos_dados.get('valor', transacao_original._valor))
             
-            # Se a carteira está sendo alterada, ajustar os saldos
-            if nova_carteira_nome != transacao_original.carteira:
-                nova_carteira = next(c for c in self.storage.get_carteiras() if c.get_nome() == nova_carteira_nome)
-                
-                # Remover da carteira antiga (se a transação já foi realizada)
-                if transacao_original.done:
-                    carteira_associada.ajustar_saldo(-valor_antigo_com_sinal)
-                if transacao_original.id in carteira_associada.movimentacoes:
-                    carteira_associada.movimentacoes.remove(transacao_original.id)
-                
-                # Adicionar à nova carteira (se a transação já foi realizada)
-                if transacao_original.done:
-                    nova_carteira.ajustar_saldo(valor_antigo_com_sinal)
-                nova_carteira.movimentacoes.append(transacao_original.id)
-                
-                # Atualizar a carteira da transação
-                transacao_original.carteira = nova_carteira_nome
-                
-                # Atualizar a carteira associada para os próximos cálculos
-                carteira_associada = nova_carteira
-            
             transacao_original.nome = novos_dados.get('nome', transacao_original.nome)
             transacao_original.categoria = novos_dados.get('categoria', transacao_original.categoria)
             transacao_original._valor = novo_valor_bruto
-            transacao_original.data = novos_dados.get('data', transacao_original.data)
             
             diferenca_de_saldo = transacao_original.valor - valor_antigo_com_sinal
-            newDone = bool(novos_dados.get('feita', transacao_original.done))
-            if(not transacao_original.done and newDone):
-                print("ficou pronta")
-                carteira_associada.atualiza_carteira(transacao_original, self.storage.get_pontos_manager())
-            if(transacao_original.done and not newDone):
-                print("desficou")
-                transacao_original.done = newDone
-                carteira_associada.ajustar_saldo(-diferenca_de_saldo)
-            transacao_original.done = newDone
             
             carteira_associada.ajustar_saldo(diferenca_de_saldo)
             self.storage.save_data()
             
             return True, "Transação atualizada com sucesso!"
-
+    
         except StopIteration:
             return False, "Erro: Carteira associada à transação não foi encontrada."
         except ValueError:

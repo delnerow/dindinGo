@@ -97,6 +97,27 @@ def fazer_deposito(cofrinho_nome):
     else:
         return jsonify({"success": False, "message": message}), 400
 
+@app.route("/api/cofrinhos/<string:cofrinho_nome>/quebrar", methods=["POST"])
+def quebrar_cofrinhos(cofrinho_nome):
+    data = request.get_json()
+    carteira_nome = data.get("carteira")
+    print("Cofrinho encontrado:", cofrinho_nome)
+    if not carteira_nome:
+        return jsonify({"success": False, "message": "Carteira de destino não fornecida."}), 400
+
+    cofrinhos = gerenciador.get_cofrinhos()
+    cofrinho = next((c for c in cofrinhos if c.get_nome() == cofrinho_nome), None)
+    if not cofrinho:
+        return jsonify({"success": False, "message": "Cofrinho não encontrado."}), 404
+
+    carteiras = gerenciador.get_carteiras()
+    carteira_nome= next((c for c in carteiras if c.get_nome() == carteira_nome), None)
+    if not carteira_nome:
+        return jsonify({"success": False, "message": "Carteira de destino não encontrada."}), 404
+
+    valor, msg = gerenciador.quebrar_cofrinho(cofrinho, carteira_nome)
+    return jsonify({"success": True, "message": f"Cofrinho '{cofrinho_nome}' quebrado. R$ {valor:.2f} retornados."})
+
 @app.route("/api/categorias", methods=["GET"])
 def listar_categorias():
     categorias = gerenciador.get_categorias_disponiveis()

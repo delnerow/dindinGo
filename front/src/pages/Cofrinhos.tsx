@@ -6,11 +6,13 @@ import AddSafeButton from "../components/ui/adicionarCofrinho";
 import DepositButton from "../components/ui/fazerDeposito";
 import CofrinhoModal from "../components/ui/cofrinhoModal";
 import DepositoModal from "../components/ui/depositarCofrinhoModal";
+import BreakSafeButton from "../components/ui/quebrarCofrinho";
+import QuebrarCofrinhoModal from "../components/ui/quebrarModal";
 
 type Cofrinho = {
   nome: string;
   desc: string;
-  timer_mes: number; // Tempo em meses
+  timer_mes: number;
   saldo: number;
   meta_valor: number;
 };
@@ -19,8 +21,9 @@ export default function Cofrinhos() {
   const [cofrinhos, setCofrinhos] = useState<Cofrinho[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDepositoModal, setShowDepositoModal] = useState(false);
-  const [cofrinhoSelecionado, setCofrinhoSelecionado] =
-    useState<Cofrinho | null>(null);
+  const [cofrinhoSelecionado, setCofrinhoSelecionado] = useState<Cofrinho | null>(null);
+  const [showQuebrarModal, setShowQuebrarModal] = useState(false);
+  const [cofrinhoParaQuebrar, setCofrinhoParaQuebrar] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/cofrinhos")
@@ -33,8 +36,8 @@ export default function Cofrinhos() {
     setShowModal(false);
   };
 
-  const abrirModalDeposito = (cofrinhos: Cofrinho) => {
-    setCofrinhoSelecionado(cofrinhos);
+  const abrirModalDeposito = (cofrinho: Cofrinho) => {
+    setCofrinhoSelecionado(cofrinho);
     setShowDepositoModal(true);
   };
 
@@ -48,30 +51,31 @@ export default function Cofrinhos() {
           <AddSafeButton onClick={() => setShowModal(true)} />
         </div>
 
-        {cofrinhos.map((cofrinhos) => {
-          const progresso = cofrinhos?.meta_valor ? (cofrinhos.saldo / cofrinhos.meta_valor) * 100 : 0;
+        {cofrinhos.map((cofrinho) => {
+          const progresso = cofrinho.meta_valor ? (cofrinho.saldo / cofrinho.meta_valor) * 100 : 0;
+          const podeQuebrar = cofrinho.timer_mes === 0 || progresso >= 100;
 
           return (
-            <Card key={cofrinhos.nome} className="w-full shadow-md border rounded-lg">
+            <Card key={cofrinho.nome} className="w-full shadow-md border rounded-lg">
               <CardContent className="p-6 space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-semibold text-blue-700">
-                    {cofrinhos.nome}
-                  </h3>
+                  <h3 className="text-xl font-semibold text-blue-700">{cofrinho.nome}</h3>
                   <span className="text-sm text-gray-500">
-                    {Math.round(cofrinhos.timer_mes ?? 0)} meses restantes
+                    {Math.round(cofrinho.timer_mes)} meses restantes
                   </span>
                 </div>
-                <p className="text-gray-600">{cofrinhos.desc}</p>
+
+                <p className="text-gray-600">{cofrinho.desc}</p>
+
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-700">
-                    Meta: <strong>R$ {(cofrinhos.meta_valor ?? 0).toFixed(2)}</strong>
+                    Meta: <strong>R$ {cofrinho.meta_valor.toFixed(2)}</strong>
                   </span>
                   <span className="text-green-600">
-                    Saldo:{" "}
-                    <strong>R$ {(cofrinhos.saldo ?? 0).toFixed(2)}</strong>
+                    Saldo: <strong>R$ {cofrinho.saldo.toFixed(2)}</strong>
                   </span>
                 </div>
+
                 <div>
                   <Progress value={progresso} />
                   <div className="text-right text-xs text-gray-500 mt-1">
@@ -79,8 +83,20 @@ export default function Cofrinhos() {
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-2 mt-4">
-                  <DepositButton onClick={() => abrirModalDeposito(cofrinhos)} />
+                <div className="flex justify-between items-center mt-4">
+                  <div>
+                    {podeQuebrar && (
+                      <BreakSafeButton
+                        onClick={() => {
+                          setCofrinhoParaQuebrar(cofrinho.nome);
+                          setShowQuebrarModal(true);
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <DepositButton onClick={() => abrirModalDeposito(cofrinho)} />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -93,15 +109,29 @@ export default function Cofrinhos() {
             onCreated={handleCreated}
           />
         )}
+
         {showDepositoModal && cofrinhoSelecionado && (
           <DepositoModal
             cofrinhoNome={cofrinhoSelecionado.nome}
             onClose={() => setShowDepositoModal(false)}
             onDeposited={() => {
               fetch("http://localhost:5000/api/cofrinhos")
-              .then((res) => res.json())
-              .then(setCofrinhos);
+                .then((res) => res.json())
+                .then(setCofrinhos);
               setShowDepositoModal(false);
+            }}
+          />
+        )}
+
+        {showQuebrarModal && cofrinhoParaQuebrar && (
+          <QuebrarCofrinhoModal
+            cofrinhoNome={cofrinhoParaQuebrar}
+            onClose={() => setShowQuebrarModal(false)}
+            onQuebrado={() => {
+              fetch("http://localhost:5000/api/cofrinhos")
+                .then((res) => res.json())
+                .then(setCofrinhos);
+              setShowQuebrarModal(false);
             }}
           />
         )}
