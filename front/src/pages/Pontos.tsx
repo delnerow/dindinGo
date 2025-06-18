@@ -2,6 +2,16 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../components/ui/sidebar";
 import { Card, CardContent } from "../components/ui/card";
 import { CircleCheckBig, Flame, Trophy } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 interface PontosBrutos {
   pontos: number;
@@ -25,39 +35,70 @@ interface PontosData {
 
 const Pontos: React.FC = () => {
   const [pontos, setPontos] = useState<PontosData | null>(null);
+  const [grafico, setGrafico] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  fetch("http://localhost:5000/api/pontos")
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Dados recebidos da API:", data);
-      const p: PontosBrutos = data.pontos;
+    fetch("http://localhost:5000/api/pontos")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Dados recebidos da API:", data.pontos);
+        const p: PontosBrutos = data.pontos; // Acessando o primeiro objeto do array
 
-      const total = p.pontos;
+        const total = p.pontos;
 
-      const metas =
-        p.meta_lazer +
-        p.meta_alimentacao +
-        p.meta_casa +
-        p.meta_mercado +
-        p.meta_servico;
+        const metas =
+          p.meta_lazer +
+          p.meta_alimentacao +
+          p.meta_casa +
+          p.meta_mercado +
+          p.meta_servico;
 
-      const gastos =
-        p.gastos_lazer +
-        p.gastos_alimentacao +
-        p.gastos_casa +
-        p.gastos_mercado +
-        p.gastos_servico;
+        const gastos =
+          p.gastos_lazer +
+          p.gastos_alimentacao +
+          p.gastos_casa +
+          p.gastos_mercado +
+          p.gastos_servico;
 
-      setPontos({ total, metas, gastos });
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error("Erro ao carregar pontos:", err);
-      setLoading(false);
-    });
-}, []);
+        setPontos({ total, metas, gastos });
+
+        const graficoData = [
+          {
+            categoria: "Lazer",
+            Meta: p.meta_lazer,
+            Gasto: p.gastos_lazer,
+          },
+          {
+            categoria: "Alimentação",
+            Meta: p.meta_alimentacao,
+            Gasto: p.gastos_alimentacao,
+          },
+          {
+            categoria: "Casa",
+            Meta: p.meta_casa,
+            Gasto: p.gastos_casa,
+          },
+          {
+            categoria: "Mercado",
+            Meta: p.meta_mercado,
+            Gasto: p.gastos_mercado,
+          },
+          {
+            categoria: "Serviço",
+            Meta: p.meta_servico,
+            Gasto: p.gastos_servico,
+          },
+        ];
+
+        setGrafico(graficoData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Erro ao carregar pontos:", err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
@@ -99,6 +140,21 @@ const Pontos: React.FC = () => {
                 <Flame className="w-8 h-8 text-red-500" />
               </Card>
             </div>
+
+            <Card className="p-4 mt-4">
+              <p className="text-lg font-semibold mb-4">Comparativo de Metas vs Gastos</p>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={grafico} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="categoria" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="Meta" fill="#10B981" />
+                  <Bar dataKey="Gasto" fill="#EF4444" />
+                </BarChart>
+              </ResponsiveContainer>
+            </Card>
           </>
         )}
       </main>
