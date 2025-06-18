@@ -4,12 +4,12 @@
         {
             "id": 2,
             "receita": false,
-            "nome": "Curso IMPA",
-            "valor": 2000.0,
+            "nome": "Curso IMPA Wainer",
+            "valor": 1950,
             "categoria": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-16T23:48:29.044164",
+            "data": "2025-06-16",
             "desc": "Reciclagem de prismas",
-            "carteira": "Trevilato Pemba",
+            "carteira": null,
             "repeticao": false
         },
         {
@@ -27,12 +27,12 @@
             "id": 5,
             "receita": false,
             "nome": "sei la vei",
-            "valor": 100.0,
+            "valor": 50,
             "categoria": "lazer",
-            "data": "2025-06-17T00:10:46.575344",
+            "data": "2025-06-17",
             "desc": "socorro",
-            "carteira": "Trevilato Pemba",
-            "repeticao": true
+            "carteira": null,
+            "repeticao": false
         },
         {
             "id": 6,
@@ -92,7 +92,7 @@
         {
             "id": 11,
             "receita": false,
-            "nome": "Grama sint\u00e9tica",
+            "nome": "Grama sint\u00e9tica verde",
             "valor": 100.0,
             "categoria": "alimenta\u00e7\u00e3o",
             "data": "2025-06-17T08:05:45.076268",
