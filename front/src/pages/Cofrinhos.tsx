@@ -2,21 +2,25 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../components/ui/sidebar";
 import { Card, CardContent } from "../components/ui/card";
 import { Progress } from "../components/ui/progress";
-import AddButton from "../components/ui/adicionarCofrinho";
+import AddSafeButton from "../components/ui/adicionarCofrinho";
+import DepositButton from "../components/ui/fazerDeposito";
 import CofrinhoModal from "../components/ui/cofrinhoModal";
+import DepositoModal from "../components/ui/depositarCofrinhoModal";
 
 type Cofrinho = {
   nome: string;
   desc: string;
   timer_mes: number; // Tempo em meses
   saldo: number;
-  meta: number;
-}
-
+  meta_valor: number;
+};
 
 export default function Cofrinhos() {
   const [cofrinhos, setCofrinhos] = useState<Cofrinho[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showDepositoModal, setShowDepositoModal] = useState(false);
+  const [cofrinhoSelecionado, setCofrinhoSelecionado] =
+    useState<Cofrinho | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/cofrinhos")
@@ -24,26 +28,15 @@ export default function Cofrinhos() {
       .then(setCofrinhos);
   }, []);
 
-  const handleCreated = (novaCarteira: Cofrinho) => {
-    setCofrinhos((prev) => [...prev, novaCarteira]);
+  const handleCreated = (novoCofrinho: Cofrinho) => {
+    setCofrinhos((prev) => [...prev, novoCofrinho]);
     setShowModal(false);
   };
 
-  function handleAdicionarSaldo(index: number) {
-    const valor = prompt("Quanto deseja adicionar?");
-    const valorNumerico = parseFloat(valor ?? "0");
-
-    if (!isNaN(valorNumerico) && valorNumerico > 0) {
-      setCofrinhos((prev) => {
-        const atualizados = [...prev];
-        atualizados[index].saldo += valorNumerico;
-        return atualizados;
-      });
-    } else {
-      alert("Valor inválido.");
-    }
-  }
-
+  const abrirModalDeposito = (cofrinhos: Cofrinho) => {
+    setCofrinhoSelecionado(cofrinhos);
+    setShowDepositoModal(true);
+  };
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
@@ -51,31 +44,32 @@ export default function Cofrinhos() {
 
       <div className="flex-1 ml-64 p-6 space-y-6 overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Minhas Carteiras</h2>
-          <AddButton onClick={() => setShowModal(true)} />
+          <h2 className="text-2xl font-bold">Meus Cofrinhos</h2>
+          <AddSafeButton onClick={() => setShowModal(true)} />
         </div>
 
-        {cofrinhos.map((cofrinho, index) => {
-          const progresso = cofrinho?.meta ? (cofrinho.saldo / cofrinho.meta) * 100 : 0;
+        {cofrinhos.map((cofrinhos) => {
+          const progresso = cofrinhos?.meta_valor ? (cofrinhos.saldo / cofrinhos.meta_valor) * 100 : 0;
 
           return (
-            <Card key={index} className="w-full shadow-md border rounded-lg">
+            <Card key={cofrinhos.nome} className="w-full shadow-md border rounded-lg">
               <CardContent className="p-6 space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-xl font-semibold text-blue-700">
-                    {cofrinho.nome}
+                    {cofrinhos.nome}
                   </h3>
                   <span className="text-sm text-gray-500">
-                    {Math.round(cofrinho.timer_mes ?? 0)} meses restantes
+                    {Math.round(cofrinhos.timer_mes ?? 0)} meses restantes
                   </span>
                 </div>
-                <p className="text-gray-600">{cofrinho.desc}</p>
+                <p className="text-gray-600">{cofrinhos.desc}</p>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-700">
-                  Meta: <strong>R$ {(cofrinho.meta ?? 0).toFixed(2)}</strong>
+                    Meta: <strong>R$ {(cofrinhos.meta_valor ?? 0).toFixed(2)}</strong>
                   </span>
                   <span className="text-green-600">
-                  Saldo: <strong>R$ {(cofrinho.saldo ?? 0).toFixed(2)}</strong>
+                    Saldo:{" "}
+                    <strong>R$ {(cofrinhos.saldo ?? 0).toFixed(2)}</strong>
                   </span>
                 </div>
                 <div>
@@ -86,13 +80,7 @@ export default function Cofrinhos() {
                 </div>
 
                 <div className="flex justify-end space-x-2 mt-4">
-                  <button
-                    onClick={() => handleAdicionarSaldo(index)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                  >
-                    Adicionar Saldo
-                  </button>
-
+                  <DepositButton onClick={() => abrirModalDeposito(cofrinhos)} />
                 </div>
               </CardContent>
             </Card>
@@ -103,6 +91,18 @@ export default function Cofrinhos() {
           <CofrinhoModal
             onClose={() => setShowModal(false)}
             onCreated={handleCreated}
+          />
+        )}
+        {showDepositoModal && cofrinhoSelecionado && (
+          <DepositoModal
+            cofrinhoNome={cofrinhoSelecionado.nome}
+            onClose={() => setShowDepositoModal(false)}
+            onDeposited={() => {
+              fetch("http://localhost:5000/api/cofrinhos")
+              .then((res) => res.json())
+              .then(setCofrinhos);
+              setShowDepositoModal(false);
+            }}
           />
         )}
       </div>

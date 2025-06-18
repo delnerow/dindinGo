@@ -3,41 +3,39 @@ import React, { useState, useEffect } from "react";
 export default function DepositarModal({
   onClose,
   onDeposited,
-  cofrinhoId,
+  cofrinhoNome,
 }: {
   onClose: () => void;
   onDeposited: () => void;
-  cofrinhoId: number;
+  cofrinhoNome: string;
 }) {
   const [valor, setValor] = useState("");
   const [carteiras, setCarteiras] = useState([]);
-  const [carteiraId, setCarteiraId] = useState("");
+  const [carteiraNome, setCarteiraNome] = useState("");
   const [erro, setErro] = useState("");
 
-  useEffect(() => {
-    // Busca as carteiras existentes
-    const fetchCarteiras = async () => {
-      const res = await fetch("http://localhost:5000/api/carteiras");
-      const data = await res.json();
-      if (data.success) {
-        setCarteiras(data.carteiras);
-        if (data.carteiras.length > 0) {
-          setCarteiraId(data.carteiras[0].id.toString());
-        }
-      }
-    };
+useEffect(() => {
+  const fetchCarteiras = async () => {
+    const res = await fetch("http://localhost:5000/api/carteiras");
+    const data = await res.json();
+    setCarteiras(data); // ← aqui aceita a lista diretamente
+    if (data.length > 0) {
+      setCarteiraNome(data[0].nome);
+    }
+  };
 
-    fetchCarteiras();
-  }, []);
+  fetchCarteiras();
+}, []);
 
-  const handleSubmit = async () => {
-    const res = await fetch(`http://localhost:5000/api/cofrinhos/${cofrinhoId}/depositar`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        valor: parseFloat(valor),
-        carteira_id: parseInt(carteiraId),
-      }),
+    const handleSubmit = async () => {
+        console.log("cofrinhoNome =>", cofrinhoNome);
+        const res = await fetch(`http://localhost:5000/api/cofrinhos/${cofrinhoNome}/depositar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            valor: parseFloat(valor),
+            carteiras: carteiraNome,
+        }),
     });
 
     const data = await res.json();
@@ -64,13 +62,13 @@ export default function DepositarModal({
 
         <label className="block mb-1 text-sm font-medium text-gray-700">Carteira de origem:</label>
         <select
-          value={carteiraId}
-          onChange={(e) => setCarteiraId(e.target.value)}
+          value={carteiraNome}
+          onChange={(e) => setCarteiraNome(e.target.value)}
           className="w-full mb-3 p-2 border rounded"
         >
-          {carteiras.map((carteira: any) => (
-            <option key={carteira.id} value={carteira.id}>
-              {carteira.nome} (R${carteira.saldo?.toFixed(2) || "0.00"})
+          {carteiras.map((carteiras: any) => (
+            <option key={carteiras.nome} value={carteiras.nome}>
+              {carteiras.nome} (R${carteiras.saldo?.toFixed(2) || "0.00"})
             </option>
           ))}
         </select>

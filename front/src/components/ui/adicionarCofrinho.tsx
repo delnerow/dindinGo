@@ -1,7 +1,7 @@
 import React from "react";
 import { Plus } from "lucide-react";
 
-export default function AddButton({ onClick }: { onClick: () => void }) {
+export default function AddSafeButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
