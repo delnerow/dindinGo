@@ -6,7 +6,7 @@ import CarteiraModal from "../components/ui/carteiraModal";
 
 type Carteira = {
   nome: string;
-  descricao: string;
+  desc: string;
   saldo: number;
 };
 
@@ -33,7 +33,7 @@ export default function Carteiras() {
           <Card key={index} className="w-full">
             <CardContent className="p-6 space-y-2">
               <h3 className="text-xl font-semibold">{carteira.nome}</h3>
-              <p className="text-sm text-gray-500">{carteira.descricao}</p>
+              <p className="text-sm text-gray-500">{carteira.desc}</p>
               <p className="text-green-600 font-medium">
                 Saldo: R$ {carteira.saldo.toFixed(2)}
               </p>

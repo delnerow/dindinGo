@@ -45,8 +45,70 @@ def criar_carteira():
             "message": message
         }), 400
 
+@app.route("/api/cofrinhos", methods=["GET"])
+def listar_cofrinhos():
+    """
+    Rota GET que retorna todos os cofrinhos.
+    """
+    cofrinhos = gerenciador.get_cofrinhos()  # Você precisa ter esse método
+    cofrinhos_dict = [c.to_dict() for c in cofrinhos]
+    return jsonify(cofrinhos_dict)
 
-# Create a single instance of GerenciamentoDeCarteiras
+
+@app.route("/api/cofrinhos", methods=["POST"])
+def criar_cofrinho():
+    """
+    Rota POST para criar novo cofrinho.
+    Espera JSON com: nome, desc, timer_mes, meta, saldo (opcional)
+    """
+    data = request.get_json()
+    nome = data.get("nome")
+    desc = data.get("desc")
+    timer_mes = int(data.get("timer_mes", 0))
+    meta = float(data.get("meta", 0.0))
+    saldo = float(data.get("saldo", 0.0))
+
+    success, message = gerenciador.adicionar_cofrinho(nome, desc, timer_mes, meta, saldo)
+
+    if success:
+        return jsonify({
+            "success": True,
+            "cofrinho": {
+                "nome": nome,
+                "descricao": desc,
+                "timer_mes": timer_mes,
+                "meta": meta,
+                "saldo": saldo
+            }
+        }), 200
+    else:
+        return jsonify({ "success": False, "message": message }), 400
+
+@app.route("/api/cofrinhos/<int:cofrinho_id>/depositar", methods=["POST"])
+def depositar_em_cofrinho(cofrinho_id):
+    """
+    Rota POST para depositar em um cofrinho.
+    Espera JSON com: valor (float), carteira_id (int)
+    """
+    data = request.get_json()
+    valor = float(data.get("valor", 0.0))
+    carteira_id = int(data.get("carteira_id", -1))
+
+    cofrinho = gerenciador.get_cofrinho_by_id(cofrinho_id)
+    if not cofrinho:
+        return jsonify({"success": False, "message": "Cofrinho não encontrado."}), 404
+
+    carteira_origem = gerenciador.get_carteira_by_id(carteira_id)
+    if not carteira_origem:
+        return jsonify({"success": False, "message": "Carteira de origem não encontrada."}), 404
+
+    success, message = gerenciador.depositar_cofrinho(valor, cofrinho, carteira_origem)
+
+    if success:
+        return jsonify({ "success": True, "message": message }), 200
+    else:
+        return jsonify({ "success": False, "message": message }), 400
+
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
