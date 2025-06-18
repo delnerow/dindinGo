@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Transacoes from './pages/Transacoes';
-import Contas from './pages/Contas';
+import Carteiras from './pages/Carteiras';
+import Cofrinhos from './pages/Cofrinhos';
 
 export default function App() {
   return (
@@ -9,7 +10,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/transacoes" element={<Transacoes />} />
-        <Route path="/contas" element={<Contas />} />
+        <Route path="/carteiras" element={<Carteiras />} />
+        <Route path="/cofrinhos" element={<Cofrinhos />} />
       </Routes>
     </BrowserRouter>
   );

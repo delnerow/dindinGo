@@ -1,13 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import '../App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "../App.css";
 import { Card, CardContent } from "../components/ui/card";
-import { Button } from "../components/ui/button";
 import Sidebar from "../components/ui/sidebar";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from "recharts";
 import { PieChart, Pie, Cell } from "recharts";
 import { Calendar } from "../components/ui/calendar";
-import { Home, DollarSign, CreditCard, PieChart as PieIcon, Calendar as CalendarIcon, BarChart3 } from "lucide-react";
+import {
+  Home,
+  DollarSign,
+  CreditCard,
+  PieChart as PieIcon,
+  Calendar as CalendarIcon,
+  BarChart3,
+} from "lucide-react";
 
 const data = [
   { name: "30/05", valor: 200 },
@@ -30,8 +45,6 @@ export default function Dashboard() {
     <div className="flex h-screen overflow-hidden bg-gray-100">
       {/* Sidebar */}
       <Sidebar />
-
-    
 
       {/* Main Content */}
       <div className="flex-1 ml-64 p-6 space-y-6 overflow-y-auto">
@@ -64,7 +77,10 @@ export default function Dashboard() {
                 <PieChart>
                   <Pie data={pieData} dataKey="value" outerRadius={60} label>
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                 </PieChart>
@@ -80,7 +96,12 @@ export default function Dashboard() {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Line type="monotone" dataKey="valor" stroke="#3b82f6" strokeWidth={2} />
+                  <Line
+                    type="monotone"
+                    dataKey="valor"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -104,7 +125,10 @@ export default function Dashboard() {
           <Card>
             <CardContent className="p-4">
               <p className="text-sm text-gray-500 mb-2">Calendário</p>
-              <Calendar value={new Date().toISOString().split("T")[0]} className="rounded-md border" />
+              <Calendar
+                value={new Date().toISOString().split("T")[0]}
+                className="rounded-md border"
+              />
             </CardContent>
           </Card>
         </div>
@@ -112,4 +136,3 @@ export default function Dashboard() {
     </div>
   );
 }
-

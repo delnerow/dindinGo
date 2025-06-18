@@ -1,9 +1,48 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, request, jsonify
+from interfaceFacade import GerenciamentoDeCarteiras
 from flask_cors import CORS
 from interfaceFacade import GerenciamentoDeCarteiras
 
 app = Flask(__name__)
 CORS(app)
+gerenciador = GerenciamentoDeCarteiras()
+
+@app.route("/api/carteiras", methods=["GET"])
+def listar_carteiras():
+    """
+    Rota GET que retorna todas as carteiras.
+    """
+    carteiras = gerenciador.get_carteiras()
+    return jsonify(carteiras)  
+
+@app.route("/api/carteiras", methods=["POST"])
+def criar_carteira():
+    """
+    Rota POST que cria uma nova carteira.
+    Espera JSON com: nome, desc, saldo.
+    """
+    data = request.get_json()
+    nome = data.get("nome")
+    desc = data.get("desc")
+    saldo = float(data.get("saldo", 0.0))
+
+    success, message = gerenciador.adicionar_carteira(nome, desc, saldo)
+
+    if success:
+        return jsonify({
+            "success": True,
+            "carteira": {
+                "nome": nome,
+                "descricao": desc,
+                "saldo": saldo
+            }
+        }), 200
+    else:
+        return jsonify({
+            "success": False,
+            "message": message
+        }), 400
+
 
 # Create a single instance of GerenciamentoDeCarteiras
 gerenciador = GerenciamentoDeCarteiras()

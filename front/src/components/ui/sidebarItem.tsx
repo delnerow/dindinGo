@@ -11,10 +11,12 @@ export default function SidebarItem({ icon, label }: { icon: React.ReactNode; la
       case "Transações":
         navigate("/transacoes");
         break;
-      case "Contas":
-        navigate("/contas");
+      case "Carteiras":
+        navigate("/carteiras");
         break;
-      
+      case "Cofrinhos":
+        navigate("/cofrinhos");
+        break;
       default:
         break;
     }
