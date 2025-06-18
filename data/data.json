@@ -1,5 +1,5 @@
 {
-    "idGenerator": 62,
+    "idGenerator": 64,
     "transacoes": [
         {
             "id": 2,
@@ -708,6 +708,30 @@
             "carteira": "asdad",
             "repeticao": 1,
             "feita": true
+        },
+        {
+            "id": 63,
+            "receita": false,
+            "nome": "Comprei Pamonha",
+            "valor": 12.0,
+            "categoria": "alimenta\u00e7\u00e3o",
+            "data": "2025-06-18",
+            "desc": "Bem gostosa",
+            "carteira": "Adilson",
+            "repeticao": false,
+            "feita": true
+        },
+        {
+            "id": 64,
+            "receita": false,
+            "nome": "despex",
+            "valor": 12.0,
+            "categoria": "alimenta\u00e7\u00e3o",
+            "data": "2025-06-18",
+            "desc": "",
+            "carteira": "Roubos e furtos",
+            "repeticao": false,
+            "feita": true
         }
     ],
     "carteiras": [
@@ -772,7 +796,7 @@
         {
             "nome": "Adilson",
             "desc": "A MAIS GORDA",
-            "saldo": 9597783.1,
+            "saldo": 9597771.1,
             "movimentacoes": [
                 7,
                 10,
@@ -780,17 +804,19 @@
                 16,
                 18,
                 20,
-                25
+                25,
+                63
             ]
         },
         {
             "nome": "Roubos e furtos",
             "desc": "Bom dia!",
-            "saldo": 7359.0,
+            "saldo": 7347.0,
             "movimentacoes": [
                 34,
                 42,
-                48
+                48,
+                64
             ]
         }
     ],
@@ -916,7 +942,7 @@
             "meta_mercado": 300,
             "meta_servico": 100,
             "gastos_lazer": -970.0,
-            "gastos_alimentacao": -100.0,
+            "gastos_alimentacao": -124.0,
             "gastos_casa": -200.0,
             "gastos_mercado": -450.0,
             "gastos_servico": 0

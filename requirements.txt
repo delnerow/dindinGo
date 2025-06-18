@@ -1,7 +1,11 @@
 jsonpickle
-Flask==2.0.1
-flask-cors==3.0.10
+flask==3.0.0
+flask-cors==4.0.0
 python-dateutil==2.8.2
 pytest==7.4.0
 pytest-cov==4.1.0
 werkzeug==2.0.1
+@vitejs/plugin-react@^4.2.0
+@types/node@^20.10.0
+typescript@^5.2.2
+vite@^5.0.0

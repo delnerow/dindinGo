@@ -1,8 +1,16 @@
 import json
+import sys
+from pathlib import Path
+
+# Add src directory to Python path
+src_path = str(Path(__file__).resolve().parent.parent)
+if src_path not in sys.path:
+    sys.path.append(src_path)
+    
 from flask import Flask, jsonify, request, request, jsonify
-from interfaceFacade import GerenciamentoDeCarteiras
+from facade.gerenciadorCarteiras import GerenciamentoDeCarteiras
 from flask_cors import CORS
-from interfaceFacade import GerenciamentoDeCarteiras
+from facade.gerenciadorCarteiras import GerenciamentoDeCarteiras
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])

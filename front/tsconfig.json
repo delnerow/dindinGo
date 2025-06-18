@@ -23,8 +23,17 @@
       "jest",
       "@testing-library/jest-dom"
     ],
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    }
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "coverage"
   ]
 }

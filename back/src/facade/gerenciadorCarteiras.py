@@ -1,8 +1,22 @@
 import datetime
 
-from expectionHandlers import ValidationErrors, EmptyFieldError, InvalidTypeError, InvalidValueError
+
+import sys
+from pathlib import Path
+
+# Add src directory to Python path
+src_path = str(Path(__file__).resolve().parent.parent)
+if src_path not in sys.path:
+    sys.path.append(src_path)
+
+
+from utils.exceptionHandlers import ValidationErrors, EmptyFieldError, InvalidTypeError, InvalidValueError
 from utils.storage import StorageManager
-from transacao import CofrinhoFactory, CorrenteFactory, DespesaFactory, Receita, ReceitaFactory, Carteira, Cofrinho, Transaction
+from core.transacao import   Receita,   Transaction
+from core.carteira import Carteira, Cofrinho
+from factories.carteira_factory import CofrinhoFactory, CorrenteFactory
+from factories.transaction_factory import DespesaFactory, ReceitaFactory
+
 
 class GerenciamentoDeCarteiras:
     """

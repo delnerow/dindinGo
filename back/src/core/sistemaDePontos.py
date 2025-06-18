@@ -1,5 +1,13 @@
 import datetime
 
+import sys
+from pathlib import Path
+
+# Add src directory to Python path
+src_path = str(Path(__file__).resolve().parent.parent)
+if src_path not in sys.path:
+    sys.path.append(src_path)
+
 class SistemaDePontos:
     def __init__(self, pontos, meta_lazer=100, meta_alimentacao=1000, meta_casa=100, meta_mercado=1000, meta_serviço=100,
                  gastos_lazer=0, gastos_alimentacao=0, gastos_casa=0, gastos_mercado=0, gastos_servico=0):

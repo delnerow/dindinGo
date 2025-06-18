@@ -1,9 +1,19 @@
 import datetime
 import os
+import sys
+from pathlib import Path
+
+# Add src directory to Python path
+src_path = str(Path(__file__).resolve().parent.parent)
+if src_path not in sys.path:
+    sys.path.append(src_path)
+
 import time
-from utils.printers import print_carteiras, print_cofrinhos, print_transacoes
 from utils.filters import filtra_transacoes_mes
-from interfaceFacade import GerenciamentoDeCarteiras
+from utils.printers import print_carteiras, print_cofrinhos, print_transacoes
+
+from facade.gerenciadorCarteiras import GerenciamentoDeCarteiras
+
 
 # ==============================================================================
 # FUNÇÕES AUXILIARES
@@ -77,7 +87,7 @@ def selecionar_categoria(gerenciador: GerenciamentoDeCarteiras) -> str:
 gerenciador = GerenciamentoDeCarteiras()
 
 while True:
-    os.system('cls' if os.name == 'nt' else 'clear')
+    #os.system('cls' if os.name == 'nt' else 'clear')
 
     print(f"Transações feitas em {gerenciador.get_mes_atual():02d}/{gerenciador.get_ano_atual()}:")
     transacoes = gerenciador.get_transacoes()

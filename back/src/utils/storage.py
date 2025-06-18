@@ -1,10 +1,21 @@
 import json
 from typing import List, Optional
 import os
+import sys
+from pathlib import Path
+
+# Add src directory to Python path
+src_path = str(Path(__file__).resolve().parent.parent)
+if src_path not in sys.path:
+    sys.path.append(src_path)
 
 # Importe suas classes do modelo e fábricas
-from transacao import Transaction, Carteira, Cofrinho, ReceitaFactory, DespesaFactory, CorrenteFactory, CofrinhoFactory
-from sistemaDePontos import SistemaDePontos
+from core.transacao import Transaction
+from core.carteira import Carteira, Cofrinho
+from factories.carteira_factory import CofrinhoFactory, CorrenteFactory
+from factories.transaction_factory import DespesaFactory, ReceitaFactory
+
+from core.sistemaDePontos import SistemaDePontos
 
 class StorageManager:
     """
@@ -12,8 +23,22 @@ class StorageManager:
     """
     _instance: Optional['StorageManager'] = None
     # Update DATA_FILE to use absolute path from project root
-    DATA_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data.json')
-
+    current_path = Path(__file__).resolve()
+    project_root = None
+            
+            # Navigate up until we find dindinGo folder
+    for parent in current_path.parents:
+        if parent.name == 'dindinGo':
+            project_root = parent
+            break
+            
+    if not project_root:
+        raise RuntimeError("Could not find project root (dindinGo folder)")
+            
+    # Set data file path
+    DATA_FILE = project_root / 'data' / 'data.json'
+    print(f"Data file path: {DATA_FILE}")
+    
     def __new__(cls) -> 'StorageManager':
         if cls._instance is None:
             cls._instance = super(StorageManager, cls).__new__(cls)

@@ -1,48 +1,74 @@
-# dindinGo Project
+# dindinGo - Personal Finance Manager
 
-## Introdução
-intro
+## Introduction
+dindinGo is a comprehensive personal finance management system that helps users track their expenses, income, and savings. It features a React frontend for user interaction and a Python Flask backend for business logic.
 
-## Estrutura do Projeto
+## Project Structure
 ```
-dindinGo
-├── src
-│   ├── interfacePemba.py  
-│   ├── transacao.py        
-│   └── storage.py          
-├── requirements.txt        
-└── README.md               
+dindinGo/
+├── back/              # Backend Python application
+├── front/            # Frontend React application
+├── data/            # Data storage
+├── requirements.txt  # Python dependencies
+└── README.md        # This file
 ```
 
-## Installation
+## Getting Started
+
+### Prerequisites
+- Python 3.8 or higher
+- Node.js 14 or higher
+- npm 6 or higher
+
+### Installation
+
 1. Clone the repository:
-   ```
-   git clone <repository-url>
-   cd dindinGo
-   ```
+```bash
+git clone <repository-url>
+cd dindinGo
+```
 
-2. Install the required dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+2. Install backend dependencies:
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-## Usage
-1. Run the application:
-   ```
-   python src/interfacePemba.py
-   ```
+3. Install frontend dependencies:
+```bash
+cd front
+npm install
+```
 
-2. Follow the on-screen prompts to:
-   - Create new transactions (income or expenses)
-   - Add funds to your savings (cofrinho)
-   - Break your savings jar to retrieve funds
+### Running the Application
 
-## Functionality
-- **Carteira**: Represents the current wallet, allowing users to check their balance and update it with transactions.
-- **Cofrinho**: Represents a savings jar where users can save money and retrieve it when needed.
-- **Despesa**: Represents an expense transaction, capturing details such as name, value, type, date, and frequency.
-- **Receita**: Represents an income transaction with similar properties to Despesa.
+1. Start the backend server:
+```bash
+cd back/src
+python api/api.py
+```
 
+2. Start the frontend development server:
+```bash
+cd front
+npm start
+```
+
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+
+## Features
+- Transaction management (income and expenses)
+- Wallet balance tracking
+- Savings box functionality
+- Points system for financial goals
+- Monthly expense tracking
+- Category-based organization
+
+## Contributing
+Please read our contributing guidelines before submitting pull requests.
 
 ## License
 This project is licensed under the MIT License.
