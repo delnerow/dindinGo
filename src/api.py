@@ -28,7 +28,7 @@ def criar_carteira():
             "success": True,
             "carteira": {
                 "nome": nome,
-                "descricao": desc,
+                "desc": desc,
                 "saldo": saldo
             }
         }), 200
@@ -51,20 +51,20 @@ def criar_cofrinho():
     nome = data.get("nome")
     desc = data.get("desc")
     timer_mes = int(data.get("timer_mes", 0))
-    meta = float(data.get("meta", 0.0))
+    meta_valor = float(data.get("meta_valor", 0.0))
     saldo = float(data.get("saldo", 0.0))
 
-    success, message = gerenciador.adicionar_cofrinho(nome, desc, timer_mes, meta, saldo)
+    success, message = gerenciador.adicionar_cofrinho(nome, desc, timer_mes, meta_valor, saldo)
 
     if success:
         return jsonify({
             "success": True,
             "cofrinho": {
                 "nome": nome,
-                "descricao": desc,
+                "desc": desc,
                 "timer_mes": timer_mes,
-                "meta": meta,
-                "saldo": saldo
+                "saldo": saldo,
+                "meta_valor": meta_valor
             }
         }), 200
     else:

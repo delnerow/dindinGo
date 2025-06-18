@@ -11,19 +11,19 @@ export default function CofrinhoModal({
   const [desc, setDesc] = useState("");
   const [timer_mes, setMes] = useState("1");
   const [saldo, setSaldo] = useState("0.00");
-  const [meta, setMeta] = useState("0.00");
+  const [meta_valor, setMeta] = useState("0.00");
   const [erro, setErro] = useState("");
 
   const handleSubmit = async () => {
     const res = await fetch("http://localhost:5000/api/cofrinhos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, desc, timer_mes: parseInt(timer_mes), saldo: parseFloat(saldo) }),
+      body: JSON.stringify({ nome, desc, timer_mes: parseInt(timer_mes), saldo: parseFloat(saldo), meta_valor: parseFloat(meta_valor) }),
     });
 
     const data = await res.json();
     if (data.success) {
-      onCreated(data.carteira); 
+      onCreated(data.cofrinho); 
     } else {
       setErro(data.message);
     }
@@ -67,9 +67,9 @@ export default function CofrinhoModal({
         />
         <label className="block mb-1 text-sm font-medium text-gray-700">Meta:</label>
         <input
-          type="text"
-          placeholder="Nome"
-          value={meta}
+          type="number"
+          placeholder="Meta"
+          value={meta_valor}
           onChange={(e) => setMeta(e.target.value)}
           className="w-full mb-3 p-2 border rounded"
         />

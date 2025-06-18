@@ -4,9 +4,8 @@ import {
   DollarSign,
   PiggyBank,
   CreditCard,
-  BarChart3,
   Calendar as CalendarIcon,
-  RotateCcw as RotateIcon,
+  ChartNoAxesCombined
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -18,9 +17,7 @@ export default function Sidebar() {
         <SidebarItem icon={<DollarSign size={20} />} label="Transações" />
         <SidebarItem icon={<CreditCard size={20} />} label="Carteiras" />
         <SidebarItem icon={<PiggyBank size={20} />} label="Cofrinhos" />
-        <SidebarItem icon={<RotateIcon size={20} />} label="Gastos Recorrentes" />
-        <SidebarItem icon={<BarChart3 size={20} />} label="Gastos Mensais" />
-        <SidebarItem icon={<CalendarIcon size={20} />} label="Calendário" />
+        <SidebarItem icon={<ChartNoAxesCombined size={20} />} label="Pontos" />
       </nav>
     </div>
   );
