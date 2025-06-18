@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Transaction } from '../types/Transaction';
-import { X } from 'lucide-react';
 
 type NewTransaction = Omit<Transaction, 'id'>;
 interface Carteira {
@@ -20,21 +19,92 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
   const [isFixo, setIsFixo] = useState(transaction ? transaction.repeticao > 0 : false);
   const [repeticoes, setRepeticoes] = useState(transaction?.repeticao || 1);
   const [isFeita, setIsFeita] = useState(transaction?.feita || false);
+  
+  // Função para formatar a data para o input date
+  const formatDateForInput = (dateString: string): string => {
+    if (!dateString) return new Date().toISOString().split('T')[0];
+    
+    // Se a data já está no formato YYYY-MM-DD, retorna como está
+    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateString;
+    }
+    
+    // Se tem timestamp, extrai apenas a data
+    if (dateString.includes('T')) {
+      return dateString.split('T')[0];
+    }
+    
+    // Se é apenas uma data, tenta converter
+    try {
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
+    } catch {
+      return new Date().toISOString().split('T')[0];
+    }
+  };
+
+  const [formData, setFormData] = useState({
+    nome: transaction?.nome || '',
+    valor: transaction?.valor || 0,
+    categoria: transaction?.categoria || '',
+    data: formatDateForInput(transaction?.data || ''),
+    desc: transaction?.desc || '',
+    carteira: transaction?.carteira || '',
+    tipo: transaction?.receita ? 'receita' : 'despesa'
+  });
+
+  // Atualiza o formData quando a transação muda
+  useEffect(() => {
+    if (transaction) {
+      setFormData({
+        nome: transaction.nome,
+        valor: transaction.valor,
+        categoria: transaction.categoria,
+        data: formatDateForInput(transaction.data),
+        desc: transaction.desc,
+        carteira: transaction.carteira,
+        tipo: transaction.receita ? 'receita' : 'despesa'
+      });
+      setIsFixo(transaction.repeticao > 0);
+      setRepeticoes(transaction.repeticao || 1);
+      setIsFeita(transaction.feita || false);
+    } else {
+      setFormData({
+        nome: '',
+        valor: 0,
+        categoria: '',
+        data: new Date().toISOString().split('T')[0],
+        desc: '',
+        carteira: '',
+        tipo: 'despesa'
+      });
+      setIsFixo(false);
+      setRepeticoes(1);
+      setIsFeita(false);
+    }
+  }, [transaction]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
     
     const transactionData: NewTransaction = {
-      nome: formData.get('nome') as string,
-      valor: Number(formData.get('valor')),
-      categoria: formData.get('categoria') as string,
-      data: formData.get('data') as string,
-      desc: formData.get('desc') as string || '',
-      carteira: formData.get('carteira') as string,
+      nome: formData.nome,
+      valor: Number(formData.valor),
+      categoria: formData.categoria,
+      data: formData.data,
+      desc: formData.desc,
+      carteira: formData.carteira,
       repeticao: isFixo ? repeticoes : 0,
-      receita: formData.get('tipo') === 'receita',
-      feita: isFixo ? isFeita : false // Only allow feita if transaction is fixed
+      receita: formData.tipo === 'receita',
+      feita: isFixo ? isFeita : false
     };
 
     if (transaction) {
@@ -56,7 +126,8 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             <label className="block text-sm font-medium text-gray-700">Tipo</label>
             <select
               name="tipo"
-              defaultValue={transaction?.receita ? 'receita' : 'despesa'}
+              value={formData.tipo}
+              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
             >
               <option value="receita">Receita</option>
@@ -69,7 +140,8 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             <input
               type="text"
               name="nome"
-              defaultValue={transaction?.nome}
+              value={formData.nome}
+              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               required
             />
@@ -82,7 +154,8 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
               name="valor"
               step="0.01"
               min="0"
-              defaultValue={transaction?.valor}
+              value={formData.valor}
+              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               required
             />
@@ -92,7 +165,8 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             <label className="block text-sm font-medium text-gray-700">Categoria</label>
             <select
               name="categoria"
-              defaultValue={transaction?.categoria}
+              value={formData.categoria}
+              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               required
             >
@@ -110,7 +184,8 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             <input
               type="date"
               name="data"
-              defaultValue={transaction?.data?.split('T')[0] || new Date().toISOString().split('T')[0]}
+              value={formData.data}
+              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               required
             />
@@ -120,7 +195,8 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             <label className="block text-sm font-medium text-gray-700">Descrição</label>
             <textarea
               name="desc"
-              defaultValue={transaction?.desc}
+              value={formData.desc}
+              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               rows={3}
             />
@@ -130,7 +206,8 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             <label className="block text-sm font-medium text-gray-700">Carteira</label>
             <select
               name="carteira"
-              defaultValue={transaction?.carteira}
+              value={formData.carteira}
+              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               required
             >

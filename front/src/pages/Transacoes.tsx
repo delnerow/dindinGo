@@ -1,7 +1,7 @@
 // Add after your existing imports
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Plus, Wallet, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Wallet, Pencil, Trash2, Filter } from 'lucide-react';
 import Sidebar from "../components/ui/sidebar";
 import { Transaction, NewTransaction } from '../types/Transaction';
 import { EditTransactionModal } from '../components/EditTransactionModal';
@@ -30,11 +30,6 @@ interface Carteira {
   saldo: number;
 }
 
-const meses = [
-  { label: "Maio de 2025", value: "2025-05" },
-  { label: "Junho de 2025", value: "2025-06" },
-];
-
 // Helper function to format dates
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -55,6 +50,15 @@ export default function Transacoes() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [categorias, setCategorias] = useState<string[]>([]);
+  const [categoriaFiltro, setCategoriaFiltro] = useState<string>("");
+  const [carteiraFiltro, setCarteiraFiltro] = useState<string>("");
+
+  // Função para limpar todos os filtros
+  const limparFiltros = () => {
+    setCategoriaFiltro("");
+    setCarteiraFiltro("");
+  };
 
   const fetchTransactions = async () => {
     try {
@@ -82,9 +86,22 @@ export default function Transacoes() {
     }
   };
 
+  // Add function to fetch categorias
+  const fetchCategorias = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/categorias');
+      if (!response.ok) throw new Error('Failed to fetch categorias');
+      const data = await response.json();
+      setCategorias(data);
+    } catch (err) {
+      console.error('Error fetching categorias:', err);
+    }
+  };
+
   useEffect(() => {
     fetchTransactions();
     fetchCarteiras();
+    fetchCategorias();
   }, []);
 
   const handleEditTransaction = async (transaction: Transaction | NewTransaction) => {
@@ -175,15 +192,17 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
   const transacoesFiltradas = transactions.filter((t) => {
     const data = new Date(t.data);
     const mesAno = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}`;
-    return mesAno === mesSelecionado;
+    const filtroMes = mesAno === mesSelecionado;
+    
+    // Filtro por categoria
+    const filtroCategoria = categoriaFiltro === "" || t.categoria === categoriaFiltro;
+    
+    // Filtro por carteira
+    const filtroCarteira = carteiraFiltro === "" || t.carteira === carteiraFiltro;
+    
+    return filtroMes && filtroCategoria && filtroCarteira;
   });
 
-
-
-
-
-
-  
   const total = transacoesFiltradas.reduce((acc, t) => acc + t.valor*(t.receita? 1:-1), 0);
 
   return (
@@ -220,17 +239,82 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
 </div>
         </div>
 
-        <button
-          onClick={() => setIsNewTransactionOpen(true)}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Nova Transação</span>
-        </button>
+        <div className="flex items-center space-x-4">
+          {/* Filtro por categoria */}
+          <div className="flex items-center space-x-2 bg-gray-50 px-3 py-2 rounded-lg border">
+            <Filter className="w-4 h-4 text-gray-500" />
+            <span className="text-sm text-gray-600">Categoria:</span>
+            <select
+              value={categoriaFiltro}
+              onChange={(e) => setCategoriaFiltro(e.target.value)}
+              className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            >
+              <option value="">Todas as categorias</option>
+              {categorias.map((categoria) => (
+                <option key={categoria} value={categoria}>
+                  {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filtro por carteira */}
+          <div className="flex items-center space-x-2 bg-gray-50 px-3 py-2 rounded-lg border">
+            <Wallet className="w-4 h-4 text-gray-500" />
+            <span className="text-sm text-gray-600">Carteira:</span>
+            <select
+              value={carteiraFiltro}
+              onChange={(e) => setCarteiraFiltro(e.target.value)}
+              className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            >
+              <option value="">Todas as carteiras</option>
+              {carteiras.map((carteira) => (
+                <option key={carteira.nome} value={carteira.nome}>
+                  {carteira.nome}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Botão para limpar filtros */}
+          {(categoriaFiltro || carteiraFiltro) && (
+            <button
+              onClick={limparFiltros}
+              className="flex items-center space-x-2 px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+              title="Limpar todos os filtros"
+            >
+              <span>Limpar Filtros</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => setIsNewTransactionOpen(true)}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Nova Transação</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex justify-between items-center mb-4">
-        <span>Transações: {transacoesFiltradas.length}</span>
+        <div className="flex items-center space-x-4">
+          <span>Transações: {transacoesFiltradas.length}</span>
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-600">|</span>
+            <span className="text-sm text-gray-600">
+              {categoriaFiltro ? `Categoria: ${categoriaFiltro.charAt(0).toUpperCase() + categoriaFiltro.slice(1)}` : 'Sem filtro de categoria'}
+            </span>
+            {(categoriaFiltro || carteiraFiltro) && (
+              <>
+                <span className="text-sm text-gray-600">|</span>
+                <span className="text-sm text-gray-600">
+                  {carteiraFiltro ? `Carteira: ${carteiraFiltro}` : 'Sem filtro de carteira'}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
         <span
           className={`font-semibold ${
             total >= 0 ? 'text-green-500' : 'text-red-500'

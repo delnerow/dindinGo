@@ -91,9 +91,12 @@ def fazer_deposito(cofrinho_nome):
     else:
         return jsonify({"success": False, "message": message}), 400
 
+@app.route("/api/categorias", methods=["GET"])
+def listar_categorias():
+    categorias = gerenciador.get_categorias_disponiveis()
+    return jsonify(categorias)
+
 @app.route('/api/transactions', methods=['GET'])
-
-
 def get_transactions():
     try:
         # Get transactions from storage through gerenciador
