@@ -587,16 +587,6 @@
     ],
     "cofrinhos": [
         {
-            "nome": "CIA",
-            "desc": "bora encher a cara",
-            "saldo": 0,
-            "timer_mes": 0,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 1000.0,
-            "movimentacoes": []
-        },
-        {
             "nome": "porcao ged",
             "desc": "no bulking loco",
             "saldo": 0,

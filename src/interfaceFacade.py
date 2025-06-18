@@ -200,6 +200,8 @@ class GerenciamentoDeCarteiras:
             # verifica penalidade de pontos
             self.storage.get_pontos_manager().quebrar_cofrinho(timer)
         
+        if cofrinho in self.storage.cofrinhos:
+            self.storage.cofrinhos.remove(cofrinho)
         self.storage.save_data()
         return valor_quebrado, "Cofrinho quebrado com sucesso!"
 
