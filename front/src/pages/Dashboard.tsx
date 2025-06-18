@@ -151,49 +151,75 @@ export default function Dashboard() {
   ];
 
   // Prepara dados para o gráfico de linha (evolução do saldo) - APENAS do período selecionado
-  const prepararDadosEvolucao = () => {
-    const transacoesOrdenadas = [...transacoesFiltradas].sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
-    if (transacoesOrdenadas.length === 0) {
-      if (carteiraAtual) {
-        return [{ name: "Saldo Atual", valor: carteiraAtual.saldo }];
-      }
-      return [{ name: "Sem dados", valor: 0 }];
-    }
+const prepararDadosEvolucao = () => {
+  const transacoesOrdenadas = [...transacoesFiltradas].sort(
+    (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
+  );
 
-    // Calcula o saldo antes do período selecionado
-    const todasTransacoesDaCarteira = transactions.filter(t => t.carteira === carteiraSelecionada);
-    const transacoesAntesDoPeriodo = todasTransacoesDaCarteira.filter(t => {
-      const dataTransacao = new Date(t.data);
-      return dataTransacao < inicio;
-    });
-    let saldoInicialPeriodo = 0;
-    transacoesAntesDoPeriodo.forEach(t => {
-      saldoInicialPeriodo += t.receita ? t.valor : -t.valor;
-    });
+  // Return early case with current saldo if no transactions
+  if (transacoesOrdenadas.length === 0) {
     if (carteiraAtual) {
-      saldoInicialPeriodo += carteiraAtual.saldo;
+      const hoje = new Date().toLocaleDateString('pt-BR');
+      return [{ name: hoje, valor: carteiraAtual.saldo }];
     }
+    return [{ name: "Sem dados", valor: 0 }];
+  }
 
-    // Agrupa transações por dia e calcula o saldo final de cada dia
-    let saldoAtual = saldoInicialPeriodo;
-    const saldoPorDia: { [dia: string]: number } = {};
-    transacoesOrdenadas.forEach(t => {
-      saldoAtual += t.receita ? t.valor : -t.valor;
-      const data = new Date(t.data);
-      const dia = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
-      saldoPorDia[dia] = saldoAtual; // sempre sobrescreve, ficando o saldo final do dia
+  // Calculate initial balance before selected period
+  const todasTransacoesDaCarteira = transactions.filter(t => t.carteira === carteiraSelecionada);
+  const transacoesAntesDoPeriodo = todasTransacoesDaCarteira.filter(t => {
+    const dataTransacao = new Date(t.data);
+    return dataTransacao < inicio;
+  });
+  
+  let saldoInicialPeriodo = 0;
+  transacoesAntesDoPeriodo.forEach(t => {
+    saldoInicialPeriodo += t.receita ? t.valor : -t.valor;
+  });
+
+  // Add current balance from carteira
+  if (carteiraAtual) {
+    saldoInicialPeriodo = carteiraAtual.saldo - transacoesFiltradas.reduce((acc, t) => 
+      acc + (t.receita ? t.valor : -t.valor), 0
+    );
+  }
+
+  // Group transactions by day and calculate running balance
+  let saldoAtual = saldoInicialPeriodo;
+  const saldoPorDia: { [dia: string]: number } = {};
+  
+  // Add initial balance to first day if there are transactions
+  if (transacoesOrdenadas.length > 0) {
+    const primeiraDia = new Date(transacoesOrdenadas[0].data)
+      .toLocaleDateString('pt-BR');
+    saldoPorDia[primeiraDia] = saldoInicialPeriodo;
+  }
+
+  // Calculate running balance for each day
+  transacoesOrdenadas.forEach(t => {
+    saldoAtual += t.receita ? t.valor : -t.valor;
+    const dia = new Date(t.data).toLocaleDateString('pt-BR');
+    saldoPorDia[dia] = saldoAtual;
+  });
+
+  // Add current day with final balance if not already included
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  if (!saldoPorDia[hoje] && carteiraAtual) {
+    saldoPorDia[hoje] = carteiraAtual.saldo;
+  }
+
+  // Convert to array and sort by date
+  const dadosEvolucao = Object.entries(saldoPorDia)
+    .map(([dia, valor]) => ({ name: dia, valor }))
+    .sort((a, b) => {
+      const [diaA, mesA, anoA] = a.name.split('/').map(Number);
+      const [diaB, mesB, anoB] = b.name.split('/').map(Number);
+      return new Date(anoA, mesA - 1, diaA).getTime() - 
+             new Date(anoB, mesB - 1, diaB).getTime();
     });
 
-    // Gera os pontos do gráfico: um por dia, saldo final
-    const dias = Object.keys(saldoPorDia).sort((a, b) => {
-      const [da, ma, ya] = a.split('/').map(Number);
-      const [db, mb, yb] = b.split('/').map(Number);
-      return new Date(ya, ma - 1, da).getTime() - new Date(yb, mb - 1, db).getTime();
-    });
-    const dadosEvolucao = dias.map(dia => ({ name: dia, valor: saldoPorDia[dia] }));
-
-    return dadosEvolucao;
-  };
+  return dadosEvolucao;
+};
 
   // Valida se o período personalizado não excede 45 dias
   const validarPeriodoPersonalizado = () => {
