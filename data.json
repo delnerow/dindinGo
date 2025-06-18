@@ -10,7 +10,8 @@
             "data": "2025-06-16T23:48:29.044164",
             "desc": "Reciclagem de prismas",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": false,
+            "feita": null
         },
         {
             "id": 4,
@@ -33,7 +34,8 @@
             "data": "2025-06-17",
             "desc": "socorro",
             "carteira": "Trevilato Pemba",
-            "repeticao": true
+            "repeticao": true,
+            "feita": null
         },
         {
             "id": 6,
@@ -236,7 +238,8 @@
             "data": "2025-06-17T10:31:44.737466",
             "desc": "Cofre quebrado",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": false,
+            "feita": null
         }
     ],
     "carteiras": [
@@ -319,6 +322,7 @@
             "timer_mes": 3,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
+            "meta_valor": null,
             "movimentacoes": []
         }
     ],

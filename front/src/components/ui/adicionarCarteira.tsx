@@ -5,10 +5,10 @@ export default function AddButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
-      aria-label="Adicionar carteira"
+      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-all"
     >
-      <Plus />
+      <Plus size={18} />
+      Nova Carteira
     </button>
   );
 }
