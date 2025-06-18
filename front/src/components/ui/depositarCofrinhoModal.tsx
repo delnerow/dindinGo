@@ -18,7 +18,7 @@ useEffect(() => {
   const fetchCarteiras = async () => {
     const res = await fetch("http://localhost:5000/api/carteiras");
     const data = await res.json();
-    setCarteiras(data); // ← aqui aceita a lista diretamente
+    setCarteiras(data); 
     if (data.length > 0) {
       setCarteiraNome(data[0].nome);
     }

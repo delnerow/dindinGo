@@ -75,12 +75,18 @@ def fazer_deposito(cofrinho_nome):
     data = request.get_json()
     valor = float(data.get("valor", 0.0))
     carteira_nome = data.get("carteiras")
+    print("Valor do depósito:", valor)
 
-    cofrinho = gerenciador.get_cofrinho_by_nome(cofrinho_nome)
+    cofrinhos = gerenciador.get_cofrinhos()
+    cofrinho = next((c for c in cofrinhos if c.get_nome() == cofrinho_nome), None)
+    print("Cofrinho encontrado:", cofrinho.get_nome())
     if not cofrinho:
         return jsonify({"success": False, "message": "Cofrinho não encontrado."}), 404
 
-    carteira_origem = gerenciador.get_carteira_by_nome(carteira_nome)
+
+    carteiras = gerenciador.get_carteiras()
+    carteira_origem = next((c for c in carteiras if c.get_nome() == carteira_nome), None)
+    print("Carteira de origem encontrada:", carteira_origem.get_nome())
     if not carteira_origem:
         return jsonify({"success": False, "message": "Carteira de origem não encontrada."}), 404
 
