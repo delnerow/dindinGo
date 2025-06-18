@@ -290,7 +290,7 @@ class GerenciamentoDeCarteiras:
     def get_carteiras(self): return self.storage.get_carteiras()
     def get_cofrinhos(self): return self.storage.get_cofrinhos()
     def get_transacoes(self): return self.storage.get_all_transactions()
-    def get_pontos(self): return self.storage.get_pontos_manager().get_pontos()
+    def get_pontos(self): return self.storage.get_pontos_manager()
     def get_metas(self): return self.storage.get_pontos_manager().get_metas()
     def get_gastos(self): return self.storage.get_pontos_manager().get_gastos()
     def get_categorias_disponiveis(self): return self.categorias
