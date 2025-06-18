@@ -28,24 +28,36 @@ const Pontos: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/pontos") // ajuste conforme sua rota real
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Dados recebidos da API:", data);
-        const p: PontosBrutos = data.pontos[0];
-        const total = Number(data.pontos);
+  fetch("http://localhost:5000/api/pontos")
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Dados recebidos da API:", data);
+      const p: PontosBrutos = data.pontos;
 
-        setPontos({total,
-          metas: 0,
-          gastos: 0
-        });
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao carregar pontos:", err);
-        setLoading(false);
-      });
-  }, []);
+      const total = p.pontos;
+
+      const metas =
+        p.meta_lazer +
+        p.meta_alimentacao +
+        p.meta_casa +
+        p.meta_mercado +
+        p.meta_servico;
+
+      const gastos =
+        p.gastos_lazer +
+        p.gastos_alimentacao +
+        p.gastos_casa +
+        p.gastos_mercado +
+        p.gastos_servico;
+
+      setPontos({ total, metas, gastos });
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Erro ao carregar pontos:", err);
+      setLoading(false);
+    });
+}, []);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
