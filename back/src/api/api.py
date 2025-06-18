@@ -11,6 +11,7 @@ from flask import Flask, jsonify, request, request, jsonify
 from facade.gerenciadorCarteiras import GerenciamentoDeCarteiras
 from flask_cors import CORS
 from facade.gerenciadorCarteiras import GerenciamentoDeCarteiras
+from core.transacao import Receita
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
@@ -151,6 +152,33 @@ def get_transactions():
         print("Error in API:", str(e))
         return {'error': str(e)}, 500
 
+@app.route('/api/transactions/monthly-totals/<string:month>', methods=['GET'])
+def get_monthly_totals(month):
+    try:
+        # Get transactions from storage through gerenciador
+        transactions = gerenciador.get_transacoes()
+        
+        # Filter transactions for the specified month
+        month_transactions = [
+            t for t in transactions 
+            if t.data.startswith(month)  # month should be in format "YYYY-MM"
+        ]
+        for c in month_transactions:
+            print(c.data)
+        # Calculate totals
+        total_receitas = sum(t._valor for t in month_transactions if isinstance(t, Receita))
+        total_despesas = sum(t._valor for t in month_transactions if not isinstance(t, Receita))
+        saldo = total_receitas - total_despesas
+        return jsonify({
+            'receitas': total_receitas,
+            'despesas': total_despesas,
+            'saldo': saldo
+        })
+        
+    except Exception as e:
+        print("Error calculating monthly totals:", str(e))
+        return {'error': str(e)}, 500
+
 @app.route('/api/transactions/<int:transaction_id>', methods=['PUT'])
 def update_transaction(transaction_id):
     try:
@@ -275,6 +303,20 @@ def get_pontos_usuario():
         **sistema.get_gastos()
     }
     return jsonify({"pontos": data})
+
+@app.route('/api/carteiras/<string:carteira_nome>', methods=['DELETE'])
+def deletar_carteira(carteira_nome):
+    try:
+        carteiras = gerenciador.get_carteiras()
+        carteira = next((c for c in carteiras if c.get_nome() == carteira_nome), None)
+        if not carteira:
+            return jsonify({'success': False, 'message': 'Carteira não encontrada.'}), 404
+        success, message = gerenciador.deletar_carteira(carteira)
+        if not success:
+            return jsonify({'success': False, 'message': message}), 400
+        return jsonify({'success': True, 'message': message})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

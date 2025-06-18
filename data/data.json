@@ -1,102 +1,6 @@
 {
-    "idGenerator": 65,
+    "idGenerator": 71,
     "transacoes": [
-        {
-            "id": 2,
-            "receita": false,
-            "nome": "Curso IMPA",
-            "valor": 2001.0,
-            "categoria": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-16T23:48:29.044164",
-            "desc": "Reciclagem de prismas",
-            "carteira": "Trevilato Pemba",
-            "repeticao": false,
-            "feita": null
-        },
-        {
-            "id": 4,
-            "receita": true,
-            "nome": "soldo",
-            "valor": 1502.0,
-            "categoria": "servi\u00e7o",
-            "data": "2025-06-16T23:50:50.039031",
-            "desc": "fab",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 5,
-            "receita": false,
-            "nome": "sei la vei",
-            "valor": 50.0,
-            "categoria": "lazer",
-            "data": "2025-06-17",
-            "desc": "socorro",
-            "carteira": "Trevilato Pemba",
-            "repeticao": true,
-            "feita": true
-        },
-        {
-            "id": 6,
-            "receita": true,
-            "nome": "Valor do cofre 'CIA'",
-            "valor": 100.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T00:11:40.276421",
-            "desc": "Cofre quebrado",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 7,
-            "receita": false,
-            "nome": "oq eh isso",
-            "valor": 1000.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T00:45:17.433625",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 8,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Adilson",
-            "valor": 2000.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T00:45:17.433625",
-            "desc": "",
-            "carteira": "porcao ged",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 9,
-            "receita": true,
-            "nome": "Valor do cofre 'porcao ged'",
-            "valor": 3000.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T00:47:48.814561",
-            "desc": "Cofre quebrado",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 10,
-            "receita": false,
-            "nome": "mindingo",
-            "valor": 1.0,
-            "categoria": "lazer",
-            "data": "2025-06-17T01:30:23.191520",
-            "desc": "pobre",
-            "carteira": "Adilson",
-            "repeticao": 1,
-            "feita": true
-        },
         {
             "id": 11,
             "receita": false,
@@ -110,150 +14,6 @@
             "feita": true
         },
         {
-            "id": 12,
-            "receita": false,
-            "nome": "Dep\u00f3sito para porcao ged",
-            "valor": 100.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T08:44:19.975963",
-            "desc": "",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 13,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Trevilato Pemba",
-            "valor": 100.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T08:44:19.975963",
-            "desc": "",
-            "carteira": "porcao ged",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 14,
-            "receita": false,
-            "nome": "Dep\u00f3sito para CIA",
-            "valor": 100.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T08:45:07.775014",
-            "desc": "",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 15,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Trevilato Pemba",
-            "valor": 100.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T08:45:07.775014",
-            "desc": "",
-            "carteira": "CIA",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 16,
-            "receita": false,
-            "nome": "Dep\u00f3sito para CIA",
-            "valor": 1000.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T09:22:07.815699",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 17,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Adilson",
-            "valor": 1000.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T09:22:07.815699",
-            "desc": "",
-            "carteira": "CIA",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 18,
-            "receita": false,
-            "nome": "Dep\u00f3sito para CIA",
-            "valor": 99.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T09:46:03.880253",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 19,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Adilson",
-            "valor": 99.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T09:46:03.880253",
-            "desc": "",
-            "carteira": "CIA",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 20,
-            "receita": false,
-            "nome": "Dep\u00f3sito para CIA",
-            "valor": 17.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T09:47:24.389080",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 21,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Adilson",
-            "valor": 17.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T09:47:24.389080",
-            "desc": "",
-            "carteira": "CIA",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 22,
-            "receita": true,
-            "nome": "Valor do cofre 'dezmbro'",
-            "valor": 100.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T10:31:44.737466",
-            "desc": "Cofre quebrado",
-            "carteira": "Trevilato Pemba",
-            "repeticao": false,
-            "feita": null
-        },
-        {
-            "id": 23,
-            "receita": false,
-            "nome": "aaa",
-            "valor": 1233.0,
-            "categoria": "casa",
-            "data": "2025-06-18",
-            "desc": "",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
             "id": 24,
             "receita": true,
             "nome": "Vieira ganhou a loteria",
@@ -263,18 +23,6 @@
             "desc": "xupa adilson, vamos em cima vieira",
             "carteira": "Trevilato Pemba",
             "repeticao": false,
-            "feita": true
-        },
-        {
-            "id": 25,
-            "receita": false,
-            "nome": "Quest\u00e3o de ordem",
-            "valor": 400000.0,
-            "categoria": "mercado",
-            "data": "2025-06-18",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": 1,
             "feita": true
         },
         {
@@ -374,18 +122,6 @@
             "feita": true
         },
         {
-            "id": 35,
-            "receita": true,
-            "nome": "sedfs",
-            "valor": 444.0,
-            "categoria": "casa",
-            "data": "2025-06-18",
-            "desc": "adsasd",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 0,
-            "feita": true
-        },
-        {
             "id": 36,
             "receita": false,
             "nome": "Dep\u00f3sito para dezmbro",
@@ -428,30 +164,6 @@
             "valor": 10000.0,
             "categoria": "transferencia",
             "data": "2025-06-18T03:47:30.075380",
-            "desc": "",
-            "carteira": "CIA",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 40,
-            "receita": false,
-            "nome": "Dep\u00f3sito para CIA",
-            "valor": 62.0,
-            "categoria": "transferencia",
-            "data": "2025-06-18T03:47:41.285035",
-            "desc": "",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 41,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Trevilato Pemba",
-            "valor": 62.0,
-            "categoria": "transferencia",
-            "data": "2025-06-18T03:47:41.285105",
             "desc": "",
             "carteira": "CIA",
             "repeticao": 1,
@@ -590,30 +302,6 @@
             "feita": true
         },
         {
-            "id": 53,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Trevilato Pemba",
-            "valor": 2.0,
-            "categoria": "transferencia",
-            "data": "2025-06-18T05:19:34.003230",
-            "desc": "",
-            "carteira": "viagem para paris",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 54,
-            "receita": false,
-            "nome": "Dep\u00f3sito para adads",
-            "valor": 56.0,
-            "categoria": "transferencia",
-            "data": "2025-06-18T05:19:50.330181",
-            "desc": "",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
             "id": 55,
             "receita": true,
             "nome": "Dep\u00f3sito de Trevilato Pemba",
@@ -646,18 +334,6 @@
             "data": "2025-06-18T05:20:55.649515",
             "desc": "",
             "carteira": "adda",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 58,
-            "receita": false,
-            "nome": "Dep\u00f3sito para porcao ged",
-            "valor": 1000.0,
-            "categoria": "transferencia",
-            "data": "2025-06-18T12:08:37.430835",
-            "desc": "",
-            "carteira": "Trevilato Pemba",
             "repeticao": 1,
             "feita": true
         },
@@ -722,18 +398,6 @@
             "feita": true
         },
         {
-            "id": 64,
-            "receita": true,
-            "nome": "Valor do cofre 'adads'",
-            "valor": 56.0,
-            "categoria": "transferencia",
-            "data": "2025-06-18T10:52:34.130139",
-            "desc": "Cofre quebrado",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
             "id": 65,
             "receita": true,
             "nome": "Valor do cofre 'asdad'",
@@ -744,13 +408,85 @@
             "carteira": "Trevilato Pemba",
             "repeticao": 1,
             "feita": true
+        },
+        {
+            "id": 66,
+            "receita": true,
+            "nome": "Valor do cofre 'dezmbro'",
+            "valor": 1600.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T17:04:59.380401",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 67,
+            "receita": true,
+            "nome": "Valor do cofre '123123'",
+            "valor": 100000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T17:05:04.501814",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 68,
+            "receita": false,
+            "nome": "celular",
+            "valor": 1000.0,
+            "categoria": "servi\u00e7o",
+            "data": "2025-06-18",
+            "desc": "",
+            "carteira": "oioioi",
+            "repeticao": false,
+            "feita": true
+        },
+        {
+            "id": 69,
+            "receita": false,
+            "nome": "Dep\u00f3sito para Formatura",
+            "valor": 500.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T17:25:43.418364",
+            "desc": "",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 70,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Trevilato Pemba",
+            "valor": 500.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T17:25:43.418364",
+            "desc": "",
+            "carteira": "Formatura",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 71,
+            "receita": true,
+            "nome": "Valor do cofre 'Formatura'",
+            "valor": 1500.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T17:26:03.798215",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 1019500.0,
+            "saldo": 1121500.0,
             "movimentacoes": [
                 1,
                 2,
@@ -805,13 +541,17 @@
                 61,
                 63,
                 64,
-                65
+                65,
+                66,
+                67,
+                69,
+                71
             ]
         },
         {
             "nome": "Adilson",
             "desc": "A MAIS GORDA",
-            "saldo": 9597771.1,
+            "saldo": 9999888.1,
             "movimentacoes": [
                 7,
                 10,
@@ -835,38 +575,13 @@
             ]
         },
         {
-            "nome": "oioioi",
-            "desc": "sei la",
-            "saldo": 1000.0,
+            "nome": "Karla Fook",
+            "desc": "Professora",
+            "saldo": 100000.0,
             "movimentacoes": []
         }
     ],
     "cofrinhos": [
-        {
-            "nome": "dezmbro",
-            "desc": "nao abre",
-            "saldo": 1600.0,
-            "timer_mes": 5,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 1000.0,
-            "movimentacoes": [
-                37,
-                49
-            ]
-        },
-        {
-            "nome": "123123",
-            "desc": "123123",
-            "saldo": 100000.0,
-            "timer_mes": 12,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 100000.0,
-            "movimentacoes": [
-                51
-            ]
-        },
         {
             "nome": "peixe que voa",
             "desc": "nao nada",
@@ -880,7 +595,7 @@
     ],
     "pontos": [
         {
-            "pontos": 771,
+            "pontos": 630,
             "meta_lazer": 100,
             "meta_alimentacao": 1000,
             "meta_casa": 1000,
@@ -890,7 +605,7 @@
             "gastos_alimentacao": -124.0,
             "gastos_casa": -200.0,
             "gastos_mercado": -450.0,
-            "gastos_servico": 0
+            "gastos_servico": -1000.0
         }
     ]
 }

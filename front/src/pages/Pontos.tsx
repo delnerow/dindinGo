@@ -33,7 +33,7 @@ interface PontosData {
   gastos: number;
 }
 
-const Pontos: React.FC = () => {
+const Pontos: React.FC<{ settingsOnClick?: () => void }> = ({ settingsOnClick }) => {
   const [pontos, setPontos] = useState<PontosData | null>(null);
   const [grafico, setGrafico] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,7 +102,7 @@ const Pontos: React.FC = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
-      <Sidebar />
+      <Sidebar settingsOnClick={settingsOnClick} />
 
       <main className="flex-1 ml-64 p-6 space-y-6 overflow-y-auto">
         <h1 className="text-2xl font-bold">Seus Pontos</h1>
@@ -113,7 +113,7 @@ const Pontos: React.FC = () => {
           <div>Erro ao carregar pontos.</div>
         ) : (
           <>
-            <Card className="shadow-lg rounded-2xl p-6 bg-gradient-to-r from-green-400 to-green-600 text-white">
+            <Card className="shadow-lg rounded-2xl p-6 bg-white">
               <CardContent className="flex items-center justify-between">
                 <div>
                   <p className="text-lg font-semibold">Total de Pontos</p>

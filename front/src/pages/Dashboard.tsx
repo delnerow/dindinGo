@@ -44,7 +44,7 @@ type Transaction = {
 
 const COLORS = ["#22c55e", "#ef4444"];
 
-export default function Dashboard() {
+export default function Dashboard({ settingsOnClick }: { settingsOnClick?: () => void }) {
   const [carteiras, setCarteiras] = useState<Carteira[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [carteiraSelecionada, setCarteiraSelecionada] = useState<string>("");
@@ -271,7 +271,7 @@ const prepararDadosEvolucao = () => {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar settingsOnClick={settingsOnClick} />
 
       {/* Main Content */}
       <div className="flex-1 ml-64 p-6 space-y-6 overflow-y-auto">

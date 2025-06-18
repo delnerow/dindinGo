@@ -1,74 +1,74 @@
-# dindinGo - Personal Finance Manager
+# dindinGo - Gerenciador de Finanças Pessoais
 
-## Introduction
-dindinGo is a comprehensive personal finance management system that helps users track their expenses, income, and savings. It features a React frontend for user interaction and a Python Flask backend for business logic.
+## Introdução
+dindinGo é um sistema completo de gerenciamento de finanças pessoais que ajuda usuários a controlar seus gastos, receitas e economias. Possui um frontend em React para interação do usuário e um backend em Python Flask para a lógica de negócios.
 
-## Project Structure
+## Estrutura do Projeto
 ```
 dindinGo/
-├── back/              # Backend Python application
-├── front/            # Frontend React application
-├── data/            # Data storage
-├── requirements.txt  # Python dependencies
-└── README.md        # This file
+├── back/              # Aplicação backend em Python
+├── front/             # Aplicação frontend em React
+├── data/              # Armazenamento de dados
+├── requirements.txt   # Dependências Python
+└── README.md          # Este arquivo
 ```
 
-## Getting Started
+## Primeiros Passos
 
-### Prerequisites
-- Python 3.8 or higher
-- Node.js 14 or higher
-- npm 6 or higher
+### Pré-requisitos
+- Python 3.8 ou superior
+- Node.js 14 ou superior
+- npm 6 ou superior
 
-### Installation
+### Instalação
 
-1. Clone the repository:
+1. Clone o repositório:
 ```bash
-git clone <repository-url>
+git clone <url-do-repositorio>
 cd dindinGo
 ```
 
-2. Install backend dependencies:
+2. Instale as dependências do backend:
 ```bash
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-3. Install frontend dependencies:
+3. Instale as dependências do frontend:
 ```bash
 cd front
 npm install
 ```
 
-### Running the Application
+### Executando a Aplicação
 
-1. Start the backend server:
+1. Inicie o servidor backend:
 ```bash
 cd back/src
 python api/api.py
 ```
 
-2. Start the frontend development server:
+2. Inicie o servidor de desenvolvimento do frontend:
 ```bash
 cd front
 npm start
 ```
 
-The application will be available at:
+A aplicação estará disponível em:
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+- API Backend: http://localhost:5000
 
-## Features
-- Transaction management (income and expenses)
-- Wallet balance tracking
-- Savings box functionality
-- Points system for financial goals
-- Monthly expense tracking
-- Category-based organization
+## Funcionalidades
+- Gerenciamento de transações (receitas e despesas)
+- Controle de saldo das carteiras
+- Funcionalidade de cofrinho
+- Sistema de pontos para metas financeiras
+- Controle mensal de despesas
+- Organização por categorias
 
-## Contributing
-Please read our contributing guidelines before submitting pull requests.
+## Contribuindo
+Leia nossas diretrizes de contribuição antes de enviar pull requests.
 
-## License
-This project is licensed under the MIT License.
+## Licença
+Este projeto está licenciado sob a Licença MIT.

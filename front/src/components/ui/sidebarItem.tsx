@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
 
-export default function SidebarItem({ icon, label }: { icon: React.ReactNode; label: string }) {
+export default function SidebarItem({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick?: () => void }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    if (onClick) {
+      onClick();
+      return;
+    }
     switch (label) {
       case "Visão Geral":
         navigate("/");

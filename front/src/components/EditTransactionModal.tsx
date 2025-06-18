@@ -122,17 +122,33 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Tipo</label>
-            <select
-              name="tipo"
-              value={formData.tipo}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-            >
-              <option value="receita">Receita</option>
-              <option value="despesa">Despesa</option>
-            </select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Tipo</label>
+              <select
+                name="tipo"
+                value={formData.tipo}
+                onChange={handleInputChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              >
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Valor</label>
+              <input
+                type="number"
+                name="valor"
+                step="0.01"
+                min="0"
+                value={formData.valor}
+                onChange={handleInputChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                required
+              />
+            </div>
           </div>
 
           <div>
@@ -147,59 +163,36 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Valor</label>
-            <input
-              type="number"
-              name="valor"
-              step="0.01"
-              min="0"
-              value={formData.valor}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              required
-            />
-          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Categoria</label>
+              <select
+                name="categoria"
+                value={formData.categoria}
+                onChange={handleInputChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                required
+              >
+                <option value="">Selecione uma categoria</option>
+                <option value="mercado">Mercado</option>
+                <option value="casa">Casa</option>
+                <option value="alimentação">Alimentação</option>
+                <option value="serviço">Serviço</option>
+                <option value="lazer">Lazer</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Categoria</label>
-            <select
-              name="categoria"
-              value={formData.categoria}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              required
-            >
-              <option value="">Selecione uma categoria</option>
-              <option value="mercado">Mercado</option>
-              <option value="casa">Casa</option>
-              <option value="alimentação">Alimentação</option>
-              <option value="serviço">Serviço</option>
-              <option value="lazer">Lazer</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Data</label>
-            <input
-              type="date"
-              name="data"
-              value={formData.data}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Descrição</label>
-            <textarea
-              name="desc"
-              value={formData.desc}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              rows={3}
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Data</label>
+              <input
+                type="date"
+                name="data"
+                value={formData.data}
+                onChange={handleInputChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                required
+              />
+            </div>
           </div>
 
           <div>
@@ -220,6 +213,17 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             </select>
           </div>
 
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Descrição</label>
+            <textarea
+              name="desc"
+              value={formData.desc}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              rows={2}
+            />
+          </div>
+
           <div className="space-y-2">
             <div className="flex items-center">
               <input
@@ -235,28 +239,32 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
             </div>
 
             {isFixo && (
-              <><div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Número de Repetições
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  value={repeticoes}
-                  onChange={(e) => setRepeticoes(Number(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
-              </div><div className="flex items-center mt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Número de Repetições
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={repeticoes}
+                    onChange={(e) => setRepeticoes(Number(e.target.value))}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  />
+                </div>
+                <div className="flex items-center">
                   <input
                     type="checkbox"
                     id="isFeita"
                     checked={isFeita}
                     onChange={(e) => setIsFeita(e.target.checked)}
-                    className="rounded border-gray-300 text-green-600" />
+                    className="rounded border-gray-300 text-green-600"
+                  />
                   <label htmlFor="isFeita" className="ml-2 text-sm font-medium text-gray-700">
                     Transação já realizada?
                   </label>
-                </div></>
-
+                </div>
+              </div>
             )}
           </div>
 

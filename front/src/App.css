@@ -36,3 +36,125 @@
     transform: rotate(360deg);
   }
 }
+
+/* Theme: Light (default) */
+.theme-light {
+  --bg: #f3f4f6;
+  --bg-card: #fff;
+  --text: #222;
+  --text-secondary: #555;
+  --accent: #2563eb;
+  --accent-contrast: #fff;
+  --accent-green: #22c55e;
+  --accent-red: #ef4444;
+}
+
+/* Theme: Dark */
+.theme-dark {
+  --bg: #18181b;
+  --bg-card: #23232b;
+  --text: #f3f4f6;
+  --text-secondary: #a1a1aa;
+  --accent: #6366f1;
+  --accent-contrast: #18181b;
+  --accent-green: #4ade80;
+  --accent-red: #f87171;
+}
+
+/* Theme: Green */
+.theme-green {
+  --bg: #e6f9ed;
+  --bg-card: #d1fae5;
+  --text: #065f46;
+  --text-secondary: #047857;
+  --accent: #10b981;
+  --accent-contrast: #fff;
+  --accent-green: #059669;
+  --accent-red: #dc2626;
+}
+
+/* Theme: Blue */
+.theme-blue {
+  --bg: #e0f2fe;
+  --bg-card: #bae6fd;
+  --text: #0c4a6e;
+  --text-secondary: #0369a1;
+  --accent: #2563eb;
+  --accent-contrast: #fff;
+  --accent-green: #22d3ee;
+  --accent-red: #f43f5e;
+}
+
+/* Theme: Neon */
+.theme-neon {
+  --bg: #18122b;
+  --bg-card: #232946;
+  --text: #e0e722;
+  --text-secondary: #f6c177;
+  --accent: #ff00cc;
+  --accent-contrast: #18122b;
+  --accent-green: #39ff14;
+  --accent-red: #ff0055;
+}
+
+body, html {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.bg-white {
+  background: var(--bg-card) !important;
+}
+
+.text-gray-800, .text-gray-900, .text-black {
+  color: var(--text) !important;
+}
+
+.text-gray-600, .text-gray-500, .text-gray-400 {
+  color: var(--text-secondary) !important;
+}
+
+.bg-blue-500, .bg-green-500, .bg-red-500, .bg-blue-600, .bg-green-600, .bg-yellow-500 {
+  background: var(--accent) !important;
+  color: var(--accent-contrast) !important;
+}
+
+.text-blue-500, .text-green-500, .text-red-500, .text-blue-600, .text-green-600, .text-yellow-500 {
+  color: var(--accent) !important;
+}
+
+button, .rounded-lg, .rounded-full {
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Optional: Card shadow tweaks for dark/neon */
+.theme-dark .shadow-lg, .theme-neon .shadow-lg {
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.7) !important;
+}
+
+.bg-gray-100 {
+  background: var(--bg) !important;
+}
+
+.bg-gray-200 {
+  background: color-mix(in srgb, var(--bg) 90%, #000 10%) !important;
+}
+
+input, select, textarea {
+  background: var(--bg-card) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--text-secondary);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-secondary) !important;
+  opacity: 1;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--accent);
+  border-color: var(--accent);
+}
+
+.text-accent-green { color: var(--accent-green) !important; }
+.text-accent-red { color: var(--accent-red) !important; }

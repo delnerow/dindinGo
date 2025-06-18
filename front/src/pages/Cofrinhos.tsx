@@ -17,7 +17,7 @@ type Cofrinho = {
   meta_valor: number;
 };
 
-export default function Cofrinhos() {
+export default function Cofrinhos({ settingsOnClick }: { settingsOnClick?: () => void }) {
   const [cofrinhos, setCofrinhos] = useState<Cofrinho[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDepositoModal, setShowDepositoModal] = useState(false);
@@ -43,7 +43,7 @@ export default function Cofrinhos() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
-      <Sidebar />
+      <Sidebar settingsOnClick={settingsOnClick} />
 
       <div className="flex-1 ml-64 p-6 space-y-6 overflow-y-auto">
         <div className="flex items-center justify-between mb-4">

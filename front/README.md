@@ -1,59 +1,59 @@
 # dindinGo Frontend
 
-## Overview
-The frontend application for dindinGo, built with React, TypeScript, and Tailwind CSS.
+## Visão Geral
+Aplicação frontend do dindinGo, construída com React, TypeScript e Tailwind CSS.
 
-## Technologies
+## Tecnologias
 - React 18
 - TypeScript
 - Tailwind CSS
-- Chart.js for visualizations
-- React Router for navigation
+- Chart.js para visualizações
+- React Router para navegação
 
-## Getting Started
+## Primeiros Passos
 
-### Prerequisites
+### Pré-requisitos
 - Node.js 14+
 - npm 6+
 
-### Installation
+### Instalação
 ```bash
 npm install
 ```
 
-### Development
+### Desenvolvimento
 ```bash
 npm start
 ```
 
-### Testing
+### Testes
 ```bash
 npm test
 ```
 
-### Building for Production
+### Build para Produção
 ```bash
 npm run build
 ```
 
-## Project Structure
+## Estrutura do Projeto
 ```
 front/
 ├── src/
-│   ├── components/    # Reusable UI components
-│   ├── pages/        # Page components
-│   ├── types/        # TypeScript type definitions
-│   ├── utils/        # Utility functions
-│   └── services/     # API service layer
-├── public/           # Static assets
-└── package.json      # Project dependencies
+│   ├── components/    # Componentes reutilizáveis
+│   ├── pages/         # Páginas da aplicação
+│   ├── types/         # Definições de tipos TypeScript
+│   ├── utils/         # Funções utilitárias
+│   └── services/      # Camada de serviços/API
+├── public/            # Arquivos estáticos
+└── package.json       # Dependências do projeto
 ```
 
-## Available Scripts
-- `npm start`: Runs development server
-- `npm test`: Runs test suite
-- `npm run build`: Builds for production
-- `npm run eject`: Ejects from Create React App
+## Scripts Disponíveis
+- `npm start`: Executa o servidor de desenvolvimento
+- `npm test`: Executa a suíte de testes
+- `npm run build`: Gera o build para produção
+- `npm run eject`: Eject do Create React App
 
-## Contributing
-See the main project README for contribution guidelines.
+## Contribuindo
+Veja o README principal do projeto para as diretrizes de contribuição.
