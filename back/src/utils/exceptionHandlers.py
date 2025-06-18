@@ -1,32 +1,39 @@
+"""
+exceptionHandlers.py
+-------------------
+Define exceções customizadas para validação e manipulação de transações e carteiras.
+Inclui classes para erros de campo vazio, tipo inválido, valor inválido e agrupamento de erros de validação.
+"""
 class TransactionError(Exception):
-    """Base exception for transaction errors"""
+    """Exceção base para erros de transação."""
     pass
 
 class EmptyFieldError(TransactionError):
-    """Raised when a required field is empty"""
+    """Exceção para campo obrigatório vazio."""
     def __init__(self, field):
         self.message = f"O campo '{field}' não pode estar vazio"
         super().__init__(self.message)
 
 class InvalidTypeError(TransactionError):
-    """Raised when a field has invalid type"""
+    """Exceção para tipo inválido em um campo."""
     def __init__(self, field, expected_type):
         self.message = f"O campo '{field}' deve ser do tipo {expected_type}"
         super().__init__(self.message)
 
 class InvalidValueError(TransactionError):
-    """Raised when a value is invalid"""
+    """Exceção para valor inválido em um campo."""
     def __init__(self, field, reason):
         self.message = f"Valor inválido para '{field}': {reason}"
         super().__init__(self.message)
 
 class CarteiraNotFoundError(TransactionError):
-    """Raised when carteira is not found"""
+    """Exceção para carteira não encontrada."""
     def __init__(self):
         self.message = "Carteira não encontrada"
         super().__init__(self.message)
         
 class ValidationErrors(Exception):
+    """Agrupa múltiplos erros de validação para exibição conjunta."""
     def __init__(self):
         self.errors = []  # Will store TransactionError instances
     

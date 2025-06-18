@@ -1,3 +1,9 @@
+"""
+storage.py
+----------
+Gerencia a persistência dos dados do sistema (transações, carteiras, cofrinhos, pontos) usando o padrão Singleton.
+Inclui métodos para carregar, salvar e manipular dados no arquivo JSON.
+"""
 import json
 from typing import List, Optional
 import os
@@ -109,15 +115,19 @@ class StorageManager:
             json.dump(data, file, indent=4)
 
     def get_cofrinhos(self) -> List[Cofrinho]:
+        """Retorna a lista de cofrinhos cadastrados."""
         return self.cofrinhos
 
     def get_carteiras(self) -> List[Carteira]:
+        """Retorna a lista de carteiras cadastradas."""
         return self.carteiras
         
     def get_all_transactions(self) -> List[Transaction]:
+        """Retorna todas as transações cadastradas."""
         return self.transacoes
     
     def get_pontos_manager(self) -> SistemaDePontos:
+        """Retorna o gerenciador de pontos do sistema."""
         return self.pontos_manager
 
     def get_next_id(self) -> int:
@@ -126,13 +136,16 @@ class StorageManager:
         return self.cur_id
 
     def add_transaction(self, transaction: Transaction):
+        """Adiciona uma nova transação ao sistema."""
         self.transacoes.append(transaction)
 
     def add_carteira(self, carteira: Carteira):
+        """Adiciona uma nova carteira ao sistema e salva os dados."""
         self.carteiras.append(carteira)
         self.save_data()
         
     def add_cofrinho(self, cofrinho: Cofrinho):
+        """Adiciona um novo cofrinho ao sistema e salva os dados."""
         self.cofrinhos.append(cofrinho)
         self.save_data()
         

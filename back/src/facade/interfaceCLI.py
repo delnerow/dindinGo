@@ -1,9 +1,16 @@
+"""
+interfaceCLI.py
+---------------
+Interface de linha de comando (CLI) para interação com o sistema de carteiras, cofrinhos e transações.
+Permite ao usuário realizar operações como adicionar, editar e remover carteiras, cofrinhos e transações,
+além de visualizar pontuação e navegar entre meses.
+"""
 import datetime
 import os
 import sys
 from pathlib import Path
 
-# Add src directory to Python path
+# src directory pro Python path
 src_path = str(Path(__file__).resolve().parent.parent)
 if src_path not in sys.path:
     sys.path.append(src_path)
@@ -35,6 +42,7 @@ def get_numeric_input(prompt: str, value_type: type = float) -> float:
 def selecionar_item(lista_itens: list, nome_item: str, impressora_func):
     """
     Função genérica para o usuário selecionar um item de uma lista.
+    Exibe a lista usando a função impressora_func e retorna o item selecionado.
     """
     if not lista_itens:
         print(f"Nenhum(a) {nome_item} disponível. Crie um(a) primeiro.")
@@ -62,6 +70,7 @@ def selecionar_item(lista_itens: list, nome_item: str, impressora_func):
 def selecionar_categoria(gerenciador: GerenciamentoDeCarteiras) -> str:
     """
     Mostra as categorias disponíveis e permite ao usuário selecionar uma.
+    Retorna a categoria escolhida.
     """
     categorias = gerenciador.get_categorias_disponiveis()
     print("Selecione uma categoria:")

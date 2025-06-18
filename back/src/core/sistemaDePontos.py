@@ -1,3 +1,9 @@
+"""
+sistemaDePontos.py
+------------------
+Implementa o sistema de pontos do usuário, com metas e controle de gastos por categoria.
+Permite adicionar/remover pontos, penalidades por quebra de cofrinho e controle mensal.
+"""
 import datetime
 
 import sys
@@ -9,9 +15,12 @@ if src_path not in sys.path:
     sys.path.append(src_path)
 
 class SistemaDePontos:
+    """
+    Gerencia o sistema de pontos do usuário, metas e gastos por categoria.
+    """
     def __init__(self, pontos, meta_lazer=100, meta_alimentacao=1000, meta_casa=100, meta_mercado=1000, meta_serviço=100,
                  gastos_lazer=0, gastos_alimentacao=0, gastos_casa=0, gastos_mercado=0, gastos_servico=0):
-        
+        """Inicializa o sistema de pontos com metas e gastos iniciais."""
         self._pontos = pontos
         self._meta_lazer = meta_lazer
         self._meta_alimentacao = meta_alimentacao
@@ -26,15 +35,13 @@ class SistemaDePontos:
         self._gastos_servico = gastos_servico
 
     def __adicionar_pontos(self, pontos):
-        """Adiciona pontos ao sistema de pontos.
-           método privado!!"""
+        """Adiciona pontos ao sistema de pontos (privado)."""
         if pontos < 0:
             raise ValueError("Pontos não podem ser negativos.")
         self._pontos += pontos
 
     def __remover_pontos(self, pontos):
-        """Remove pontos ao sistema de pontos.
-           método privado!!"""
+        """Remove pontos do sistema de pontos (privado)."""
         if pontos < 0:
             raise ValueError("Pontos não podem ser negativos.")
         self._pontos -= pontos
@@ -42,6 +49,7 @@ class SistemaDePontos:
             self._pontos = 0
 
     def __resetar_pontos(self):
+        """Reseta a pontuação para zero."""
         self._pontos = 0
 
     def get_pontos(self):
@@ -110,10 +118,7 @@ class SistemaDePontos:
             return 0
         
     def depositar_cofrinho(self, valor):
-        """Deposita o valor do cofrinho e atribui pontuação positiva
-           proporcional ao valor e ao tempo.
-           Retorna os pontos ganhos."""
-        
+        """Deposita o valor do cofrinho e atribui pontuação positiva proporcional ao valor e ao tempo."""
         if valor <= 0:
             raise ValueError("Valor do depósito deve ser maior que zero.")
         
@@ -159,6 +164,7 @@ class SistemaDePontos:
 
     @classmethod
     def from_dict(cls, d):
+        """Cria um SistemaDePontos a partir de um dicionário."""
         return cls(d['pontos'], 
                    d['meta_lazer'], d['meta_alimentacao'], d['meta_casa'], 
                    d['meta_mercado'], d['meta_servico'], 
@@ -166,6 +172,7 @@ class SistemaDePontos:
                    d['gastos_mercado'], d['gastos_servico'])
     
     def to_dict(self):
+        """Converte o SistemaDePontos para um dicionário (serialização)."""
         return {
             'pontos': self._pontos,
             'meta_lazer': self._meta_lazer,

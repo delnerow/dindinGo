@@ -1,3 +1,9 @@
+"""
+transacao.py
+------------
+Define as classes abstratas e concretas para transações financeiras: Transaction, Receita e Despesa.
+Inclui métodos para serialização e manipulação de valores.
+"""
 from __future__ import annotations
 from abc import ABC
 from typing import  Dict, Any

@@ -1,3 +1,9 @@
+"""
+carteira.py
+-----------
+Define as classes abstratas e concretas para carteiras do sistema: Carteira, Corrente e Cofrinho.
+Inclui métodos para manipulação de saldo, movimentações e integração com o sistema de pontos.
+"""
 
 from abc import ABC, abstractmethod
 import datetime
@@ -12,7 +18,6 @@ if src_path not in sys.path:
 
 from core.sistemaDePontos import SistemaDePontos
 
-
 from core.transacao import  Transaction
 class Carteira(ABC):
     """
@@ -25,15 +30,19 @@ class Carteira(ABC):
         self.movimentacoes = movimentacoes
 
     def get_saldo(self) -> float:
+        """Retorna o saldo atual da carteira."""
         return self._saldo
 
     def get_nome(self) -> str:
+        """Retorna o nome da carteira."""
         return self._nome
 
     def get_descricao(self) -> str:
+        """Retorna a descrição da carteira."""
         return self._descricao
 
     def to_dict(self) -> Dict[str, Any]:
+        """Converte a carteira para um dicionário (serialização)."""
         return {
             'nome': self._nome,
             'desc': self._descricao,
@@ -42,7 +51,7 @@ class Carteira(ABC):
         }
     
     def ajustar_saldo(self, valor_ajuste: float):
-        
+        """Ajusta o saldo da carteira pelo valor fornecido."""
         self._saldo = self._saldo + valor_ajuste
 
     @abstractmethod
@@ -66,12 +75,14 @@ class Cofrinho(Carteira):
         self.meta_valor = meta_valor  # Valor alvo para o cofre
 
     def quebrar(self) -> float:
+        """Quebra o cofrinho, zerando o saldo e limpando as movimentações."""
         retorno = self._saldo
         self._saldo = 0
         self.movimentacoes.clear()
         return retorno
 
     def depositar(self, transacao: Transaction):
+        """Deposita uma transação do tipo Receita no cofrinho."""
         if not isinstance(transacao, Transaction):
             raise TypeError("Apenas objetos do tipo Transaction podem ser depositados.")
         
@@ -96,6 +107,9 @@ class Cofrinho(Carteira):
         return self._timer_mes
     
     def inicializar(self):
+        """
+        Atualiza o timer do cofrinho de acordo com o mês e ano atuais.
+        """
         #verificar se deve atualizar o timer_mes
         hoje = datetime.datetime.now()
         mes_atual = hoje.month
@@ -119,9 +133,8 @@ class Cofrinho(Carteira):
         # garantir que o self._timer_mes não fique negativo
         self._timer_mes = 0 if self._timer_mes < 0 else self._timer_mes
 
-
-
     def to_dict(self) -> Dict[str, Any]:
+        """Converte o cofrinho para um dicionário (serialização)."""
         return {
             'nome': self._nome,
             'desc': self._descricao,

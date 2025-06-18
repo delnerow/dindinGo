@@ -1,8 +1,12 @@
+# =========================================
+# Módulo: api.py
+# Descrição: API Flask para gerenciamento de carteiras, cofrinhos e transações.
+# =========================================
 import json
 import sys
 from pathlib import Path
 
-# Add src directory to Python path
+# src directory pro Python path
 src_path = str(Path(__file__).resolve().parent.parent)
 if src_path not in sys.path:
     sys.path.append(src_path)
@@ -19,12 +23,18 @@ gerenciador = GerenciamentoDeCarteiras()
 
 @app.route("/api/carteiras", methods=["GET"])
 def listar_carteiras():
+    """
+    Retorna a lista de carteiras cadastradas no sistema.
+    """
     carteiras = gerenciador.get_carteiras()
     carteiras_dict = [c.to_dict() for c in carteiras]
     return jsonify(carteiras_dict)  
 
 @app.route("/api/carteiras", methods=["POST"])
 def criar_carteira():
+    """
+    Cria uma nova carteira a partir dos dados enviados no corpo da requisição.
+    """
     data = request.get_json()
     nome = data.get("nome")
     desc = data.get("desc")
@@ -49,6 +59,9 @@ def criar_carteira():
 
 @app.route("/api/cofrinhos", methods=["GET"])
 def listar_cofrinhos():
+    """
+    Retorna a lista de cofrinhos cadastrados no sistema.
+    """
     cofrinhos = gerenciador.get_cofrinhos() 
     cofrinhos_dict = [c.to_dict() for c in cofrinhos]
     return jsonify(cofrinhos_dict)
@@ -56,6 +69,9 @@ def listar_cofrinhos():
 
 @app.route("/api/cofrinhos", methods=["POST"])
 def criar_cofrinho():
+    """
+    Cria um novo cofrinho a partir dos dados enviados no corpo da requisição.
+    """
     data = request.get_json()
     nome = data.get("nome")
     desc = data.get("desc")
@@ -81,6 +97,9 @@ def criar_cofrinho():
 
 @app.route("/api/cofrinhos/<string:cofrinho_nome>/depositar", methods=["POST"])
 def fazer_deposito(cofrinho_nome):
+    """
+    Realiza um depósito de uma carteira para um cofrinho.
+    """
     data = request.get_json()
     valor = float(data.get("valor", 0.0))
     carteira_nome = data.get("carteiras")
@@ -108,6 +127,9 @@ def fazer_deposito(cofrinho_nome):
 
 @app.route("/api/cofrinhos/<string:cofrinho_nome>/quebrar", methods=["POST"])
 def quebrar_cofrinhos(cofrinho_nome):
+    """
+    Quebra um cofrinho, transferindo o saldo para uma carteira de destino.
+    """
     data = request.get_json()
     carteira_nome = data.get("carteira")
     print("Cofrinho encontrado:", cofrinho_nome)
@@ -129,16 +151,21 @@ def quebrar_cofrinhos(cofrinho_nome):
 
 @app.route("/api/categorias", methods=["GET"])
 def listar_categorias():
+    """
+    Retorna as categorias disponíveis para transações.
+    """
     categorias = gerenciador.get_categorias_disponiveis()
     return jsonify(categorias)
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
+    """
+    Retorna todas as transações cadastradas no sistema.
+    """
     try:
-        # Get transactions from storage through gerenciador
+        
         transactions = gerenciador.get_transacoes()
         
-        # Convert to dict with explicit checking
         if not transactions:
             return jsonify([])
             
@@ -154,18 +181,19 @@ def get_transactions():
 
 @app.route('/api/transactions/monthly-totals/<string:month>', methods=['GET'])
 def get_monthly_totals(month):
+    """
+    Retorna o total de receitas, despesas e saldo para um mês específico.
+    """
     try:
-        # Get transactions from storage through gerenciador
         transactions = gerenciador.get_transacoes()
         
-        # Filter transactions for the specified month
         month_transactions = [
             t for t in transactions 
-            if t.data.startswith(month)  # month should be in format "YYYY-MM"
+            if t.data.startswith(month)
         ]
         for c in month_transactions:
             print(c.data)
-        # Calculate totals
+        
         total_receitas = sum(t._valor for t in month_transactions if isinstance(t, Receita))
         total_despesas = sum(t._valor for t in month_transactions if not isinstance(t, Receita))
         saldo = total_receitas - total_despesas
@@ -181,16 +209,19 @@ def get_monthly_totals(month):
 
 @app.route('/api/transactions/<int:transaction_id>', methods=['PUT'])
 def update_transaction(transaction_id):
+    """
+    Atualiza uma transação existente com os dados fornecidos.
+    """
     try:
         updated_data = request.json
         
-        # Find the original transaction
+        
         original_transaction = next(
             t for t in gerenciador.get_transacoes() 
             if t.id == transaction_id
         )
         
-        # Update the transaction using the facade
+        
         success, message = gerenciador.editar_transacao(
             original_transaction,
             updated_data
@@ -208,14 +239,17 @@ def update_transaction(transaction_id):
 
 @app.route('/api/transactions/<int:transaction_id>', methods=['DELETE'])
 def delete_transaction(transaction_id):
+    """
+    Deleta uma transação pelo seu ID.
+    """
     try:
-        # Find the transaction to delete
+        
         transaction = next(
             t for t in gerenciador.get_transacoes() 
             if t.id == transaction_id
         )
         
-        # Delete the transaction using the facade
+        
         success, message = gerenciador.deletar_transacao(transaction)
         
         if not success:
@@ -230,6 +264,9 @@ def delete_transaction(transaction_id):
 
 @app.route('/api/transactions', methods=['POST'])
 def create_transaction():
+    """
+    Cria uma nova transação (receita ou despesa) a partir dos dados enviados no corpo da requisição.
+    """
     try:
         data = request.json
         print("\n=== Transaction Creation Debug ===")
@@ -241,7 +278,7 @@ def create_transaction():
         except (ValueError, TypeError) as e:
             print("Error converting valor:", str(e))
             return {'error': 'Valor inválido: deve ser um número'}, 400
-        # Get the carteira object
+        
         try:
             carteiras = gerenciador.get_carteiras()
                 
@@ -257,14 +294,14 @@ def create_transaction():
         if not carteira:
             return {'error': f'Carteira não encontrada: {data["carteira"]}'}, 400
 
-        # Call the correct facade methods with the right parameters
+        
         try:
             if data.get('receita'):
                 print("woooo")
                 success, message = gerenciador.adicionar_receita(
                     nome=data['nome'],
                     valor=valor,
-                    tipo=data['categoria'],  # Changed from categoria to tipo
+                    tipo=data['categoria'],  
                     data=data['data'],
                     desc=data['desc'],
                     carteira=carteira,
@@ -274,7 +311,7 @@ def create_transaction():
                 success, message = gerenciador.adicionar_despesa(
                     nome=data['nome'],
                     valor=valor,
-                    tipo=data['categoria'],  # Changed from categoria to tipo
+                    tipo=data['categoria'], 
                     data=data['data'],
                     desc=data['desc'],
                     carteira=carteira,
@@ -296,7 +333,10 @@ def create_transaction():
 
 @app.route("/api/pontos", methods=["GET"])
 def get_pontos_usuario():
-    sistema = gerenciador.get_pontos()  # aqui você está pegando o objeto SistemaDePontos
+    """
+    Retorna os pontos do usuário, metas e gastos do sistema de pontos.
+    """
+    sistema = gerenciador.get_pontos() 
     data = {
         "pontos": sistema.get_pontos(),
         **sistema.get_metas(),
@@ -306,6 +346,9 @@ def get_pontos_usuario():
 
 @app.route('/api/carteiras/<string:carteira_nome>', methods=['DELETE'])
 def deletar_carteira(carteira_nome):
+    """
+    Deleta uma carteira pelo nome, se ela existir e estiver com saldo zero.
+    """
     try:
         carteiras = gerenciador.get_carteiras()
         carteira = next((c for c in carteiras if c.get_nome() == carteira_nome), None)

@@ -1,10 +1,14 @@
+# =========================================
+# Módulo: gerenciadorCarteiras.py
+# Descrição: Implementa a fachada para o gerenciamento de carteiras, cofrinhos e transações.
+# =========================================
 import datetime
 
 
 import sys
 from pathlib import Path
 
-# Add src directory to Python path
+# src directory pro Python path
 src_path = str(Path(__file__).resolve().parent.parent)
 if src_path not in sys.path:
     sys.path.append(src_path)
@@ -22,9 +26,10 @@ class GerenciamentoDeCarteiras:
     """
     Implementação do padrão Facade (a famosa Fachada).
     Oferece uma interface simples para o sistema, orquestrando
-    operações entre a interface do usuário, a lógica de negócios e a camada de persistência ( o famoso JSON).
+    operações entre a interface do usuário, a lógica de negócios e a camada de persistência (JSON).
     """
     def __init__(self):
+        # Inicializa o gerenciador com as fábricas e o gerenciador de armazenamento
         self.storage = StorageManager()
         self._mes_atual = datetime.datetime.now().month
         self._ano_atual = datetime.datetime.now().year
@@ -37,6 +42,9 @@ class GerenciamentoDeCarteiras:
         self.categorias = ["lazer", "alimentação", "casa", "mercado", "serviço"]
 
     def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep: int = 1):
+        """
+        Adiciona uma receita à carteira especificada. Permite receitas recorrentes (rep > 1).
+        """
         try:
             self.validar_transacao(nome, str(valor), tipo, carteira)
             
@@ -76,6 +84,9 @@ class GerenciamentoDeCarteiras:
             return False, f"\nErros de validação:\n{str(e)}"
 
     def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep : int = 1):
+        """
+        Adiciona uma despesa à carteira especificada. Permite despesas recorrentes (rep > 1).
+        """
         try:
             self.validar_transacao(nome, str(valor), tipo, carteira)
             # Get current date as datetime object
@@ -116,11 +127,17 @@ class GerenciamentoDeCarteiras:
             return False, f"\nErros de validação:\n{str(e)}"
             
     def realizar_transacao(self, transacao: Transaction):
+        """
+        Realiza uma transação que estava pendente, atualizando a carteira correspondente.
+        """
         #para transacoes que nao foram pagas quando criadas, como as que se repetem
         carteira = next(c for c in self.storage.get_carteiras() if c.get_nome() == transacao.carteira)
         carteira.atualiza_carteira(transacao)   
     
     def editar_transacao(self, transacao_original: Transaction, novos_dados: dict):
+        """
+        Edita uma transação existente, atualizando seus dados e ajustando o saldo da carteira se necessário.
+        """
         try:
             if transacao_original.categoria != "transferencia":
                 carteira_existe = any( c.get_nome() == transacao_original.carteira for c in self.storage.get_carteiras())
@@ -157,6 +174,9 @@ class GerenciamentoDeCarteiras:
             return False, "Erro de validação: O valor inserido não é um número válido."
 
     def adicionar_carteira(self, nome: str, desc: str, saldo: float = 0):
+        """
+        Adiciona uma nova carteira corrente ao sistema.
+        """
         try:
             self.validar_carteira(nome, desc, str(saldo))
             carteira = self.corrente_factory.create(nome, desc, saldo)
@@ -166,6 +186,9 @@ class GerenciamentoDeCarteiras:
             return False, f"\nErros de validação:\n{str(e)}"
 
     def adicionar_cofrinho(self, nome: str, desc: str, timer_mes: int, meta_valor:float, saldo: float = 0):
+        """
+        Adiciona um novo cofrinho ao sistema.
+        """
         try:
             hoje = datetime.datetime.now()
             mes_atual = hoje.month
@@ -178,7 +201,9 @@ class GerenciamentoDeCarteiras:
             return False, f"\nErros de validação:\n{str(e)}"
 
     def depositar_cofrinho(self, valor: float, cofrinho: Cofrinho, carteira_origem: Carteira):
-
+        """
+        Realiza um depósito de uma carteira para um cofrinho.
+        """
         if valor <= 0:
             return False, "O valor do depósito deve ser positivo."
         if valor > carteira_origem.get_saldo():
@@ -200,6 +225,9 @@ class GerenciamentoDeCarteiras:
         return True, f"Valor de R$ {valor:.2f} depositado com sucesso."
 
     def quebrar_cofrinho(self, cofrinho: Cofrinho, carteira_destino: Carteira):
+        """
+        Quebra o cofrinho, transferindo o saldo para uma carteira destino e aplicando penalidade se necessário.
+        """
         timer = cofrinho.get_timer()
         valor_quebrado = cofrinho.quebrar()
         
@@ -219,7 +247,6 @@ class GerenciamentoDeCarteiras:
     def deletar_transacao(self, transacao: Transaction) -> tuple[bool, str]:
         """
         Deleta uma transação e atualiza o saldo da carteira associada.
-    
         """
         try:
             # Tenta encontrar a carteira associada
@@ -250,6 +277,9 @@ class GerenciamentoDeCarteiras:
             return False, f"Erro ao deletar transação: {str(e)}"
 
     def validar_transacao(self, nome, valor, tipo, carteira):
+        """
+        Valida os campos de uma transação, lançando exceções em caso de erro.
+        """
         errors = ValidationErrors()
         if not nome or not nome.strip(): errors.add(EmptyFieldError("nome"))
         
@@ -264,6 +294,9 @@ class GerenciamentoDeCarteiras:
         if errors.has_errors(): raise errors
 
     def validar_carteira(self, nome, desc, saldo):
+        """
+        Valida os campos de uma carteira, lançando exceções em caso de erro.
+        """
         errors = ValidationErrors()
         if not nome or not nome.strip(): errors.add(EmptyFieldError("nome"))
         if not desc or not desc.strip(): errors.add(EmptyFieldError("descrição"))
@@ -279,7 +312,6 @@ class GerenciamentoDeCarteiras:
         """
         Deleta uma carteira corrente se ela tiver saldo zero.
         Não deleta as transações associadas, apenas impede novas transações.
-
         """
         try:
             # Verifica se é uma carteira corrente
@@ -301,17 +333,38 @@ class GerenciamentoDeCarteiras:
         except Exception as e:
             return False, f"Erro ao deletar carteira: {str(e)}"
 
-    def get_carteiras(self): return self.storage.get_carteiras()
-    def get_cofrinhos(self): return self.storage.get_cofrinhos()
-    def get_transacoes(self): return self.storage.get_all_transactions()
-    def get_pontos(self): return self.storage.get_pontos_manager()
-    def get_metas(self): return self.storage.get_pontos_manager().get_metas()
-    def get_gastos(self): return self.storage.get_pontos_manager().get_gastos()
-    def get_categorias_disponiveis(self): return self.categorias
-    def get_mes_atual(self): return self._mes_atual
-    def get_ano_atual(self): return self._ano_atual
+    def get_carteiras(self):
+        """Retorna todas as carteiras correntes."""
+        return self.storage.get_carteiras()
+    def get_cofrinhos(self):
+        """Retorna todos os cofrinhos."""
+        return self.storage.get_cofrinhos()
+    def get_transacoes(self):
+        """Retorna todas as transações."""
+        return self.storage.get_all_transactions()
+    def get_pontos(self):
+        """Retorna o gerenciador de pontos."""
+        return self.storage.get_pontos_manager()
+    def get_metas(self):
+        """Retorna as metas do sistema de pontos."""
+        return self.storage.get_pontos_manager().get_metas()
+    def get_gastos(self):
+        """Retorna os gastos do sistema de pontos."""
+        return self.storage.get_pontos_manager().get_gastos()
+    def get_categorias_disponiveis(self):
+        """Retorna as categorias disponíveis para transações."""
+        return self.categorias
+    def get_mes_atual(self):
+        """Retorna o mês atual do sistema."""
+        return self._mes_atual
+    def get_ano_atual(self):
+        """Retorna o ano atual do sistema."""
+        return self._ano_atual
 
     def proximo_mes(self):
+        """
+        Avança o sistema para o próximo mês.
+        """
         if self._mes_atual == 12:
             self._mes_atual = 1
             self._ano_atual += 1
@@ -319,6 +372,9 @@ class GerenciamentoDeCarteiras:
             self._mes_atual += 1
 
     def mes_anterior(self):
+        """
+        Retrocede o sistema para o mês anterior.
+        """
         if self._mes_atual == 1:
             self._mes_atual = 12
             self._ano_atual -= 1
