@@ -11,7 +11,7 @@ class Transaction(ABC):
     """
     Classe abstrata que representa uma transação financeira.
     """
-    def __init__(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, fixo: bool = False):
+    def __init__(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep :int =1, done : bool = False):
         self.id = id
         self.nome = nome
         self._valor = abs(valor)
@@ -19,7 +19,8 @@ class Transaction(ABC):
         self.data = data
         self.desc = desc
         self.carteira = carteira
-        self.fixo = fixo
+        self.rep = rep
+        self.done = done
 
     @property
     def valor(self) -> float:
@@ -50,19 +51,20 @@ class Transaction(ABC):
             'data': self.data,
             'desc': self.desc,
             'carteira': self.carteira,
-            'repeticao': self.fixo
+            'repeticao': self.rep,
+            "feita": self.done,
         }
 
 class Receita(Transaction):
     """Representa uma transação de entrada de dinheiro."""
-    def __init__(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, repeticao: bool = False):
-        super().__init__(id, nome, valor, categoria, data, desc, carteira, repeticao)
+    def __init__(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, rep :int =1, done: bool = False):
+        super().__init__(id, nome, valor, categoria, data, desc, carteira, rep, done)
 
 class Despesa(Transaction):
     """Representa uma transação de saída de dinheiro."""
-    def __init__(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, repeticao: bool = False):
-        super().__init__(id, nome, valor, categoria, data, desc, carteira, repeticao)
-
+    def __init__(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep :int =1, done: bool = False):
+        super().__init__(id, nome, valor, categoria, data, desc, carteira, rep, done)
+from sistemaDePontos import SistemaDePontos
 
 class Carteira(ABC):
     """
@@ -127,7 +129,7 @@ class Cofrinho(Carteira):
         if isinstance(transacao, Despesa):
             print(f"ERRO: Não é possível adicionar uma Despesa ('{transacao.nome}') a um Cofrinho.")
             return
-
+        transacao.done = True 
         self._saldo += transacao.valor
         self.movimentacoes.append(transacao.id)
 
@@ -189,13 +191,14 @@ class Corrente(Carteira):
     def __init__(self, nome: str, descricao: str, saldo: float, movimentacoes: List[int] = []):
         super().__init__(nome, descricao, saldo, movimentacoes)
 
-    def atualiza_carteira(self, transacao: Transaction):
-        """Adiciona o valor de uma transação (receita ou despesa) ao saldo."""
+    def atualiza_carteira(self, transacao: Transaction, pontos_manager: SistemaDePontos =None ):
+        """Adiciona o valor de uma transação (receita ou despesa) ao saldo e chama o sistema de pontos."""
         if not isinstance(transacao, Transaction):
             raise TypeError("Apenas objetos do tipo Transaction podem ser adicionados à carteira.")
-
+        transacao.done = True 
         self._saldo += transacao.valor
         self.movimentacoes.append(transacao.id)
+        pontos_manager.adicionar_despesa(transacao.valor, transacao.categoria)
 
 # ==================================
 # 2. Classes de Fábrica (Factories)
@@ -203,7 +206,7 @@ class Corrente(Carteira):
 
 class TransactionFactory(ABC):
     @abstractmethod
-    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, repeticao: bool) -> Transaction:
+    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep: int, done: bool) -> Transaction:
         pass
 
     @classmethod
@@ -212,25 +215,25 @@ class TransactionFactory(ABC):
         pass
 
 class ReceitaFactory(TransactionFactory):
-    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, repeticao: bool = False) -> Receita:
-        return Receita(id, nome, valor, categoria, data, desc, carteira, repeticao)
+    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep: int = 1, done: bool = False) -> Receita:
+        return Receita(id, nome, valor, categoria, data, desc, carteira, rep, done)
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Receita:
         return Receita(
             d['id'], d['nome'], d['valor'], d['categoria'],
-            d['data'], d['desc'], d['carteira'], d.get('repeticao', False)
+            d['data'], d['desc'], d['carteira'], d['repeticao'],d.get('feita')
         )
 
 class DespesaFactory(TransactionFactory):
-    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, repeticao: bool = False) -> Despesa:
-        return Despesa(id, nome, valor, categoria, data, desc, carteira, repeticao)
+    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str, fixo: bool = False, rep: int = 1, done: bool = False) -> Despesa:
+        return Despesa(id, nome, valor, categoria, data, desc, carteira, rep, done)
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Despesa:
         return Despesa(
             d['id'], d['nome'], d['valor'], d['categoria'],
-            d['data'], d['desc'], d['carteira'], d.get('repeticao', False)
+            d['data'], d['desc'], d['carteira'], d['repeticao'],d.get('feita')
         )
 
 class CarteiraFactory(ABC):

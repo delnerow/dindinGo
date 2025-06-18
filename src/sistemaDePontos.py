@@ -1,6 +1,6 @@
 import datetime
 
-class sistemaDePontos:
+class SistemaDePontos:
     def __init__(self, pontos, meta_lazer=100, meta_alimentacao=1000, meta_casa=100, meta_mercado=1000, meta_serviço=100,
                  gastos_lazer=0, gastos_alimentacao=0, gastos_casa=0, gastos_mercado=0, gastos_servico=0):
         

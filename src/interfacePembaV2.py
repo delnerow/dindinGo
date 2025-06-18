@@ -81,6 +81,7 @@ while True:
 
     print(f"Transações feitas em {gerenciador.get_mes_atual():02d}/{gerenciador.get_ano_atual()}:")
     transacoes = gerenciador.get_transacoes()
+    
     transacoes_mes = filtra_transacoes_mes(transacoes, gerenciador.get_mes_atual(), gerenciador.get_ano_atual())
     carteiras = gerenciador.get_carteiras()
     cofrinhos = gerenciador.get_cofrinhos()
@@ -102,6 +103,7 @@ while True:
         "[7] Próximo mês\n"
         "[8] Editar transação\n"
         "[9] Deletar transação\n"
+        "[10] Deletar carteira\n"
         "[0] Sair\n"
         ">>> "
     )
@@ -115,15 +117,20 @@ while True:
         valor = get_numeric_input("Qual o valor, em reais? ")
         modo = get_numeric_input("Despesa(1) ou Ganho(2)? ", int)
         repeticao = input("É uma transação recorrente? (s/n) ").lower() == 's'
+        if repeticao:
+            print("Quantas vezes essa transação se repete? (digite um número inteiro)")
+            rep = get_numeric_input("Número de repetições: ", int)
+        else:
+            rep = 1
         nome = input("Qual o nome da transação? ")
         desc = input("Qual a descrição? ")
         tipo = selecionar_categoria(gerenciador)
         data = datetime.datetime.now().isoformat()
 
         if modo == 2:
-            result, msg = gerenciador.adicionar_receita(nome, valor, tipo, data, desc, carteira, repeticao)
+            result, msg = gerenciador.adicionar_receita(nome, valor, tipo, data, desc, carteira, repeticao, rep)
         elif modo == 1:
-            result, msg = gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira, repeticao)
+            result, msg = gerenciador.adicionar_despesa(nome, valor, tipo, data, desc, carteira, repeticao, rep)
         else:
             result, msg = False, "Modo inválido."
 
@@ -215,6 +222,27 @@ while True:
             continue
 
         sucesso, msg = gerenciador.deletar_transacao(transacao_para_deletar)
+        print(msg)
+        time.sleep(3)
+        
+    elif acao == 10:  # Deletar carteira
+        carteira = selecionar_item(carteiras, "carteira", print_carteiras)
+        if carteira is None:
+            continue
+
+        print(f"\nSaldo atual da carteira: R${carteira.get_saldo():.2f}")
+        if carteira.get_saldo() != 0:
+            print("Atenção: Só é possível deletar carteiras com saldo zero!")
+            time.sleep(3)
+            continue
+
+        confirmacao = input(f"\nTem certeza que deseja deletar a carteira '{carteira.get_nome()}'? (s/n) ")
+        if confirmacao.lower() != 's':
+            print("Operação cancelada.")
+            time.sleep(2)
+            continue
+
+        sucesso, msg = gerenciador.deletar_carteira(carteira)
         print(msg)
         time.sleep(3)
         

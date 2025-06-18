@@ -31,5 +31,5 @@ def print_transacoes(transacoes):
         print(f"🏷️ Categoria: {transacao.categoria.capitalize()}")
         print(f"📅 Data: {transacao.data}")
         print(f"📝 Descrição: {transacao.desc}")
-        print(f"🔁 Fixo? {'Sim' if transacao.fixo else 'Não'}")
+        print(f"🔁 Fixo? {'Sim' if transacao.rep>1 else 'Não'}")
         print("=" * 30)
