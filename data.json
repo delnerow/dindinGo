@@ -1,5 +1,5 @@
 {
-    "idGenerator": 36,
+    "idGenerator": 22,
     "transacoes": [
         {
             "id": 2,
@@ -10,8 +10,7 @@
             "data": "2025-06-16T23:48:29.044164",
             "desc": "Reciclagem de prismas",
             "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
+            "repeticao": false
         },
         {
             "id": 4,
@@ -29,13 +28,12 @@
             "id": 5,
             "receita": false,
             "nome": "sei la vei",
-            "valor": 100.0,
+            "valor": 50,
             "categoria": "lazer",
-            "data": "2025-06-17T00:10:46.575344",
+            "data": "2025-06-17",
             "desc": "socorro",
             "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
+            "repeticao": true
         },
         {
             "id": 6,
@@ -100,7 +98,7 @@
         {
             "id": 11,
             "receita": false,
-            "nome": "Grama sint\u00e9tica",
+            "nome": "Grama sint\u00e9tica verde",
             "valor": 100.0,
             "categoria": "alimenta\u00e7\u00e3o",
             "data": "2025-06-17T08:05:45.076268",
@@ -238,188 +236,7 @@
             "data": "2025-06-17T10:31:44.737466",
             "desc": "Cofre quebrado",
             "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 23,
-            "receita": false,
-            "nome": "Dep\u00f3sito para Casa da Moeda",
-            "valor": 499.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T15:18:42.155633",
-            "desc": "",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 24,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Trevilato Pemba",
-            "valor": 499.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T15:18:42.157604",
-            "desc": "",
-            "carteira": "Casa da Moeda",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 25,
-            "receita": true,
-            "nome": "Sela",
-            "valor": 100.0,
-            "categoria": "lazer",
-            "data": "2025-06-17T15:58:13.457951",
-            "desc": "",
-            "carteira": "Ponei cavalo",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 26,
-            "receita": false,
-            "nome": "Dep\u00f3sito para Casa da Moeda",
-            "valor": 190.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T15:58:52.005133",
-            "desc": "",
-            "carteira": "Ponei cavalo",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 27,
-            "receita": true,
-            "nome": "Dep\u00f3sito de Ponei cavalo",
-            "valor": 190.0,
-            "categoria": "transferencia",
-            "data": "2025-06-17T15:58:52.005133",
-            "desc": "",
-            "carteira": "Casa da Moeda",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 28,
-            "receita": false,
-            "nome": "A\u00e7ai Gold",
-            "valor": 100.0,
-            "categoria": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-17T18:50:14.538919",
-            "desc": "dourado",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 29,
-            "receita": false,
-            "nome": "Farda de Aspirador (1/3)",
-            "valor": 150.0,
-            "categoria": "mercado",
-            "data": "2025-06-17T18:51:07.381567",
-            "desc": "P\u00f3",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 29,
-            "receita": false,
-            "nome": "Farda de Aspirador (2/3)",
-            "valor": 150.0,
-            "categoria": "mercado",
-            "data": "2025-07-17T18:51:07.381567",
-            "desc": "P\u00f3",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": false
-        },
-        {
-            "id": 29,
-            "receita": false,
-            "nome": "Farda de Aspirador (3/3)",
-            "valor": 150.0,
-            "categoria": "mercado",
-            "data": "2025-08-17T18:51:07.381567",
-            "desc": "P\u00f3",
-            "carteira": "Trevilato Pemba",
-            "repeticao": 1,
-            "feita": false
-        },
-        {
-            "id": 30,
-            "receita": false,
-            "nome": "Metaquest",
-            "valor": 30000.0,
-            "categoria": "lazer",
-            "data": "2025-06-17T19:47:33.583629",
-            "desc": "AFIAGBD",
-            "carteira": "Adilson",
-            "repeticao": 1,
-            "feita": true
-        },
-        {
-            "id": 31,
-            "receita": true,
-            "nome": "Aposentadoria do Cunha (1/5)",
-            "valor": 50000.0,
-            "categoria": "lazer",
-            "data": "2025-06-17T19:52:21.008029",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": true,
-            "feita": 5
-        },
-        {
-            "id": 32,
-            "receita": true,
-            "nome": "Aposentadoria do Cunha (2/5)",
-            "valor": 50000.0,
-            "categoria": "lazer",
-            "data": "2025-07-17T19:52:21.008029",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": true,
-            "feita": 5
-        },
-        {
-            "id": 33,
-            "receita": true,
-            "nome": "Aposentadoria do Cunha (3/5)",
-            "valor": 50000.0,
-            "categoria": "lazer",
-            "data": "2025-08-17T19:52:21.008029",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": true,
-            "feita": 5
-        },
-        {
-            "id": 34,
-            "receita": true,
-            "nome": "Aposentadoria do Cunha (4/5)",
-            "valor": 50000.0,
-            "categoria": "lazer",
-            "data": "2025-09-17T19:52:21.008029",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": true,
-            "feita": 5
-        },
-        {
-            "id": 35,
-            "receita": true,
-            "nome": "Aposentadoria do Cunha (5/5)",
-            "valor": 50000.0,
-            "categoria": "lazer",
-            "data": "2025-10-17T19:52:21.008029",
-            "desc": "",
-            "carteira": "Adilson",
-            "repeticao": true,
-            "feita": 5
+            "repeticao": false
         }
     ],
     "carteiras": [
@@ -445,15 +262,14 @@
         {
             "nome": "Adilson",
             "desc": "A MAIS GORDA",
-            "saldo": 9967783.0,
+            "saldo": 9997783.0,
             "movimentacoes": [
                 7,
                 10,
                 11,
                 16,
                 18,
-                20,
-                30
+                20
             ]
         }
     ],
@@ -465,6 +281,7 @@
             "timer_mes": 0,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
+            "meta_valor": 1000.0,
             "movimentacoes": [
                 15,
                 17,
@@ -475,12 +292,14 @@
         {
             "nome": "porcao ged",
             "desc": "no bulking loco",
-            "saldo": 100.0,
+            "saldo": 1211.0,
             "timer_mes": 5,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
+            "meta_valor": 1000.0,
             "movimentacoes": [
-                13
+                13,
+                24
             ]
         },
         {
@@ -490,6 +309,7 @@
             "timer_mes": 5,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
+            "meta_valor": 1000.0,
             "movimentacoes": []
         },
         {
@@ -499,10 +319,7 @@
             "timer_mes": 3,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
-            "movimentacoes": [
-                24,
-                27
-            ]
+            "movimentacoes": []
         }
     ],
     "pontos": [

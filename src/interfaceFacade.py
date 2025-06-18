@@ -210,14 +210,17 @@ class GerenciamentoDeCarteiras:
     
         """
         try:
-            # Encontra a carteira associada
-            carteira_associada = next(
-                c for c in self.storage.get_carteiras() 
-                if c.get_nome() == transacao.carteira
-            )
-            
-            # Remove o valor da transação do saldo da carteira
-            carteira_associada.ajustar_saldo(-transacao.valor)
+            # Tenta encontrar a carteira associada
+            try:
+                carteira_associada = next(
+                    c for c in self.storage.get_carteiras() 
+                    if c.get_nome() == transacao.carteira
+                )
+                # Se encontrou a carteira, ajusta o saldo
+                carteira_associada.ajustar_saldo(-transacao.valor)
+            except StopIteration:
+                # Carteira não existe mais, continua com a deleção
+                pass
             
             # Remove a transação do storage
             self.storage.remove_transaction(transacao.id)
@@ -225,15 +228,12 @@ class GerenciamentoDeCarteiras:
             # Se for uma despesa, atualiza o sistema de pontos
             if not isinstance(transacao, Receita):
                 pontos_manager = self.storage.get_pontos_manager()
-                pontos_manager.remover_despesa(transacao.valor, transacao.categoria)
             
             # Salva as alterações
             self.storage.save_data()
             
             return True, "Transação deletada com sucesso!"
             
-        except StopIteration:
-            return False, "Erro: Carteira associada à transação não foi encontrada."
         except Exception as e:
             return False, f"Erro ao deletar transação: {str(e)}"
 

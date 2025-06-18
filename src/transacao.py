@@ -108,12 +108,13 @@ class Cofrinho(Carteira):
     Representa uma conta poupança simples (Cofrinho).
     """
     def __init__(self, nome: str, descricao: str, saldo: float,
-                timer_mes: int, ultimo_mes_update: int, ultimo_ano_update: int,
+                timer_mes: int, ultimo_mes_update: int, ultimo_ano_update: int, meta_valor: float,
                 movimentacoes: List[int] = []):
         super().__init__(nome, descricao, saldo, movimentacoes)
         self._timer_mes = timer_mes
         self._ultimo_mes_update = ultimo_mes_update
         self._ultimo_ano_update = ultimo_ano_update
+        self.meta_valor = meta_valor  # Valor alvo para o cofre
 
     def quebrar(self) -> float:
         retorno = self._saldo
@@ -179,6 +180,7 @@ class Cofrinho(Carteira):
             "timer_mes": self._timer_mes,
             "ultimo_mes_update": self._ultimo_mes_update,
             "ultimo_ano_update": self._ultimo_ano_update,
+            'meta_valor': self.meta_valor,
             'movimentacoes': self.movimentacoes
         }
     
@@ -255,12 +257,12 @@ class CorrenteFactory(CarteiraFactory):
         )
 
 class CofrinhoFactory(CarteiraFactory):
-    def create(self, nome: str, descricao: str, saldo: float,timer_mes, ultimo_mes_update, ultimo_ano_update,
+    def create(self, nome: str, descricao: str, saldo: float,timer_mes, ultimo_mes_update, ultimo_ano_update, meta_valor,
                 movimentacoes: List[int] = []) -> Cofrinho:
-        return Cofrinho(nome, descricao, saldo, timer_mes, ultimo_mes_update, ultimo_ano_update,movimentacoes)
+        return Cofrinho(nome, descricao, saldo, timer_mes, ultimo_mes_update, ultimo_ano_update, meta_valor, movimentacoes)
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Cofrinho:
         return Cofrinho(
-            d['nome'], d['desc'], d['saldo'], d['timer_mes'], d['ultimo_mes_update'], d['ultimo_ano_update'], d.get('movimentacoes', [])
+            d['nome'], d['desc'], d['saldo'], d['timer_mes'], d['ultimo_mes_update'], d['ultimo_ano_update'], d.get('meta_valor'), d.get('movimentacoes', [])
         )

@@ -1,5 +1,6 @@
 import json
 from typing import List, Optional
+import os
 
 # Importe suas classes do modelo e fábricas
 from transacao import Transaction, Carteira, Cofrinho, ReceitaFactory, DespesaFactory, CorrenteFactory, CofrinhoFactory
@@ -10,7 +11,8 @@ class StorageManager:
     Implementação do padrão Singleton para gerenciar a persistência de dados.
     """
     _instance: Optional['StorageManager'] = None
-    DATA_FILE = 'data.json'
+    # Update DATA_FILE to use absolute path from project root
+    DATA_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data.json')
 
     def __new__(cls) -> 'StorageManager':
         if cls._instance is None:
@@ -34,8 +36,15 @@ class StorageManager:
     def _load_data(self):
         """Carrega os dados do arquivo JSON para a memória da instância."""
         try:
-            with open(self.DATA_FILE, 'r') as file:
+            print(f"Loading data from: {self.DATA_FILE}")  # Debug log
+            
+            if not os.path.exists(self.DATA_FILE):
+                print(f"Data file not found at: {self.DATA_FILE}")
+                return False
+
+            with open(self.DATA_FILE, 'r', encoding='utf-8') as file:
                 data = json.load(file)
+                print(f"Successfully loaded data with {len(data.get('transacoes', []))} transactions")
                 self.cur_id = data.get('idGenerator', 0)
                 
                 for t_data in data.get('transacoes', []):
