@@ -4,14 +4,15 @@ import {
   DollarSign,
   PiggyBank,
   CreditCard,
-  Calendar as CalendarIcon,
-  ChartNoAxesCombined
+  ChartNoAxesCombined,
 } from "lucide-react";
 
 export default function Sidebar() {
   return (
     <div className="w-64 bg-white p-6 border-r shadow-lg fixed h-full">
-      <h1 className="text-xl font-bold mb-6">Orçamento Fácil</h1>
+      <div className="flex items-center gap-2 mb-6">
+        <h1 className="text-xl font-bold">DinDinGo</h1>
+      </div>
       <nav className="space-y-4">
         <SidebarItem icon={<Home size={20} />} label="Visão Geral" />
         <SidebarItem icon={<DollarSign size={20} />} label="Transações" />
