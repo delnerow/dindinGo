@@ -1,3 +1,4 @@
+import json
 from flask import Flask, jsonify, request, request, jsonify
 from interfaceFacade import GerenciamentoDeCarteiras
 from flask_cors import CORS
@@ -46,7 +47,6 @@ def criar_carteira():
 
 
 # Create a single instance of GerenciamentoDeCarteiras
-gerenciador = GerenciamentoDeCarteiras()
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
@@ -117,5 +117,70 @@ def delete_transaction(transaction_id):
     except Exception as e:
         return {'error': str(e)}, 500
 
+@app.route('/api/transactions', methods=['POST'])
+def create_transaction():
+    try:
+        data = request.json
+        print("\n=== Transaction Creation Debug ===")
+        print("1. Received Data:", json.dumps(data, indent=2))
+
+        try:
+            valor = float(data['valor'])
+            print("2. Converted valor:", valor)
+        except (ValueError, TypeError) as e:
+            print("Error converting valor:", str(e))
+            return {'error': 'Valor inválido: deve ser um número'}, 400
+
+        # Get the carteira object
+        try:
+            carteiras = gerenciador.get_carteiras()
+            carteira = next(
+                (c for c in carteiras if c.get_nome() == data['carteira']),
+                None
+            )
+            print("4. Found carteira:", carteira)
+        except Exception as e:
+            print("Error finding carteira:", str(e))
+            return {'error': f'Erro ao buscar carteira: {str(e)}'}, 400
+
+        if not carteira:
+            return {'error': f'Carteira não encontrada: {data["carteira"]}'}, 400
+
+        # Call the correct facade methods with the right parameters
+        try:
+            if data.get('receita'):
+                print("woooo")
+                success, message = gerenciador.adicionar_receita(
+                    nome=data['nome'],
+                    valor=valor,
+                    tipo=data['categoria'],  # Changed from categoria to tipo
+                    data=data['data'],
+                    desc=data['desc'],
+                    carteira=carteira,
+                    fixo=data['repeticao']
+                )
+            else:
+                success, message = gerenciador.adicionar_despesa(
+                    nome=data['nome'],
+                    valor=valor,
+                    tipo=data['categoria'],  # Changed from categoria to tipo
+                    data=data['data'],
+                    desc=data['desc'],
+                    carteira=carteira,
+                    fixo=data['repeticao']
+                )
+
+            if not success:
+                return {'error': message}, 400
+
+            return jsonify({'message': message}), 201
+
+        except Exception as e:
+            print("Error in transaction creation:", str(e))
+            return {'error': str(e)}, 500
+
+    except Exception as e:
+        print("Error in request handling:", str(e))
+        return {'error': str(e)}, 500
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

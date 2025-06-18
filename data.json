@@ -1,5 +1,5 @@
 {
-    "idGenerator": 22,
+    "idGenerator": 24,
     "transacoes": [
         {
             "id": 2,
@@ -10,7 +10,8 @@
             "data": "2025-06-16T23:48:29.044164",
             "desc": "Reciclagem de prismas",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": false,
+            "feita": null
         },
         {
             "id": 4,
@@ -33,7 +34,8 @@
             "data": "2025-06-17",
             "desc": "socorro",
             "carteira": "Trevilato Pemba",
-            "repeticao": true
+            "repeticao": true,
+            "feita": null
         },
         {
             "id": 6,
@@ -236,14 +238,39 @@
             "data": "2025-06-17T10:31:44.737466",
             "desc": "Cofre quebrado",
             "carteira": "Trevilato Pemba",
-            "repeticao": false
+            "repeticao": false,
+            "feita": null
+        },
+        {
+            "id": 23,
+            "receita": false,
+            "nome": "aaa",
+            "valor": 1233.0,
+            "categoria": "casa",
+            "data": "2025-06-18",
+            "desc": "",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 24,
+            "receita": true,
+            "nome": "Vieira ganhou a loteria",
+            "valor": 1000000.0,
+            "categoria": "lazer",
+            "data": "2025-06-18",
+            "desc": "xupa adilson, vamos em cima vieira",
+            "carteira": "Trevilato Pemba",
+            "repeticao": false,
+            "feita": true
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 1803.0,
+            "saldo": 1000570.0,
             "movimentacoes": [
                 1,
                 2,
@@ -256,7 +283,9 @@
                 14,
                 22,
                 23,
-                28
+                28,
+                23,
+                24
             ]
         },
         {
@@ -319,20 +348,21 @@
             "timer_mes": 3,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
+            "meta_valor": null,
             "movimentacoes": []
         }
     ],
     "pontos": [
         {
-            "pontos": 85,
+            "pontos": 0,
             "meta_lazer": 100,
             "meta_alimentacao": 1000,
             "meta_casa": 1000,
             "meta_mercado": 300,
             "meta_servico": 100,
-            "gastos_lazer": -30000.0,
+            "gastos_lazer": 970000.0,
             "gastos_alimentacao": -100.0,
-            "gastos_casa": 0,
+            "gastos_casa": -1233.0,
             "gastos_mercado": 0,
             "gastos_servico": 0
         }

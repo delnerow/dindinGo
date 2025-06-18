@@ -222,6 +222,12 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
                     <div className="text-sm text-gray-500">
                       {transaction.categoria}
                     </div>
+                    {/* Add description here */}
+            {transaction.desc && (
+              <div className="text-sm text-gray-400 mt-1 italic">
+                {transaction.desc}
+              </div>
+            )}
                   </div>
                 </div>
                 <div className="text-right">
@@ -230,7 +236,7 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
                       transaction.receita ? 'text-green-500' : 'text-red-500'
                     }`}
                   >
-                    R$ {Math.abs(transaction.valor).toFixed(2)}
+                    R$ {Math.abs(Number(transaction.valor)).toFixed(2)}
                   </p>
                   <p className="text-sm text-gray-500">
                     {formatDate(transaction.data)}
@@ -265,6 +271,7 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
           isOpen={!!editingTransaction}
           onClose={() => setEditingTransaction(null)}
           onSave={handleEditTransaction}
+          carteiras={carteiras}  // Add carteiras prop
         />
       )}
 
@@ -274,7 +281,8 @@ const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => 
           transaction={null}
           isOpen={isNewTransactionOpen}
           onClose={() => setIsNewTransactionOpen(false)}
-          onSave={handleAddTransaction}  // Use the handleAddTransaction function
+          onSave={handleAddTransaction}
+          carteiras={carteiras}  // Add carteiras prop
         />
       )}
     </div>

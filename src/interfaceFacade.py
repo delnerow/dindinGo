@@ -12,7 +12,6 @@ class GerenciamentoDeCarteiras:
     """
     def __init__(self):
         self.storage = StorageManager()
-        
         self._mes_atual = datetime.datetime.now().month
         self._ano_atual = datetime.datetime.now().year
         
@@ -54,9 +53,12 @@ class GerenciamentoDeCarteiras:
                     self.storage.add_transaction(trans)
                     novo_id = self.storage.get_next_id()
             else:
+                
                 trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
                 self.storage.add_transaction(trans)
-                carteira.atualiza_carteira(trans)
+                pontos_manager = self.storage.get_pontos_manager()
+                carteira.atualiza_carteira(trans,pontos_manager)
+                print("normal!!")
             self.storage.save_data()
             return True, f"{'Receita adicionada' if rep == 1 else f'Receitas adicionadas para {rep} meses'} com sucesso."
         except ValidationErrors as e:

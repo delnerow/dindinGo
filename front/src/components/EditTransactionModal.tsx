@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Transaction } from '../types/Transaction';
 import { X } from 'lucide-react';
 
@@ -19,8 +20,6 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
   const [isFixo, setIsFixo] = useState(transaction?.repeticao || false);
   const [repeticoes, setRepeticoes] = useState(1);
 
-  if (!isOpen) return null;
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -30,10 +29,11 @@ export function EditTransactionModal({ transaction, isOpen, onClose, onSave, car
       valor: Number(formData.get('valor')),
       categoria: formData.get('categoria') as string,
       data: formData.get('data') as string,
-      desc: formData.get('desc') as string,
+      desc: formData.get('desc') as string || '',
       carteira: formData.get('carteira') as string,
-      repeticao: Number(formData.get('repe')),
-      receita: formData.get('tipo') === 'receita'
+      repeticao: isFixo,  // Changed to use boolean
+      receita: formData.get('tipo') === 'receita',  // Changed to match data model
+      feita: false  // Default value for new transactions
     };
 
     if (transaction) {
