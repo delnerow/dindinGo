@@ -1,5 +1,5 @@
 {
-    "idGenerator": 64,
+    "idGenerator": 65,
     "transacoes": [
         {
             "id": 2,
@@ -711,26 +711,38 @@
         },
         {
             "id": 63,
-            "receita": false,
-            "nome": "Comprei Pamonha",
-            "valor": 12.0,
-            "categoria": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-18",
-            "desc": "Bem gostosa",
-            "carteira": "Adilson",
-            "repeticao": false,
+            "receita": true,
+            "nome": "Valor do cofre 'adda'",
+            "valor": 1010.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T10:51:18.545288",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
             "feita": true
         },
         {
             "id": 64,
-            "receita": false,
-            "nome": "despex",
-            "valor": 12.0,
-            "categoria": "alimenta\u00e7\u00e3o",
-            "data": "2025-06-18",
-            "desc": "",
-            "carteira": "Roubos e furtos",
-            "repeticao": false,
+            "receita": true,
+            "nome": "Valor do cofre 'adads'",
+            "valor": 56.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T10:52:34.130139",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 65,
+            "receita": true,
+            "nome": "Valor do cofre 'asdad'",
+            "valor": 5000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T10:53:22.056642",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
             "feita": true
         }
     ],
@@ -738,7 +750,7 @@
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 1013434.0,
+            "saldo": 1019500.0,
             "movimentacoes": [
                 1,
                 2,
@@ -790,7 +802,10 @@
                 29,
                 58,
                 60,
-                61
+                61,
+                63,
+                64,
+                65
             ]
         },
         {
@@ -818,6 +833,12 @@
                 48,
                 64
             ]
+        },
+        {
+            "nome": "oioioi",
+            "desc": "sei la",
+            "saldo": 1000.0,
+            "movimentacoes": []
         }
     ],
     "cofrinhos": [
@@ -847,95 +868,19 @@
             ]
         },
         {
-            "nome": "asdad",
-            "desc": "ada",
-            "saldo": 5000.0,
+            "nome": "peixe que voa",
+            "desc": "nao nada",
+            "saldo": 100.0,
             "timer_mes": 1,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
-            "meta_valor": 15.0,
-            "movimentacoes": [
-                62
-            ]
-        },
-        {
-            "nome": "adads",
-            "desc": "adfa",
-            "saldo": 56.0,
-            "timer_mes": 1,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 1234.0,
-            "movimentacoes": [
-                55
-            ]
-        },
-        {
-            "nome": "adad",
-            "desc": "afddsafd",
-            "saldo": 0.0,
-            "timer_mes": 1,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 15.0,
+            "meta_valor": 590.0,
             "movimentacoes": []
-        },
-        {
-            "nome": "adad",
-            "desc": "adad",
-            "saldo": 0.0,
-            "timer_mes": 1,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 50.0,
-            "movimentacoes": []
-        },
-        {
-            "nome": "adad",
-            "desc": "asd",
-            "saldo": 0.0,
-            "timer_mes": 1,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 50.0,
-            "movimentacoes": []
-        },
-        {
-            "nome": "aadsads",
-            "desc": "adad",
-            "saldo": 0.0,
-            "timer_mes": 1,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 50.0,
-            "movimentacoes": []
-        },
-        {
-            "nome": "dada",
-            "desc": "ada",
-            "saldo": 0.0,
-            "timer_mes": 1,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 50.0,
-            "movimentacoes": []
-        },
-        {
-            "nome": "adda",
-            "desc": "ada",
-            "saldo": 1010.0,
-            "timer_mes": 1,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 12123.0,
-            "movimentacoes": [
-                57
-            ]
         }
     ],
     "pontos": [
         {
-            "pontos": 780,
+            "pontos": 771,
             "meta_lazer": 100,
             "meta_alimentacao": 1000,
             "meta_casa": 1000,

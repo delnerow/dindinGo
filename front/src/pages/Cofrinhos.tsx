@@ -53,7 +53,6 @@ export default function Cofrinhos() {
 
         {cofrinhos.map((cofrinho) => {
           const progresso = cofrinho.meta_valor ? (cofrinho.saldo / cofrinho.meta_valor) * 100 : 0;
-          const podeQuebrar = cofrinho.timer_mes === 0 || progresso >= 100;
 
           return (
             <Card key={cofrinho.nome} className="w-full shadow-md border rounded-lg">
@@ -85,8 +84,7 @@ export default function Cofrinhos() {
 
                 <div className="flex justify-between items-center mt-4">
                   <div>
-                    {podeQuebrar && (
-                      <BreakSafeButton
+                    { (<BreakSafeButton
                         onClick={() => {
                           setCofrinhoParaQuebrar(cofrinho.nome);
                           setShowQuebrarModal(true);
