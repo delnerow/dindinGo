@@ -9,3 +9,4 @@ export interface Transaction {
   carteira: string;
   repeticao: boolean;
 }
+export type NewTransaction = Omit<Transaction, 'id'>;
