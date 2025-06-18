@@ -31,26 +31,29 @@ export default function CarteiraModal({
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-96">
         <h3 className="text-xl font-semibold mb-4">Nova Carteira</h3>
+        <label className="block mb-1 text-sm font-medium text-gray-700">Nome:</label>
         <input
           type="text"
           placeholder="Nome"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
-          className="w-full mb-2 p-2 border rounded"
+          className="w-full mb-3 p-2 border rounded"
         />
+        <label className="block mb-1 text-sm font-medium text-gray-700">Descrição:</label>
         <input
           type="text"
           placeholder="Descrição"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
-          className="w-full mb-2 p-2 border rounded"
+          className="w-full mb-3 p-2 border rounded"
         />
+        <label className="block mb-1 text-sm font-medium text-gray-700">Saldo inicial:</label>
         <input
           type="number"
           placeholder="Saldo inicial"
           value={saldo}
           onChange={(e) => setSaldo(e.target.value)}
-          className="w-full mb-2 p-2 border rounded"
+          className="w-full mb-3 p-2 border rounded"
         />
 
         {erro && <p className="text-red-500 text-sm">{erro}</p>}
