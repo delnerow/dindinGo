@@ -1,11 +1,11 @@
 {
-    "idGenerator": 57,
+    "idGenerator": 62,
     "transacoes": [
         {
             "id": 2,
             "receita": false,
             "nome": "Curso IMPA",
-            "valor": 2000.0,
+            "valor": 2001.0,
             "categoria": "alimenta\u00e7\u00e3o",
             "data": "2025-06-16T23:48:29.044164",
             "desc": "Reciclagem de prismas",
@@ -323,7 +323,7 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": true
+            "feita": false
         },
         {
             "id": 30,
@@ -335,7 +335,7 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": true
+            "feita": false
         },
         {
             "id": 31,
@@ -347,7 +347,7 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": true
+            "feita": false
         },
         {
             "id": 32,
@@ -359,7 +359,7 @@
             "desc": "",
             "carteira": "Trevilato Pemba",
             "repeticao": 5,
-            "feita": true
+            "feita": false
         },
         {
             "id": 34,
@@ -648,13 +648,73 @@
             "carteira": "adda",
             "repeticao": 1,
             "feita": true
+        },
+        {
+            "id": 58,
+            "receita": false,
+            "nome": "Dep\u00f3sito para porcao ged",
+            "valor": 1000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T12:08:37.430835",
+            "desc": "",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 59,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Trevilato Pemba",
+            "valor": 1000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T12:08:37.431955",
+            "desc": "",
+            "carteira": "porcao ged",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 60,
+            "receita": true,
+            "nome": "Valor do cofre 'porcao ged'",
+            "valor": 1000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T12:08:48.675781",
+            "desc": "Cofre quebrado",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 61,
+            "receita": false,
+            "nome": "Dep\u00f3sito para asdad",
+            "valor": 5000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T12:11:10.352783",
+            "desc": "",
+            "carteira": "Trevilato Pemba",
+            "repeticao": 1,
+            "feita": true
+        },
+        {
+            "id": 62,
+            "receita": true,
+            "nome": "Dep\u00f3sito de Trevilato Pemba",
+            "valor": 5000.0,
+            "categoria": "transferencia",
+            "data": "2025-06-18T12:11:10.352783",
+            "desc": "",
+            "carteira": "asdad",
+            "repeticao": 1,
+            "feita": true
         }
     ],
     "carteiras": [
         {
             "nome": "Trevilato Pemba",
             "desc": "ONG para financiar estudos do leonardo",
-            "saldo": 1018454.0,
+            "saldo": 1013434.0,
             "movimentacoes": [
                 1,
                 2,
@@ -695,7 +755,18 @@
                 50,
                 52,
                 54,
-                56
+                56,
+                29,
+                29,
+                29,
+                29,
+                29,
+                29,
+                29,
+                29,
+                58,
+                60,
+                61
             ]
         },
         {
@@ -725,16 +796,6 @@
     ],
     "cofrinhos": [
         {
-            "nome": "porcao ged",
-            "desc": "no bulking loco",
-            "saldo": 0,
-            "timer_mes": 5,
-            "ultimo_mes_update": 6,
-            "ultimo_ano_update": 2025,
-            "meta_valor": 1000.0,
-            "movimentacoes": []
-        },
-        {
             "nome": "dezmbro",
             "desc": "nao abre",
             "saldo": 1600.0,
@@ -762,12 +823,14 @@
         {
             "nome": "asdad",
             "desc": "ada",
-            "saldo": 0.0,
+            "saldo": 5000.0,
             "timer_mes": 1,
             "ultimo_mes_update": 6,
             "ultimo_ano_update": 2025,
             "meta_valor": 15.0,
-            "movimentacoes": []
+            "movimentacoes": [
+                62
+            ]
         },
         {
             "nome": "adads",
@@ -846,7 +909,7 @@
     ],
     "pontos": [
         {
-            "pontos": 0,
+            "pontos": 50,
             "meta_lazer": 100,
             "meta_alimentacao": 1000,
             "meta_casa": 1000,
@@ -855,7 +918,7 @@
             "gastos_lazer": 970000.0,
             "gastos_alimentacao": -100.0,
             "gastos_casa": -2289.0,
-            "gastos_mercado": -400743.0,
+            "gastos_mercado": -400803.0,
             "gastos_servico": 0
         }
     ]

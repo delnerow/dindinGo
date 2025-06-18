@@ -95,7 +95,7 @@ class Carteira(ABC):
     
     def ajustar_saldo(self, valor_ajuste: float):
         
-        self._saldo += valor_ajuste
+        self._saldo = self._saldo + valor_ajuste
 
     @abstractmethod
     def atualiza_carteira(self, transacao: Transaction):

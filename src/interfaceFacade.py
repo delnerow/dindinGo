@@ -135,7 +135,15 @@ class GerenciamentoDeCarteiras:
             
             diferenca_de_saldo = transacao_original.valor - valor_antigo_com_sinal
             
-            carteira_associada.ajustar_saldo(diferenca_de_saldo)
+            newDone= novos_dados.get('feita')
+            if(transacao_original.done and not newDone):
+                print("desficou")
+                transacao_original.done = newDone
+                carteira_associada.ajustar_saldo(-transacao_original.valor)
+            elif (not transacao_original.done and newDone):
+                carteira_associada.atualiza_carteira(transacao_original, self.storage.get_pontos_manager())
+            elif(transacao_original.done and newDone):
+                carteira_associada.ajustar_saldo(diferenca_de_saldo)
             self.storage.save_data()
             
             return True, "Transação atualizada com sucesso!"
