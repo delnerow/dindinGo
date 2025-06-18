@@ -3,6 +3,7 @@ import Dashboard from './pages/Dashboard';
 import Transacoes from './pages/Transacoes';
 import Carteiras from './pages/Carteiras';
 import Cofrinhos from './pages/Cofrinhos';
+import Pontos from './pages/Pontos';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/transacoes" element={<Transacoes />} />
         <Route path="/carteiras" element={<Carteiras />} />
         <Route path="/cofrinhos" element={<Cofrinhos />} />
+        <Route path="/pontos" element={<Pontos />} />
       </Routes>
     </BrowserRouter>
   );

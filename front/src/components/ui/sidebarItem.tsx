@@ -17,6 +17,9 @@ export default function SidebarItem({ icon, label }: { icon: React.ReactNode; la
       case "Cofrinhos":
         navigate("/cofrinhos");
         break;
+      case "Pontos":
+        navigate("/pontos");
+        break;
       default:
         break;
     }

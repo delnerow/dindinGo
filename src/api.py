@@ -258,5 +258,10 @@ def create_transaction():
         print("Error in request handling:", str(e))
         return {'error': str(e)}, 500
     
+@app.route("/api/pontos", methods=["GET"])
+def get_pontos_usuario():
+    pontos = gerenciador.get_pontos()
+    return jsonify({"pontos": pontos})
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
