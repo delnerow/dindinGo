@@ -52,6 +52,7 @@ export default function Dashboard() {
   const [dataInicial, setDataInicial] = useState<string>("");
   const [dataFinal, setDataFinal] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [fullScreenChart, setFullScreenChart] = useState<null | 'pie' | 'line'>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,18 +95,22 @@ export default function Dashboard() {
     switch (periodoSelecionado) {
       case "7":
         dataInicio = new Date(hoje.getTime() - 7 * 24 * 60 * 60 * 1000);
+        dataInicio.setHours(0, 0, 0, 0); // Define para o início do dia
         break;
       case "15":
         dataInicio = new Date(hoje.getTime() - 15 * 24 * 60 * 60 * 1000);
+        dataInicio.setHours(0, 0, 0, 0); // Define para o início do dia
         break;
       case "30":
         dataInicio = new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000);
+        dataInicio.setHours(0, 0, 0, 0); // Define para o início do dia
         break;
       case "personalizado":
         if (dataInicial && dataFinal) {
           const inicio = new Date(dataInicial);
           const fim = new Date(dataFinal);
-          fim.setHours(23, 59, 59, 999); // Define para o final do dia selecionado
+          inicio.setHours(0, 0, 0, 0); // Define para o início do dia inicial
+          fim.setHours(23, 59, 59, 999); // Define para o final do dia final
           return {
             inicio: inicio,
             fim: fim
@@ -113,9 +118,11 @@ export default function Dashboard() {
         }
         // Fallback para 7 dias se não há datas personalizadas
         dataInicio = new Date(hoje.getTime() - 7 * 24 * 60 * 60 * 1000);
+        dataInicio.setHours(0, 0, 0, 0); // Define para o início do dia
         break;
       default:
         dataInicio = new Date(hoje.getTime() - 7 * 24 * 60 * 60 * 1000);
+        dataInicio.setHours(0, 0, 0, 0); // Define para o início do dia
     }
     
     return {
@@ -146,48 +153,44 @@ export default function Dashboard() {
   // Prepara dados para o gráfico de linha (evolução do saldo) - APENAS do período selecionado
   const prepararDadosEvolucao = () => {
     const transacoesOrdenadas = [...transacoesFiltradas].sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
-    
     if (transacoesOrdenadas.length === 0) {
-      // Se não há transações no período, mostra apenas o saldo atual
       if (carteiraAtual) {
         return [{ name: "Saldo Atual", valor: carteiraAtual.saldo }];
       }
       return [{ name: "Sem dados", valor: 0 }];
     }
 
-    // Para calcular a evolução correta, precisamos do saldo antes do período selecionado
-    // Vamos calcular o saldo inicial do período
+    // Calcula o saldo antes do período selecionado
     const todasTransacoesDaCarteira = transactions.filter(t => t.carteira === carteiraSelecionada);
     const transacoesAntesDoPeriodo = todasTransacoesDaCarteira.filter(t => {
       const dataTransacao = new Date(t.data);
       return dataTransacao < inicio;
     });
-
-    // Calcula o saldo antes do período selecionado
     let saldoInicialPeriodo = 0;
     transacoesAntesDoPeriodo.forEach(t => {
       saldoInicialPeriodo += t.receita ? t.valor : -t.valor;
     });
+    if (carteiraAtual) {
+      saldoInicialPeriodo += carteiraAtual.saldo;
+    }
 
-    // Agora calcula a evolução do saldo dentro do período selecionado
+    // Agrupa transações por dia e calcula o saldo final de cada dia
     let saldoAtual = saldoInicialPeriodo;
-    const dadosEvolucao = [];
-
-    // Adiciona o ponto inicial (saldo no início do período)
-    dadosEvolucao.push({
-      name: `${inicio.getDate().toString().padStart(2, '0')}/${(inicio.getMonth() + 1).toString().padStart(2, '0')}`,
-      valor: saldoAtual
-    });
-
-    // Adiciona pontos para cada transação no período
+    const saldoPorDia: { [dia: string]: number } = {};
     transacoesOrdenadas.forEach(t => {
       saldoAtual += t.receita ? t.valor : -t.valor;
       const data = new Date(t.data);
-      dadosEvolucao.push({
-        name: `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}`,
-        valor: saldoAtual
-      });
+      const dia = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+      saldoPorDia[dia] = saldoAtual; // sempre sobrescreve, ficando o saldo final do dia
     });
+
+    // Gera os pontos do gráfico: um por dia, saldo final
+    const dias = Object.keys(saldoPorDia).sort((a, b) => {
+      const [da, ma, ya] = a.split('/').map(Number);
+      const [db, mb, yb] = b.split('/').map(Number);
+      return new Date(ya, ma - 1, da).getTime() - new Date(yb, mb - 1, db).getTime();
+    });
+    const dadosEvolucao = dias.map(dia => ({ name: dia, valor: saldoPorDia[dia] }));
 
     return dadosEvolucao;
   };
@@ -206,6 +209,27 @@ export default function Dashboard() {
 
   // Obtém a data de hoje no formato YYYY-MM-DD para limitar a data final
   const hojeFormatado = new Date().toISOString().split('T')[0];
+
+  // Função para formatar data no formato brasileiro
+  const formatarDataBrasileira = (data: Date | string) => {
+    if (typeof data === 'string') {
+      // Espera formato YYYY-MM-DD
+      const [ano, mes, dia] = data.split('-');
+      if (ano && mes && dia) return `${dia}/${mes}/${ano}`;
+      return data;
+    }
+    return data.toLocaleDateString('pt-BR');
+  };
+
+  // Componente de Modal para tela cheia
+  const FullScreenModal = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70" onClick={onClose}>
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-5xl w-full h-[90vh] flex flex-col justify-center" onClick={e => e.stopPropagation()}>
+        <button className="self-end mb-2 text-gray-500 hover:text-gray-800" onClick={onClose}>&#10005;</button>
+        <div className="flex-1 flex items-center justify-center">{children}</div>
+      </div>
+    </div>
+  );
 
   if (isLoading) {
     return (
@@ -273,28 +297,38 @@ export default function Dashboard() {
               <label htmlFor="data-inicial" className="block text-sm font-medium text-gray-700 mb-2">
                 Data Inicial:
               </label>
-              <input
-                type="date"
-                id="data-inicial"
-                value={dataInicial}
-                onChange={(e) => setDataInicial(e.target.value)}
-                max={hojeFormatado}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
+              <div className="relative">
+                <input
+                  type="date"
+                  id="data-inicial"
+                  value={dataInicial}
+                  onChange={(e) => setDataInicial(e.target.value)}
+                  max={hojeFormatado}
+                  className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <CalendarIcon className="h-5 w-5 text-gray-400" />
+                </div>
+              </div>
             </div>
             <div>
               <label htmlFor="data-final" className="block text-sm font-medium text-gray-700 mb-2">
                 Data Final:
               </label>
-              <input
-                type="date"
-                id="data-final"
-                value={dataFinal}
-                onChange={(e) => setDataFinal(e.target.value)}
-                min={dataInicial}
-                max={hojeFormatado}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
+              <div className="relative">
+                <input
+                  type="date"
+                  id="data-final"
+                  value={dataFinal}
+                  onChange={(e) => setDataFinal(e.target.value)}
+                  min={dataInicial}
+                  max={hojeFormatado}
+                  className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <CalendarIcon className="h-5 w-5 text-gray-400" />
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -309,7 +343,9 @@ export default function Dashboard() {
         {/* Informações do período selecionado */}
         <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mb-6">
           <p className="text-sm">
-            <strong>Período selecionado:</strong> {inicio.toLocaleDateString('pt-BR')} a {fim.toLocaleDateString('pt-BR')} 
+            <strong>Período selecionado:</strong> {periodoSelecionado === "personalizado" && dataInicial && dataFinal
+              ? `${formatarDataBrasileira(dataInicial)} a ${formatarDataBrasileira(dataFinal)}`
+              : `${formatarDataBrasileira(inicio)} a ${formatarDataBrasileira(fim)} `}
             ({transacoesFiltradas.length} transações encontradas)
           </p>
         </div>
@@ -319,7 +355,7 @@ export default function Dashboard() {
           {carteiraAtual ? (
             <Card>
               <CardContent className="p-6">
-                <p className="text-sm text-gray-500 mb-2">{carteiraAtual.nome}</p>
+                <p className="text-sm text-gray-500 mb-2">Saldo: {carteiraAtual.nome}</p>
                 <p className="text-3xl font-bold text-green-600 mb-2">
                   R$ {carteiraAtual.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
@@ -336,12 +372,18 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
+          {/* Gráfico de Pizza */}
+          <Card onClick={() => setFullScreenChart('pie')} className="cursor-pointer hover:shadow-2xl transition-shadow">
             <CardContent className="p-4">
-              <p className="text-sm text-gray-500 mb-2">Receitas vs Despesas (Período Selecionado)</p>
+              <p className="text-sm text-gray-500 font-bold mb-4">Receitas vs Despesas (Período Selecionado)</p>
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
-                  <Pie data={pieData} dataKey="value" outerRadius={60} label>
+                  <Pie 
+                    data={pieData} 
+                    dataKey="value" 
+                    outerRadius={60} 
+                    label={({ name, value }) => `${name}: R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
+                  >
                     {pieData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
@@ -355,12 +397,16 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Gráfico de Linha */}
+          <Card onClick={() => setFullScreenChart('line')} className="cursor-pointer hover:shadow-2xl transition-shadow">
             <CardContent className="p-4">
-              <p className="text-sm text-gray-500 mb-2">Evolução do Saldo (Período Selecionado)</p>
+              <p className="text-sm text-gray-500 font-bold mb-10">Evolução do Saldo (Período Selecionado)</p>
               <ResponsiveContainer width="100%" height={200}>
-                <LineChart data={prepararDadosEvolucao()}>
-                  <XAxis dataKey="name" />
+                <LineChart 
+                  data={prepararDadosEvolucao()}
+                  margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                >
+                  <XAxis dataKey="name" tickFormatter={(str) => str.slice(0, 5)} />
                   <YAxis />
                   <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} />
                   <Line
@@ -374,6 +420,56 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Modal de Tela Cheia para os Gráficos */}
+        {fullScreenChart === 'pie' && (
+          <FullScreenModal onClose={() => setFullScreenChart(null)}>
+            <div className="w-full h-full flex flex-col items-center justify-center">
+              <p className="text-lg text-gray-700 font-bold mb-4">Receitas vs Despesas (Período Selecionado)</p>
+              <ResponsiveContainer width="90%" height={500}>
+                <PieChart>
+                  <Pie 
+                    data={pieData} 
+                    dataKey="value" 
+                    outerRadius={200} 
+                    label={({ name, value }) => `${name}: R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell
+                        key={`cell-full-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </FullScreenModal>
+        )}
+        {fullScreenChart === 'line' && (
+          <FullScreenModal onClose={() => setFullScreenChart(null)}>
+            <div className="w-full h-full flex flex-col items-center justify-center">
+              <p className="text-lg text-gray-700 font-bold mb-4">Evolução do Saldo (Período Selecionado)</p>
+              <ResponsiveContainer width="90%" height={500}>
+                <LineChart 
+                  data={prepararDadosEvolucao()}
+                  margin={{ top: 5, right: 20, left: 40, bottom: 5 }}
+                >
+                  <XAxis dataKey="name" tickFormatter={(str) => str.slice(0, 5)} />
+                  <YAxis />
+                  <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} />
+                  <Line
+                    type="monotone"
+                    dataKey="valor"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </FullScreenModal>
+        )}
       </div>
     </div>
   );
