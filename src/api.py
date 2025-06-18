@@ -13,7 +13,8 @@ def listar_carteiras():
     Rota GET que retorna todas as carteiras.
     """
     carteiras = gerenciador.get_carteiras()
-    return jsonify(carteiras)  
+    carteiras_dict = [c.to_dict() for c in carteiras]
+    return jsonify(carteiras_dict)  
 
 @app.route("/api/carteiras", methods=["POST"])
 def criar_carteira():
@@ -83,6 +84,28 @@ def update_transaction(transaction_id):
             original_transaction,
             updated_data
         )
+        
+        if not success:
+            return {'error': message}, 400
+            
+        return jsonify({'message': message})
+        
+    except StopIteration:
+        return {'error': 'Transaction not found'}, 404
+    except Exception as e:
+        return {'error': str(e)}, 500
+
+@app.route('/api/transactions/<int:transaction_id>', methods=['DELETE'])
+def delete_transaction(transaction_id):
+    try:
+        # Find the transaction to delete
+        transaction = next(
+            t for t in gerenciador.get_transacoes() 
+            if t.id == transaction_id
+        )
+        
+        # Delete the transaction using the facade
+        success, message = gerenciador.deletar_transacao(transaction)
         
         if not success:
             return {'error': message}, 400

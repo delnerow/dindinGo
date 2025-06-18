@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wallet, Pencil } from 'lucide-react';
+import { Wallet, Pencil, Trash2 } from 'lucide-react';
 import Sidebar from "../components/ui/sidebar";
 import { Transaction } from '../types/Transaction';
 import { EditTransactionModal } from '../components/EditTransactionModal';
@@ -22,22 +22,22 @@ export default function Transacoes() {
   const [error, setError] = useState<string | null>(null);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('http://localhost:5000/api/transactions');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        setTransactions(data);
-      } catch (err) {
-        console.error('Fetch error:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load transactions');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchTransactions = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('http://localhost:5000/api/transactions');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      setTransactions(data);
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load transactions');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTransactions();
   }, []);
 
@@ -60,6 +60,35 @@ export default function Transacoes() {
     } catch (err) {
       console.error('Update error:', err);
       alert('Failed to update transaction');
+    }
+  };
+
+  const handleDeleteTransaction = async (transactionId: number) => {
+    // Replace window.confirm with a safer check
+    const userConfirmed = window.confirm('Tem certeza que deseja excluir esta transação?');
+    if (!userConfirmed) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/transactions/${transactionId}`,
+        {
+          method: 'DELETE',
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete transaction');
+      }
+
+      // Refresh transactions after deletion
+      await fetchTransactions();
+      
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert(err instanceof Error ? err.message : 'Failed to delete transaction');
     }
   };
 
@@ -116,12 +145,20 @@ export default function Transacoes() {
                     </p>
                   </div>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end space-x-2">
                   <button
                     onClick={() => setEditingTransaction(transaction)}
                     className="p-2 hover:bg-gray-100 rounded-full"
+                    title="Editar"
                   >
                     <Pencil className="w-4 h-4 text-gray-500" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteTransaction(transaction.id)}
+                    className="p-2 hover:bg-gray-100 hover:text-red-500 rounded-full"
+                    title="Excluir"
+                  >
+                    <Trash2 className="w-4 h-4 text-gray-500 hover:text-red-500" />
                   </button>
                 </div>
               </div>

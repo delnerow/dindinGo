@@ -149,8 +149,9 @@ class GerenciamentoDeCarteiras:
                 if c.get_nome() == transacao.carteira
             )
             
+            
             # Remove o valor da transação do saldo da carteira
-            carteira_associada.ajustar_saldo(-transacao.valor)
+            if carteira_associada: carteira_associada.ajustar_saldo(-transacao.valor)
             
             # Remove a transação do storage
             self.storage.remove_transaction(transacao.id)
@@ -165,8 +166,6 @@ class GerenciamentoDeCarteiras:
             
             return True, "Transação deletada com sucesso!"
             
-        except StopIteration:
-            return False, "Erro: Carteira associada à transação não foi encontrada."
         except Exception as e:
             return False, f"Erro ao deletar transação: {str(e)}"
 
