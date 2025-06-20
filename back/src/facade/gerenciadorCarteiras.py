@@ -41,12 +41,12 @@ class GerenciamentoDeCarteiras:
 
         self.categorias = ["lazer", "alimentação", "casa", "mercado", "serviço"]
 
-    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep: int = 1):
+    def adicionar_receita(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, rep: int = 1, feita: bool = False):
         """
         Adiciona uma receita à carteira especificada. Permite receitas recorrentes (rep > 1).
         """
         try:
-            self.validar_transacao(nome, str(valor), tipo, carteira)
+            self.validar_transacao(nome, str(valor), tipo, carteira, rep)
             
             # Get current date as datetime object
             data_atual = datetime.datetime.fromisoformat(data)
@@ -61,29 +61,29 @@ class GerenciamentoDeCarteiras:
                         data_trans = data_trans.replace(year=data_atual.year + ((data_atual.month + i - 1) // 12))
                     
                     trans = self.receita_factory.create_transaction(
-                        novo_id, 
-                        f"{nome} ({i+1}/{rep})" if rep > 1 else nome,
-                        valor, 
-                        tipo, 
-                        data_trans.isoformat(), 
-                        desc, 
-                        carteira.get_nome(), 
-                        fixo,
-                        rep
+                        id=novo_id, 
+                        nome=f"{nome} ({i+1}/{rep})" if rep > 1 else nome,
+                        valor=valor, 
+                        categoria=tipo, 
+                        data=data_trans.isoformat(), 
+                        desc=desc, 
+                        carteira=carteira.get_nome(), 
+                        feita=feita,
+                        rep=rep
                     )
                     
                     self.storage.add_transaction(trans)
                     novo_id = self.storage.get_next_id()
             else:
-                trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
+                trans = self.receita_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), feita=True, rep=rep )
                 self.storage.add_transaction(trans)
-                carteira.atualiza_carteira(trans)
+            if feita: carteira.atualiza_carteira(trans)
             self.storage.save_data()
             return True, f"{'Receita adicionada' if rep == 1 else f'Receitas adicionadas para {rep} meses'} com sucesso."
         except ValidationErrors as e:
             return False, f"\nErros de validação:\n{str(e)}"
 
-    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, fixo: bool = False, rep : int = 1):
+    def adicionar_despesa(self, nome: str, valor: float, tipo: str, data: str, desc: str, carteira: Carteira, rep: int = 1, feita: bool = False):
         """
         Adiciona uma despesa à carteira especificada. Permite despesas recorrentes (rep > 1).
         """
@@ -102,24 +102,23 @@ class GerenciamentoDeCarteiras:
                     
                     
                     trans = self.despesa_factory.create_transaction(
-                        novo_id, 
-                        f"{nome} ({i+1}/{rep})" if rep > 1 else nome,
-                        valor, 
-                        tipo, 
-                        data_trans.isoformat(), 
-                        desc, 
-                        carteira.get_nome(), 
-                        fixo,
-                        rep
+                        id=novo_id, 
+                        nome=f"{nome} ({i+1}/{rep})" if rep > 1 else nome,
+                        valor=valor, 
+                        categoria=tipo, 
+                        data=data_trans.isoformat(), 
+                        desc=desc, 
+                        carteira=carteira.get_nome(), 
+                        feita=feita,
+                        rep=rep
                     )
                     
                     self.storage.add_transaction(trans)
                     novo_id = self.storage.get_next_id()
             else:
-                despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), fixo, rep )
+                despesa = self.despesa_factory.create_transaction(novo_id, nome, valor, tipo, data, desc, carteira.get_nome(), feita=True, rep=rep )
                 self.storage.add_transaction(despesa)
-                pontos_manager = self.storage.get_pontos_manager()
-                carteira.atualiza_carteira(despesa, pontos_manager)
+            if feita: carteira.atualiza_carteira(trans,self.storage.get_pontos_manager())
 
             self.storage.save_data()
             return True, "Despesa adicionada com sucesso."

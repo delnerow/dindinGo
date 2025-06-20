@@ -71,7 +71,30 @@ class StorageManager:
             
             if not os.path.exists(self.DATA_FILE):
                 print(f"Data file not found at: {self.DATA_FILE}")
-                return False
+                default_data = {
+                    'idGenerator': 0,
+                    'transacoes': [],
+                    'carteiras': [],
+                    'cofrinhos': [],
+                    'pontos': [{
+                        'pontos': 0,
+                        'meta_lazer': 0,
+                        'meta_alimentacao': 0,
+                        'meta_casa': 0,
+                        'meta_mercado': 0,
+                        'meta_servico': 0,
+                        'gastos_lazer': 0,
+                        'gastos_alimentacao': 0,
+                        'gastos_casa': 0,
+                        'gastos_mercado': 0,
+                        'gastos_servico': 0
+                    }]
+                }
+                with open(self.DATA_FILE, 'w', encoding='utf-8') as file:
+                    json.dump(default_data, file, indent=4)
+                print(f"Arquivo de dados recriado em: {self.DATA_FILE}")
+                # Agora tente recarregar os dados
+                self._load_data()
 
             with open(self.DATA_FILE, 'r', encoding='utf-8') as file:
                 data = json.load(file)

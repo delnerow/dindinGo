@@ -38,9 +38,9 @@ class ReceitaFactory(TransactionFactory):
     """
     Fábrica para criar objetos Receita.
     """
-    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep: int = 1, done: bool = False) -> Receita:
+    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep: int = 1, feita: bool = False) -> Receita:
         """Cria uma transação do tipo Receita."""
-        return Receita(id, nome, valor, categoria, data, desc, carteira, rep, done)
+        return Receita(id, nome, valor, categoria, data, desc, carteira, rep, feita)
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Receita:
@@ -54,9 +54,9 @@ class DespesaFactory(TransactionFactory):
     """
     Fábrica para criar objetos Despesa.
     """
-    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep: int = 1, done: bool = False) -> Despesa:
+    def create_transaction(self, id: int, nome: str, valor: float, categoria: str, data: str, desc: str, carteira: str,  rep: int = 1, feita: bool = False) -> Despesa:
         """Cria uma transação do tipo Despesa."""
-        return Despesa(id, nome, valor, categoria, data, desc, carteira, rep, done)
+        return Despesa(id, nome, valor, categoria, data, desc, carteira, rep, feita)
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Despesa:
